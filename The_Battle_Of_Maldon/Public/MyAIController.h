@@ -10,43 +10,27 @@
 #include "MyAIController.generated.h"
 
 UCLASS()
-class AMyAIController : public AAIController
+class THE_BATTLE_OF_MALDON_API AMyAIController : public AAIController
 {
 	GENERATED_BODY()
 public:
 	AMyAIController(const FObjectInitializer& ObjectInitializer);
 	ALivingEntity* Bot;
-	ALivingEntity* findNearestEnemyLivingEntity();
 	AActor* target;
-	AActor* currentRouteObject;
-
-	int getWeaponDamage(ALivingEntity* targetToCheck);
-
-	float ComboButtonPressed(FString BInput, float WeaponDamage);
+	AActor* currentRouteObject;	
 
 	bool isAI;
 	bool canMove;
-	bool canAttack;
 	bool isTargetInSightRange();
 	bool isTargetInAttackRange(AActor* tempTarget);
 	bool livingEntityIsWithinPatrolRange(ALivingEntity* le);
-	bool isTargetPerfomingADefensiveAction(ALivingEntity* tempTarget);
-	bool isTargetPerfomingAnAttackAction(ALivingEntity* tempTarget);
-
-	FString buttonPressed();
-
+	
 	virtual void Possess(class APawn* InPawn) override;
 	virtual void OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)  override;
 	virtual void Tick(float DeltaTime) override;
 
 	void lookForTarget();
 	void setNextRouteObject();
-	void setAction(Combo* currentCombo);
 	void goToNextPathObject();
 	void moveToTarget(AActor* tempTarget);
-	void attackAgain();
-	void attackTarget(FString ButtonPressed, AActor* attackTarget);
-	void reactToDefensiveAction();
-	void reactToAttackAction();
-	void performCombo(Combo* currentCombo);
 };

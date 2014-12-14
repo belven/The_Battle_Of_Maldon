@@ -1,5 +1,5 @@
 #include "The_Battle_of_Maldon.h"
-#include "MyAIController.h"
+#include "CombatAIController.h"
 #include "LivingEntity.h"
 #include "Engine.h"
 
@@ -7,7 +7,7 @@ ALivingEntity::ALivingEntity(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
 	CurrentEntityType = EntityEnums::Living;
-	AIControllerClass = AMyAIController::StaticClass();
+	AIControllerClass = ACombatAIController::StaticClass();
 	EntityCombos = new Combos(this);
 	health = 1000000000000;
 	entityName = "Test";

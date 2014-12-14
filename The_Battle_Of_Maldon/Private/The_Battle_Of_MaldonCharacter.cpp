@@ -10,7 +10,7 @@
 #include "Weapon.h"
 #include "DefenseAction.h"
 #include "AttackAction.h"
-#include "MyAIController.h"
+#include "CombatAIController.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ void AThe_Battle_Of_MaldonCharacter::SetupPlayerInputComponent(class UInputCompo
 void AThe_Battle_Of_MaldonCharacter::PossessedBy(class AController* NewController)
 {
 	Super::PossessedBy(NewController);
-	AMyAIController* controller = (AMyAIController*)GetController();
+	ACombatAIController* controller = (ACombatAIController*)GetController();
 	controller->canAttack = true;
 	controller->Bot = this;
 	controller->isAI = false;
@@ -372,7 +372,7 @@ And this will check if they have pressed the right button, this is all handled i
 */
 void AThe_Battle_Of_MaldonCharacter::DealDamage(FString ButtonPressed)
 {
-	AMyAIController* controller = (AMyAIController*)GetController();
+	ACombatAIController* controller = (ACombatAIController*)GetController();
 	controller->attackTarget(ButtonPressed, Target);
 }
 

@@ -199,7 +199,7 @@ void AMyAIController::moveToTarget(AActor* tempTarget)
 {
 	MoveAction* ma = new MoveAction(10);
 
-	if (__raise Bot->source.MoveActionEvent(ma))
+	if (__raise Bot->source.MoveActionEvent(ma) && Bot->CurrentAction == NULL)
 	{
 		SetFocus(tempTarget);
 		MoveToActor(tempTarget);
@@ -232,7 +232,7 @@ void AMyAIController::attackTarget(FString ButtonPressed, AActor* attackTarget)
 		AMyAIController* tempCon = (AMyAIController*)tempTarget->GetController();;
 
 		//Get the next damage to.
-		float damageDone = Bot->EntityCombos->ComboButtonPressed(ButtonPressed, getWeaponDamage(Bot));
+		float damageDone = ComboButtonPressed(ButtonPressed, getWeaponDamage(Bot));
 
 		if (tempTarget && Bot->EntityCombos->lastComboSucsessfull)
 		{
@@ -258,6 +258,47 @@ void AMyAIController::attackTarget(FString ButtonPressed, AActor* attackTarget)
 			}
 		}
 	}
+}
+
+float AMyAIController::ComboButtonPressed(FString BInput, float WeaponDamage)
+{
+	Combos* combos = Bot->EntityCombos;
+	/*if (ItemOwner != NULL && CustomAnimNode == NULL)
+	{
+	CustomAnimNode = AnimNodePlayCustomAnim(ItemOwner.Mesh.FindAnimNode(AnimNode));
+	}*/
+
+	if (combos->IsWithinCombo(&BInput))
+	{
+		//Run combo animation
+		/*if (CustomAnimNode != NULL)
+		{
+		CustomAnimNode.PlayCustomAnim(tempCurrentCombo->ComboAnim, 1.0);
+		}*/
+
+		Bot->SetStopComboTimer(combos->CurrentCombo->ComboDelay);
+		combos->lastComboSucsessfull = true;
+		combos->CalculateDamage(WeaponDamage);
+	}
+	else if (combos->IsWithinOriginalCombo(&BInput))
+	{
+		Bot->SetStopComboTimer(combos->CurrentCombo->ComboDelay);
+		combos->lastComboSucsessfull = true;
+		combos->CalculateDamage(WeaponDamage);
+	}
+	else
+	{
+		Bot->ClearStopComboTimer();
+		combos->StopCombo();
+		combos->lastComboSucsessfull = false;
+	}
+
+	if (combos->CurrentCombo->ComboList.Num() == 0)
+	{
+		combos->StopCombo();
+	}
+
+	return combos->LastDamage;
 }
 
 /*This will eventually control Reaction animations and strength of force of the hit*/

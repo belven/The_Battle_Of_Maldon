@@ -52,6 +52,7 @@ public:
 	Conversation* currentConversation;
 	TArray<Quest*> currentQuests;
 	bool isLocking;
+	bool canMove;
 
 	void CombatActionQ();
 	void CombatActionE();

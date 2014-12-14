@@ -22,6 +22,8 @@ public:
 
 	int getWeaponDamage(ALivingEntity* targetToCheck);
 
+	float ComboButtonPressed(FString BInput, float WeaponDamage);
+
 	bool isAI;
 	bool canMove;
 	bool canAttack;

@@ -102,6 +102,8 @@ public:
 	void TakeDamage(Damage* damage);
 	void Dodge(DodgeEnums::DodgeDirection dodgeDirection);
 	void StopCombo();
+	void SetStopComboTimer(float ComboDelay);
+	void ClearStopComboTimer();
 
 	UFUNCTION(BlueprintCallable, Category = "AddItem")
 	void AddItemToInventory(AItem* itemToAdd);

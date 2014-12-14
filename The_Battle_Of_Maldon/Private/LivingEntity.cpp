@@ -89,6 +89,15 @@ void ALivingEntity::Dodge(DodgeEnums::DodgeDirection dodgeDirection = DodgeEnums
 	}
 }
 
+void ALivingEntity::SetStopComboTimer(float ComboDelay){
+	ClearStopComboTimer();
+	GetWorldTimerManager().SetTimer(this, &ALivingEntity::StopCombo, ComboDelay);
+}
+
+void ALivingEntity::ClearStopComboTimer(){
+	GetWorldTimerManager().ClearTimer(this, &ALivingEntity::StopCombo);
+}
+
 void ALivingEntity::StopCombo()
 {
 	EntityCombos->StopCombo();
@@ -107,7 +116,7 @@ void ALivingEntity::AddItemToInventory(AItem* itemToAdd)
 	else
 	{
 		itemSocket = NAME_None;
-	}	
+	}
 }
 
 void ALivingEntity::AttachItemToSocket(AItem* itemToAdd, FName socketName){

@@ -62,7 +62,7 @@ public:
 			{*/
 		float modifier = 1;
 		float delay = rand() % 3 + modifier;
-		Combo* tempCombo = GenerateCombo(1, 1, delay, "");
+		Combo* tempCombo = GenerateCombo(1, 1, delay, "F");
 
 		delay = rand() % 2 + modifier;
 		Combo* tempCombo2 = GenerateCombo(2, 1, delay, "E");
@@ -226,58 +226,7 @@ public:
 		return PartOfCombo;
 	}
 
-	float ComboButtonPressed(FString BInput, float WeaponDamage)
-	{
-		//ItemOwner = WeaponOwner;
-
-		/*if (ItemOwner != NULL && CustomAnimNode == NULL)
-		{
-		CustomAnimNode = AnimNodePlayCustomAnim(ItemOwner.Mesh.FindAnimNode(AnimNode));
-		}*/
-
-		if (CurrentCombo->ComboList.Num() == 0)
-		{
-			//GetWorldTimerManager().ClearTimer(this, &Combos::StopCombo);
-			//GetWorldTimerManager().SetTimer(this, &Combos::StopCombo, 0.2f);
-			StopCombo();
-		}
-
-		if (IsWithinCombo(&BInput))
-		{
-			//Run combo animation
-			/*if (CustomAnimNode != NULL)
-				{
-				CustomAnimNode.PlayCustomAnim(tempCurrentCombo->ComboAnim, 1.0);
-				}*/
-			//ItemOwner->GetWorldTimerManager().ClearTimer(ItemOwner, &ALivingEntity::StopCombo);
-			//ItemOwner->GetWorldTimerManager().SetTimer(ItemOwner, &ALivingEntity::StopCombo, CurrentCombo->ComboDelay);
-
-			//if (CurrentCombo->CurrentCombatActionType != CombatEnums::Defense)
-			//{
-			lastComboSucsessfull = true;
-			CalculateDamage(WeaponDamage);
-			//}
-		}
-		else if (IsWithinOriginalCombo(&BInput))
-		{
-			lastComboSucsessfull = true;
-			CalculateDamage(WeaponDamage);
-		}
-		else
-		{
-			//GetWorldTimerManager().ClearTimer(this, &Combos::StopCombo);
-			StopCombo();
-			lastComboSucsessfull = false;
-		}
-
-		if (CurrentCombo->ComboList.Num() == 0)
-		{
-			//GetWorldTimerManager().ClearTimer(this, &Combos::StopCombo);
-			//GetWorldTimerManager().SetTimer(this, &Combos::StopCombo, 0.2f);
-		}
-
-		return LastDamage;
-	}
+	
 
 	void SetNextCombo(Combo* nextCombo)
 	{

@@ -23,9 +23,10 @@ AThe_Battle_Of_MaldonCharacter::AThe_Battle_Of_MaldonCharacter(const FObjectInit
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
 	clan = "1";
-	health = 100;
+	health = 1000;
 	entityName = "Player";
 	isLocking = false;
+	canMove = true;
 
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
@@ -348,6 +349,7 @@ void AThe_Battle_Of_MaldonCharacter::Block()
 		CharacterMovement->StopMovementImmediately();
 		DefenseAction* tempDefenseAction = new DefenseAction();
 		CurrentAction = tempDefenseAction;
+		canMove = false;
 	}
 }
 
@@ -357,6 +359,7 @@ When ctrl is realesed the player will stop blocking
 void AThe_Battle_Of_MaldonCharacter::BlockStopped()
 {
 	CurrentAction = NULL;
+	canMove = true;
 }
 
 
@@ -375,7 +378,7 @@ void AThe_Battle_Of_MaldonCharacter::DealDamage(FString ButtonPressed)
 
 void AThe_Battle_Of_MaldonCharacter::MoveForward(float Value)
 {
-	if (Value != 0.0f)
+	if (Value != 0.0f && canMove)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorForwardVector(), Value);
@@ -384,7 +387,7 @@ void AThe_Battle_Of_MaldonCharacter::MoveForward(float Value)
 
 void AThe_Battle_Of_MaldonCharacter::MoveRight(float Value)
 {
-	if (Value != 0.0f)
+	if (Value != 0.0f && canMove)
 	{
 		// add movement in that direction
 		AddMovementInput(GetActorRightVector(), Value);
@@ -393,12 +396,16 @@ void AThe_Battle_Of_MaldonCharacter::MoveRight(float Value)
 
 void AThe_Battle_Of_MaldonCharacter::TurnAtRate(float Rate)
 {
-	// calculate delta for this frame from the rate information
-	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+	if (canMove){
+		// calculate delta for this frame from the rate information
+		AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
+	}
 }
 
 void AThe_Battle_Of_MaldonCharacter::LookUpAtRate(float Rate)
 {
-	// calculate delta for this frame from the rate information
-	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	if (canMove){
+		// calculate delta for this frame from the rate information
+		AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
+	}
 }

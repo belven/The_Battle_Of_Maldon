@@ -4,6 +4,8 @@
 #include "CombatAIController.h"
 #include "Combo.h"
 #include "Damage.h"
+#include "DefenseAction.h"
+#include "AttackAction.h"
 #include "Engine.h"
 
 ACombatAIController::ACombatAIController(const FObjectInitializer& ObjectInitializer)
@@ -15,7 +17,7 @@ ACombatAIController::ACombatAIController(const FObjectInitializer& ObjectInitial
 
 void ACombatAIController::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	AAIController::Tick(DeltaTime);
 
 	if (Bot)
 	{

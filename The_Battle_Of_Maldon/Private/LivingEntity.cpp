@@ -11,7 +11,7 @@ ALivingEntity::ALivingEntity(const FObjectInitializer& ObjectInitializer)
 	CurrentEntityType = EntityEnums::Living;
 	AIControllerClass = ACombatAIController::StaticClass();
 	EntityCombos = new Combos(this);
-	health = 1000000000000;
+	health = 400;
 	entityName = "Test";
 	clan = "2";
 	attackDamage = 20;

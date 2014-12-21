@@ -19,6 +19,7 @@
 AThe_Battle_Of_MaldonCharacter::AThe_Battle_Of_MaldonCharacter(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
+	UE_LOG(LogTemp, Warning, TEXT("AThe_Battle_Of_MaldonCharacter start"));
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -48,6 +49,7 @@ AThe_Battle_Of_MaldonCharacter::AThe_Battle_Of_MaldonCharacter(const FObjectInit
 	Mesh1P->RelativeLocation = FVector(0.f, 0.f, -150.f);
 	Mesh1P->bCastDynamicShadow = false;
 	Mesh1P->CastShadow = false;
+	UE_LOG(LogTemp, Warning, TEXT("AThe_Battle_Of_MaldonCharacter end"));
 
 	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P are set in the
 	// derived blueprint asset named MyCharacter (to avoid direct content references in C++)
@@ -97,15 +99,19 @@ void AThe_Battle_Of_MaldonCharacter::SetupPlayerInputComponent(class UInputCompo
 
 void AThe_Battle_Of_MaldonCharacter::PossessedBy(class AController* NewController)
 {
+	UE_LOG(LogTemp, Warning, TEXT("PossessedBy start"));
 	Super::PossessedBy(NewController);
 	ACombatAIController* controller = (ACombatAIController*)GetController();
+	UE_LOG(LogTemp, Warning, TEXT("GetController"));
 	controller->canAttack = true;
 	controller->Bot = this;
 	controller->isAI = false;
+	UE_LOG(LogTemp, Warning, TEXT("PossessedBy end"));
 }
 
 void AThe_Battle_Of_MaldonCharacter::Tick(float DeltaTime)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Character Tick start"));
 	Super::Tick(DeltaTime);
 
 	if (isLocking)
@@ -152,6 +158,7 @@ void AThe_Battle_Of_MaldonCharacter::Tick(float DeltaTime)
 			//DrawDebugBox(TheWorld, testHitResult.Location, FVector(10, 10, 10), debugColor);
 		}
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Character Tick end"));
 }
 
 void AThe_Battle_Of_MaldonCharacter::OnFire()

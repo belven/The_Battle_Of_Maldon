@@ -2,6 +2,8 @@
 #include "CombatAIController.h"
 #include "LivingEntity.h"
 #include "Engine.h"
+#include <iostream>
+#include <string>
 
 ALivingEntity::ALivingEntity(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)

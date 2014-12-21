@@ -10,21 +10,25 @@
 class EventReceiver {
 public:
 	bool AttackActionEvent(AttackAction* action) {
+		UE_LOG(LogTemp, Warning, TEXT("AttackActionEvent Raised"));
 
 		return true;
 	}
 
 	bool MoveActionEvent(MoveAction* action) {
+		UE_LOG(LogTemp, Warning, TEXT("MoveActionEvent Raised"));
 
 		return true;
 	}
 
 	bool LivingEntityTakeDamageEvent(Damage* damage) {
+		UE_LOG(LogTemp, Warning, TEXT("LivingEntityTakeDamageEvent Raised"));
 
 		return true;
 	}
 
 	bool DefenseActionEvent(DefenseAction* action) {
+		UE_LOG(LogTemp, Warning, TEXT("DefenseActionEvent Raised"));
 
 		return true;
 	}

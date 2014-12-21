@@ -7,47 +7,63 @@
 #include "DefenseAction.h"
 #include "AttackAction.h"
 #include "Engine.h"
+#include <iostream>
+#include <string>
 
 ACombatAIController::ACombatAIController(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
+	UE_LOG(LogTemp, Warning, TEXT("ACombatAIController start"));
 	canAttack = true;
+	//std::cout << "Test 1";
+	UE_LOG(LogTemp, Warning, TEXT("ACombatAIController end"));
 }
 
 
 void ACombatAIController::Tick(float DeltaTime)
 {
+	UE_LOG(LogTemp, Warning, TEXT("ACombatAIController Tick"));
 	AAIController::Tick(DeltaTime);
 
-	if (Bot)
+	if (Bot && isAI)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("is Bot & isAI"));
 		lookForTarget();
 	}
+	UE_LOG(LogTemp, Warning, TEXT("ACombatAIController Tick end"));
 }
 
 void ACombatAIController::Possess(APawn* InPawn)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Possess"));
 	Super::Possess(InPawn);
 	canAttack = true;
+	UE_LOG(LogTemp, Warning, TEXT("Possess end"));
 }
 
 void ACombatAIController::lookForTarget()
 {
+	UE_LOG(LogTemp, Warning, TEXT("lookForTarget start"));
 	//Check if there is anything within the bots patrol range otherwise move towards next RouteObject
 
 	if (!Bot->CurrentAggressionType == LivingEntityEnums::Passive)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("CurrentAggressionType"));
 		ALivingEntity* tempTarget = findNearestEnemyLivingEntity();
 
 		if (livingEntityIsWithinPatrolRange(tempTarget))
 		{
+			UE_LOG(LogTemp, Warning, TEXT("livingEntityIsWithinPatrolRange"));
 			//If the target isn't close enough move towards it
 			if (!isTargetInAttackRange(tempTarget))
 			{
+				UE_LOG(LogTemp, Warning, TEXT("isTargetInAttackRange"));
 				moveToTarget(tempTarget);
+				UE_LOG(LogTemp, Warning, TEXT("isTargetInAttackRange end"));
 			}
 			else if (canAttack)
 			{
+				UE_LOG(LogTemp, Warning, TEXT("canAttack"));
 				StopMovement();
 				attackTarget(buttonPressed(), tempTarget);
 			}
@@ -56,18 +72,22 @@ void ACombatAIController::lookForTarget()
 		}
 		else
 		{
+			UE_LOG(LogTemp, Warning, TEXT("goToNextPathObject"));
 			goToNextPathObject();
 		}
 	}
 	else
 	{
+		UE_LOG(LogTemp, Warning, TEXT("goToNextPathObject 2"));
 		goToNextPathObject();
 	}
+	UE_LOG(LogTemp, Warning, TEXT("lookForTarget end"));
 }
 
 /*This will find all ALivingEntities within the world and choose the closest one that is it's enemy*/
 ALivingEntity* ACombatAIController::findNearestEnemyLivingEntity()
 {
+	UE_LOG(LogTemp, Warning, TEXT("findNearestEnemyLivingEntity start"));
 	TArray<ALivingEntity*> EntitiesFound;
 	ALivingEntity* tempPawn = NULL;
 	float lastDistanceTo = 0;
@@ -98,6 +118,7 @@ ALivingEntity* ACombatAIController::findNearestEnemyLivingEntity()
 			tempPawn = le;
 		}
 	}
+	UE_LOG(LogTemp, Warning, TEXT("findNearestEnemyLivingEntity end"));
 
 	return tempPawn;
 }
@@ -107,6 +128,7 @@ ALivingEntity* ACombatAIController::findNearestEnemyLivingEntity()
 /*If the owner of this controller has pressed the right button and isn't in the air, then they will run the approprite animation and set the damage to do*/
 void ACombatAIController::attackTarget(FString ButtonPressed, AActor* attackTarget)
 {
+	UE_LOG(LogTemp, Warning, TEXT("attackTarget"));
 	if (canAttack && Bot && attackTarget && !Bot->GetCharacterMovement()->IsFalling() && !Bot->GetCharacterMovement()->IsFlying())
 	{
 		ALivingEntity* tempTarget = (ALivingEntity*)attackTarget;
@@ -117,6 +139,7 @@ void ACombatAIController::attackTarget(FString ButtonPressed, AActor* attackTarg
 
 		if (tempTarget && Bot->EntityCombos->lastComboSucsessfull)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("lastComboSucsessfull"));
 			//Is the target perfomring an action, then react to action, removed for players as they control thier own defenses 
 			if (isAI && tempTarget->CurrentAction)
 			{
@@ -130,11 +153,13 @@ void ACombatAIController::attackTarget(FString ButtonPressed, AActor* attackTarg
 				}
 				else
 				{
+					UE_LOG(LogTemp, Warning, TEXT("performCombo"));
 					performCombo(Bot->EntityCombos->CurrentCombo);
 				}
 			}
 			else
 			{
+				UE_LOG(LogTemp, Warning, TEXT("performCombo 2"));
 				performCombo(Bot->EntityCombos->CurrentCombo);
 			}
 		}
@@ -143,6 +168,7 @@ void ACombatAIController::attackTarget(FString ButtonPressed, AActor* attackTarg
 
 float ACombatAIController::ComboButtonPressed(FString BInput, float WeaponDamage)
 {
+	UE_LOG(LogTemp, Warning, TEXT("ComboButtonPressed start"));
 	Combos* combos = Bot->EntityCombos;
 	/*if (ItemOwner != NULL && CustomAnimNode == NULL)
 	{
@@ -151,6 +177,7 @@ float ACombatAIController::ComboButtonPressed(FString BInput, float WeaponDamage
 
 	if (combos->IsWithinCombo(&BInput))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("IsWithinCombo"));
 		//Run combo animation
 		/*if (CustomAnimNode != NULL)
 		{
@@ -163,12 +190,14 @@ float ACombatAIController::ComboButtonPressed(FString BInput, float WeaponDamage
 	}
 	else if (combos->IsWithinOriginalCombo(&BInput))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("IsWithinOriginalCombo"));
 		Bot->SetStopComboTimer(combos->CurrentCombo->ComboDelay);
 		combos->lastComboSucsessfull = true;
 		combos->CalculateDamage(WeaponDamage);
 	}
 	else
 	{
+		UE_LOG(LogTemp, Warning, TEXT("ComboButtonPressed else"));
 		Bot->ClearStopComboTimer();
 		combos->StopCombo();
 		combos->lastComboSucsessfull = false;
@@ -176,9 +205,11 @@ float ACombatAIController::ComboButtonPressed(FString BInput, float WeaponDamage
 
 	if (combos->CurrentCombo->ComboList.Num() == 0)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("ComboButtonPressed StopCombo"));
 		combos->StopCombo();
 	}
 
+	UE_LOG(LogTemp, Warning, TEXT("ComboButtonPressed end"));
 	return combos->LastDamage;
 }
 
@@ -186,7 +217,7 @@ float ACombatAIController::ComboButtonPressed(FString BInput, float WeaponDamage
 void ACombatAIController::reactToDefensiveAction()
 {
 	GetWorldTimerManager().SetTimer(this, &ACombatAIController::attackAgain, 1.5f);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, Bot->entityName + "s' attack was blocked");
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, Bot->entityName + "s' attack was blocked");
 	Bot->EntityCombos->StopCombo();
 	canAttack = false;
 }
@@ -236,27 +267,32 @@ bool ACombatAIController::isTargetInAttackRange(AActor* tempTarget)
 /*This is to be used with timers in order to allow the bot to attack again*/
 void ACombatAIController::attackAgain()
 {
+	UE_LOG(LogTemp, Warning, TEXT("attackAgain start"));
 	ALivingEntity* tempTarget = (ALivingEntity*)target;
 	Damage* damage = new Damage(Bot->EntityCombos->LastDamage);
 	if (tempTarget)	tempTarget->TakeDamage(damage);
+	UE_LOG(LogTemp, Warning, TEXT("TakeDamage"));
 
 	Bot->CurrentAction = NULL;
 
 	if (Bot->entityName == "Player")
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, Bot->entityName + " can attack again");
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, Bot->entityName + " can attack again");
 	}
 
 	canAttack = true;
+	UE_LOG(LogTemp, Warning, TEXT("attackAgain end"));
 }
 
 /*Sets the Bots action, and sets the dely on the attack and canAttack to false*/
 void ACombatAIController::performCombo(Combo* currentCombo)
 {
+	UE_LOG(LogTemp, Warning, TEXT("performCombo start"));
 	setAction(currentCombo);
 	float Delay = currentCombo ? currentCombo->ComboDelay : 1;
-	GetWorldTimerManager().SetTimer(this, &ACombatAIController::attackAgain, Delay - 0.5);
+	GetWorldTimerManager().SetTimer(this, &ACombatAIController::attackAgain, (Delay - 0.5) > 0 ? Delay - 0.5 : 1);
 	canAttack = false;
+	UE_LOG(LogTemp, Warning, TEXT("performCombo end"));
 }
 
 /*This will controll all the variables that Bot->CurrentAction should have*/
@@ -324,11 +360,11 @@ FString ACombatAIController::buttonPressed()
 		index = rand() % comboList.Num();
 		if (index < 0) index = 0;
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, Bot->entityName + " just pressed " + comboList[index]->ComboButton);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, Bot->entityName + " just pressed " + comboList[index]->ComboButton);
 		return comboList[index]->ComboButton;
 	}
 	else {
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, Bot->entityName + " just pressed " + Bot->EntityCombos->OriganalCombo->ComboButton);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, Bot->entityName + " just pressed " + Bot->EntityCombos->OriganalCombo->ComboButton);
 		return Bot->EntityCombos->OriganalCombo->ComboButton;
 	}
 }

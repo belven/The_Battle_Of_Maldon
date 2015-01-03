@@ -8,7 +8,7 @@ class AttackAction : public CombatAction
 public:
 	AttackAction()
 	{
-		CurrentCombatActionType = CombatEnums::Attack;
+		currentCombatActionType = CombatEnums::Attack;
 	}
 
 	Combo* AttackCombo;

@@ -10,40 +10,31 @@
 AMyAIController::AMyAIController(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
-	UE_LOG(LogTemp, Warning, TEXT("AMyAIController start"));
 	canMove = true;
 	isAI = true;
-	UE_LOG(LogTemp, Warning, TEXT("AMyAIController end"));
 }
 
 void AMyAIController::Possess(APawn* InPawn)
 {
-	UE_LOG(LogTemp, Warning, TEXT("AMyAIController Possess"));
 	Super::Possess(InPawn);
 	Bot = Cast<ALivingEntity>(InPawn);
 	canMove = true;
-	UE_LOG(LogTemp, Warning, TEXT("AMyAIController Possess End"));
 }
 
 void AMyAIController::Tick(float DeltaTime)
 {
-	UE_LOG(LogTemp, Warning, TEXT("AMyAIController Tick start"));
 	Super::Tick(DeltaTime);
 
 	if (Bot && isAI)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AMyAIController lookForTarget"));
 		lookForTarget();
 	}
-	UE_LOG(LogTemp, Warning, TEXT("AMyAIController Tick end"));
 }
 
 void AMyAIController::lookForTarget()
 {
-	UE_LOG(LogTemp, Warning, TEXT("AMyAIController lookForTarget start"));
 	//Check if there is anything within the bots patrol range otherwise move towards next RouteObject
 	goToNextPathObject();
-	UE_LOG(LogTemp, Warning, TEXT("AMyAIController lookForTarget end"));
 }
 
 #pragma region Perception
@@ -84,7 +75,6 @@ void AMyAIController::goToNextPathObject()
 {
 	if (canMove)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AMyAIController goToNextPathObject canMove"));
 		if (currentRouteObject)
 		{
 			setNextRouteObject();
@@ -96,11 +86,9 @@ void AMyAIController::goToNextPathObject()
 
 		if (currentRouteObject)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("AMyAIController goToNextPathObject currentRouteObject"));
 			moveToTarget(currentRouteObject);
 			target = currentRouteObject;
 		}
-		UE_LOG(LogTemp, Warning, TEXT("AMyAIController goToNextPathObject end"));
 	}
 }
 
@@ -126,31 +114,26 @@ void AMyAIController::setNextRouteObject()
 /* This will move and set the focus of the pawn to the passed in Actor but only if the pawn isn't performing another action*/
 void AMyAIController::moveToTarget(AActor* tempTarget)
 {
-	UE_LOG(LogTemp, Warning, TEXT("moveToTarget"));
 	MoveAction* ma = new MoveAction(10);
 
-	if (__raise Bot->source.MoveActionEvent(ma) && Bot->CurrentAction == NULL)
+	if (__raise Bot->source.MoveActionEvent(ma))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("__raise"));
 		SetFocus(tempTarget);
 		MoveToActor(tempTarget);
 		canMove = false;
 		Bot->CurrentAction = ma;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("moveToTarget end"));
 }
 
 /*This is used to make sure that the pawn can only move after it's reached it's current destination.*/
 void AMyAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)
 {
-	UE_LOG(LogTemp, Warning, TEXT("AMyAIController OnMoveCompleted start"));
 	canMove = true;
 
 	if (Result != EPathFollowingResult::Success && target == currentRouteObject)
 	{
 		goToNextPathObject();
 	}
-	UE_LOG(LogTemp, Warning, TEXT("AMyAIController OnMoveCompleted end"));
 }
 
 #pragma endregion

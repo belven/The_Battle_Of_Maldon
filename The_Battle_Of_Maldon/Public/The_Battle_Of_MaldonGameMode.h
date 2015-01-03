@@ -3,6 +3,8 @@
 #include "GameFramework/GameMode.h"
 #include "The_Battle_Of_MaldonGameMode.generated.h"
 
+
+
 UCLASS(minimalapi)
 class AThe_Battle_Of_MaldonGameMode : public AGameMode
 {
@@ -10,6 +12,8 @@ class AThe_Battle_Of_MaldonGameMode : public AGameMode
 
 public:
 	AThe_Battle_Of_MaldonGameMode(const FObjectInitializer& ObjectInitializer);
+
+
 };
 
 

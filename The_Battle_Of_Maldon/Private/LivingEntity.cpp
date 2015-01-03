@@ -11,10 +11,10 @@ ALivingEntity::ALivingEntity(const FObjectInitializer& ObjectInitializer)
 	CurrentEntityType = EntityEnums::Living;
 	AIControllerClass = ACombatAIController::StaticClass();
 	EntityCombos = new Combos(this);
-	health = 400;
+	health = 1000;
 	entityName = "Test";
 	clan = "2";
-	attackDamage = 20;
+	attackDamage = 200;
 	currentHealth = health;
 	rollDistance = 400;
 	rollVelocity = 300;
@@ -97,7 +97,8 @@ void ALivingEntity::SetStopComboTimer(float ComboDelay){
 }
 
 void ALivingEntity::ClearStopComboTimer(){
-	GetWorldTimerManager().ClearTimer(this, &ALivingEntity::StopCombo);
+	//GetWorldTimerManager().ClearTimer(this, &ALivingEntity::StopCombo);
+	GetWorldTimerManager().ClearAllTimersForObject(this);
 }
 
 void ALivingEntity::StopCombo()
@@ -136,7 +137,7 @@ void ALivingEntity::RollLeft()
 		GetController()->StopMovement();
 		LaunchCharacter(AddForce, true, true);
 
-		DefenseAction* tempDefenseAction = new DefenseAction();
+		DodgeAction* tempDefenseAction = new DodgeAction();
 		CurrentAction = tempDefenseAction;
 	}
 }
@@ -151,7 +152,7 @@ void ALivingEntity::RollRight()
 		GetController()->StopMovement();
 		LaunchCharacter(AddForce, true, true);
 
-		DefenseAction* tempDefenseAction = new DefenseAction();
+		DodgeAction* tempDefenseAction = new DodgeAction();
 		CurrentAction = tempDefenseAction;
 	}
 }
@@ -166,7 +167,7 @@ void ALivingEntity::RollBackwards()
 		GetController()->StopMovement();
 		LaunchCharacter(AddForce, true, true);
 
-		DefenseAction* tempDefenseAction = new DefenseAction();
+		DodgeAction* tempDefenseAction = new DodgeAction();
 		CurrentAction = tempDefenseAction;
 	}
 }
@@ -181,14 +182,14 @@ void ALivingEntity::RollForwards()
 		GetController()->StopMovement();
 		LaunchCharacter(AddForce, true, true);
 
-		DefenseAction* tempDefenseAction = new DefenseAction();
+		DodgeAction* tempDefenseAction = new DodgeAction();
 		CurrentAction = tempDefenseAction;
 	}
 }
 
-void ALivingEntity::TakeDamage(Damage* damage)
+void ALivingEntity::InflictDamage(Damage* damage)
 {
-	if (__raise source.LivingEntityTakeDamageEvent(damage))
+	if (__raise source.LivingEntityDamageEvent(damage))
 	{
 		if ((currentHealth - damage->damageDone) > 0)
 		{

@@ -1,25 +1,13 @@
-// Copyright 1998-2014 Epic Games, Inc. All Rights Reserved.
-
 #include "The_Battle_Of_Maldon.h"
 #include "The_Battle_Of_MaldonCharacter.h"
-#include "The_Battle_Of_MaldonProjectile.h"
-#include "Animation/AnimInstance.h"
 #include "LivingEntity.h"
 #include "Person.h"
-#include "MoveAction.h"
-#include "Weapon.h"
 #include "DefenseAction.h"
-#include "AttackAction.h"
 #include "CombatAIController.h"
-
-
-//////////////////////////////////////////////////////////////////////////
-// AThe_Battle_Of_MaldonCharacter
 
 AThe_Battle_Of_MaldonCharacter::AThe_Battle_Of_MaldonCharacter(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {
-	UE_LOG(LogTemp, Warning, TEXT("AThe_Battle_Of_MaldonCharacter start"));
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -38,10 +26,7 @@ AThe_Battle_Of_MaldonCharacter::AThe_Battle_Of_MaldonCharacter(const FObjectInit
 	FirstPersonCameraComponent->AttachParent = GetCapsuleComponent();
 	FirstPersonCameraComponent->RelativeLocation = FVector(0, 0, 64.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
-
-	// Default offset from the character location for projectiles to spawn
-	GunOffset = FVector(100.0f, 30.0f, 10.0f);
-
+	
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = ObjectInitializer.CreateDefaultSubobject<USkeletalMeshComponent>(this, TEXT("CharacterMesh1P"));
 	Mesh1P->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
@@ -49,19 +34,14 @@ AThe_Battle_Of_MaldonCharacter::AThe_Battle_Of_MaldonCharacter(const FObjectInit
 	Mesh1P->RelativeLocation = FVector(0.f, 0.f, -150.f);
 	Mesh1P->bCastDynamicShadow = false;
 	Mesh1P->CastShadow = false;
-	UE_LOG(LogTemp, Warning, TEXT("AThe_Battle_Of_MaldonCharacter end"));
-
-	// Note: The ProjectileClass and the skeletal mesh/anim blueprints for Mesh1P are set in the
-	// derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
-
-//////////////////////////////////////////////////////////////////////////
-// Input
 
 void AThe_Battle_Of_MaldonCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	// set up gameplay key bindings
+	UE_LOG(LogTemp, Log, TEXT("Test 2"));
 	check(InputComponent);
+	UE_LOG(LogTemp, Log, TEXT("Test 3"));
 
 	InputComponent->BindAction("CombatActionQ", IE_Pressed, this, &AThe_Battle_Of_MaldonCharacter::CombatActionQ);
 	InputComponent->BindAction("CombatActionE", IE_Pressed, this, &AThe_Battle_Of_MaldonCharacter::CombatActionE);
@@ -78,122 +58,106 @@ void AThe_Battle_Of_MaldonCharacter::SetupPlayerInputComponent(class UInputCompo
 
 	InputComponent->BindAction("Lock", IE_Pressed, this, &AThe_Battle_Of_MaldonCharacter::LockOn);
 	InputComponent->BindAction("Lock", IE_Released, this, &AThe_Battle_Of_MaldonCharacter::LockOnStopped);
-
-	/*InputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	InputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);*/
-
-	//InputComponent->BindAction("Fire", IE_Pressed, this, &AThe_Battle_Of_MaldonCharacter::OnFire);
-	InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AThe_Battle_Of_MaldonCharacter::TouchStarted);
+	
+	//InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AThe_Battle_Of_MaldonCharacter::TouchStarted);
 
 	InputComponent->BindAxis("MoveForward", this, &AThe_Battle_Of_MaldonCharacter::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &AThe_Battle_Of_MaldonCharacter::MoveRight);
 
-	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
-	// "turn" handles devices that provide an absolute delta, such as a mouse.
-	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 	InputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	InputComponent->BindAxis("TurnRate", this, &AThe_Battle_Of_MaldonCharacter::TurnAtRate);
 	InputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	InputComponent->BindAxis("LookUpRate", this, &AThe_Battle_Of_MaldonCharacter::LookUpAtRate);
+	UE_LOG(LogTemp, Log, TEXT("Test 4"));
 }
 
 void AThe_Battle_Of_MaldonCharacter::PossessedBy(class AController* NewController)
 {
-	UE_LOG(LogTemp, Warning, TEXT("PossessedBy start"));
 	Super::PossessedBy(NewController);
-	ACombatAIController* controller = (ACombatAIController*)GetController();
-	UE_LOG(LogTemp, Warning, TEXT("GetController"));
-	controller->canAttack = true;
-	controller->Bot = this;
+	ACombatAIController* controller = (ACombatAIController*)NewController;
 	controller->isAI = false;
-	UE_LOG(LogTemp, Warning, TEXT("PossessedBy end"));
+	controller->Bot = this;
+	controller->canAttack = true;
 }
 
 void AThe_Battle_Of_MaldonCharacter::Tick(float DeltaTime)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Character Tick start"));
+	UE_LOG(LogTemp, Log, TEXT("Test 1"));
 	Super::Tick(DeltaTime);
 
-	if (isLocking)
+	if (Target && isLocking)
 	{
-		if (Target)
-		{
-			FVector Direction = Target->GetActorLocation() - GetActorLocation();
-			FRotator NewControlRotation = Direction.Rotation();
+		FVector Direction = Target->GetActorLocation() - GetActorLocation();
+		FRotator NewControlRotation = Direction.Rotation();
 
-			if (GetMovementComponent() && GetMovementComponent()->IsMovingOnGround())
+		if (GetMovementComponent() && GetMovementComponent()->IsMovingOnGround())
+		{
+			NewControlRotation.Pitch = 0.f;
+		}
+
+		NewControlRotation.Yaw = FRotator::ClampAxis(NewControlRotation.Yaw);
+		GetController()->SetControlRotation(NewControlRotation);
+
+		FaceRotation(NewControlRotation, DeltaTime);
+	}
+	else
+	{
+		Target = NULL;
+
+		FHitResult testHitResult(ForceInit);
+		FVector testStartFVector = GetActorLocation();
+		FVector testEndFVector = testStartFVector + GetActorForwardVector() * 1000.0f;
+
+		FCollisionQueryParams TraceParams(TEXT("MyTrace"), true, this);
+		TraceParams.bTraceComplex = true;
+		TraceParams.bTraceAsyncScene = true;
+		TraceParams.bReturnPhysicalMaterial = false;
+
+		if (GetWorld()->LineTraceSingle(testHitResult, testStartFVector, testEndFVector, ECC_WorldStatic, TraceParams))
+		{
+			ALivingEntity* tempActor = (testHitResult.GetActor() != NULL ? Cast<ALivingEntity>(testHitResult.GetActor()) : NULL);
+
+			if (tempActor != NULL)
 			{
-				NewControlRotation.Pitch = 0.f;
+				Target = tempActor;
 			}
-
-			NewControlRotation.Yaw = FRotator::ClampAxis(NewControlRotation.Yaw);
-			GetController()->SetControlRotation(NewControlRotation);
-
-			FaceRotation(NewControlRotation, DeltaTime);
-			return;
 		}
 	}
-
-	Target = NULL;
-
-	FHitResult testHitResult(ForceInit);
-	UWorld* TheWorld = this->GetWorld();
-	FVector testStartFVector = this->GetActorLocation();
-	FVector testEndFVector = testStartFVector + GetActorForwardVector() * 1000.0f;
-	FColor debugColor = FColor::Red;
-
-	FCollisionQueryParams TraceParams(TEXT("MyTrace"), true, this);
-	TraceParams.bTraceComplex = true;
-	TraceParams.bTraceAsyncScene = true;
-	TraceParams.bReturnPhysicalMaterial = false;
-
-	if (TheWorld->LineTraceSingle(testHitResult, testStartFVector, testEndFVector, ECC_WorldStatic, TraceParams))
-	{
-		ALivingEntity* tempActor = (testHitResult.GetActor() != NULL ? Cast<ALivingEntity>(testHitResult.GetActor()) : NULL);
-
-		if (tempActor != NULL)
-		{
-			debugColor = FColor::Red;
-			Target = tempActor;
-			//DrawDebugBox(TheWorld, testHitResult.Location, FVector(10, 10, 10), debugColor);
-		}
-	}
-	UE_LOG(LogTemp, Warning, TEXT("Character Tick end"));
 }
 
 void AThe_Battle_Of_MaldonCharacter::OnFire()
 {
 	// try and fire a projectile
-	if (ProjectileClass != NULL)
-	{
-		const FRotator SpawnRotation = GetControlRotation();
-		// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
-		const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(GunOffset);
+	//if (ProjectileClass != NULL)
+	//{
+	//	const FRotator SpawnRotation = GetControlRotation();
+	//	// MuzzleOffset is in camera space, so transform it to world space before offsetting from the character location to find the final muzzle position
+	//	const FVector SpawnLocation = GetActorLocation() + SpawnRotation.RotateVector(GunOffset);
 
-		UWorld* const World = GetWorld();
-		if (World != NULL)
-		{
-			// spawn the projectile at the muzzle
-			World->SpawnActor<AThe_Battle_Of_MaldonProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
-		}
-	}
+	//	UWorld* const World = GetWorld();
+	//	if (World != NULL)
+	//	{
+	//		// spawn the projectile at the muzzle
+	//		World->SpawnActor<AThe_Battle_Of_MaldonProjectile>(ProjectileClass, SpawnLocation, SpawnRotation);
+	//	}
+	//}
 
-	// try and play the sound if specified
-	if (FireSound != NULL)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
-	}
+	//// try and play the sound if specified
+	//if (FireSound != NULL)
+	//{
+	//	UGameplayStatics::PlaySoundAtLocation(this, FireSound, GetActorLocation());
+	//}
 
-	// try and play a firing animation if specified
-	if (FireAnimation != NULL)
-	{
-		// Get the animation object for the arms mesh
-		UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
-		if (AnimInstance != NULL)
-		{
-			AnimInstance->Montage_Play(FireAnimation, 1.f);
-		}
-	}
+	//// try and play a firing animation if specified
+	//if (FireAnimation != NULL)
+	//{
+	//	// Get the animation object for the arms mesh
+	//	UAnimInstance* AnimInstance = Mesh1P->GetAnimInstance();
+	//	if (AnimInstance != NULL)
+	//	{
+	//		//AnimInstance->Montage_Play(FireAnimation, 1.f);
+	//	}
+	//}
 
 }
 
@@ -248,15 +212,6 @@ void AThe_Battle_Of_MaldonCharacter::ConverstationActionThree()
 void AThe_Battle_Of_MaldonCharacter::ConverstationActionFour()
 {
 	GoToConverstation(4);
-}
-
-void AThe_Battle_Of_MaldonCharacter::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location)
-{
-	// only fire for first finger down
-	if (FingerIndex == 0)
-	{
-		OnFire();
-	}
 }
 
 /**
@@ -317,7 +272,7 @@ This is done by the player pressing and holding the shift key
 */
 void AThe_Battle_Of_MaldonCharacter::LockOn()
 {
-	FirstPersonCameraComponent->bUseControllerViewRotation = false;
+	FirstPersonCameraComponent->bUsePawnControlRotation = false;
 	FocusOnLockOn();
 	isLocking = true;
 }
@@ -329,7 +284,7 @@ void AThe_Battle_Of_MaldonCharacter::FocusOnLockOn()
 {
 	if (Target)
 	{
-		((AMyAIController*)GetController())->SetFocus(Target);
+		((ACombatAIController*)GetController())->SetFocus(Target);
 	}
 }
 
@@ -339,7 +294,7 @@ It will cuase the camera and movement to go back to default
 */
 void AThe_Battle_Of_MaldonCharacter::LockOnStopped()
 {
-	FirstPersonCameraComponent->bUseControllerViewRotation = true;
+	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 	isLocking = false;
 	Target = NULL;
 }
@@ -351,9 +306,9 @@ Allowing for counter attacks
 */
 void AThe_Battle_Of_MaldonCharacter::Block()
 {
-	if (!CharacterMovement->IsFalling() && !CharacterMovement->IsFlying())
+	if (!GetCharacterMovement()->IsFalling() && !GetCharacterMovement()->IsFlying())
 	{
-		CharacterMovement->StopMovementImmediately();
+		GetCharacterMovement()->StopMovementImmediately();
 		DefenseAction* tempDefenseAction = new DefenseAction();
 		CurrentAction = tempDefenseAction;
 		canMove = false;
@@ -368,7 +323,6 @@ void AThe_Battle_Of_MaldonCharacter::BlockStopped()
 	CurrentAction = NULL;
 	canMove = true;
 }
-
 
 /*
 This forms the starting point for the players combos
@@ -403,7 +357,7 @@ void AThe_Battle_Of_MaldonCharacter::MoveRight(float Value)
 
 void AThe_Battle_Of_MaldonCharacter::TurnAtRate(float Rate)
 {
-	if (canMove){
+	if (canMove && !isLocking){
 		// calculate delta for this frame from the rate information
 		AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 	}
@@ -411,7 +365,7 @@ void AThe_Battle_Of_MaldonCharacter::TurnAtRate(float Rate)
 
 void AThe_Battle_Of_MaldonCharacter::LookUpAtRate(float Rate)
 {
-	if (canMove){
+	if (canMove && !isLocking){
 		// calculate delta for this frame from the rate information
 		AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 	}

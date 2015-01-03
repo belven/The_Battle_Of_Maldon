@@ -20,22 +20,22 @@ class ACombosBP : public AActor
 public:
 	ACombosBP(const FObjectInitializer& ObjectInitializer);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ComboStuff)
-	AComboBP* OriganalCombo;
+		AComboBP* OriganalCombo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ComboStuff)
 		AComboBP* CurrentCombo;
 
-//public:
-//	int CombosID;
-//	float LastDamage;
-//	int HitCounter;
-//
-//public:
-//	bool lastComboSucsessfull;
-//	void StopCombo();
-//	bool IsWithinCombo(FString* BInput);
-//	bool IsWithinOriginalCombo(FString* BInput);
-//	float ComboButtonPressed(FString BInput, float WeaponDamage);
-//	void SetNextCombo(AComboBP* nextCombo);
-//	void CalculateDamage(float WeaponDamage);
+	//public:
+	//	int CombosID;
+	//	float LastDamage;
+	//	int HitCounter;
+	//
+	//public:
+	//	bool lastComboSucsessfull;
+	//	void StopCombo();
+	//	bool IsWithinCombo(FString* BInput);
+	//	bool IsWithinOriginalCombo(FString* BInput);
+	//	float ComboButtonPressed(FString BInput, float WeaponDamage);
+	//	void SetNextCombo(AComboBP* nextCombo);
+	//	void CalculateDamage(float WeaponDamage);
 };

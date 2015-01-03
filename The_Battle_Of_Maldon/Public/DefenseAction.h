@@ -1,5 +1,15 @@
-#pragma once
+namespace DefenseEnums
+{
+	enum DefenseType
+	{
+		Block,
+		Dodge,
+		Other
+	};
+}
 
+
+#pragma once
 #include "CombatAction.h"
 #include "Combo.h"
 
@@ -8,8 +18,9 @@ class DefenseAction : public CombatAction
 public:
 	DefenseAction()
 	{
-		CurrentCombatActionType = CombatEnums::Defense;
+		currentCombatActionType = CombatEnums::Defense;
 	}
 
-	Combo* AttackCombo;
+	DefenseEnums::DefenseType currentDefenseType;
+
 };

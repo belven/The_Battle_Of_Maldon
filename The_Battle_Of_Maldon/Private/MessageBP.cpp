@@ -4,10 +4,10 @@
 #include "MessageBP.h"
 
 
-//UMessageBP::UMessageBP(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer){
-//
-//
-//}
+UMessageBP::UMessageBP(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer){
+
+
+}
 
 TArray<FString> UMessageBP::getPlayerReplies(){
 	TArray<FString> tempReplies;
@@ -20,6 +20,14 @@ TArray<FString> UMessageBP::getPlayerReplies(){
 	return tempReplies;
 }
 
+UMessageBP* UMessageBP::GetMessageBP(FString inNpcReplyMessage, FString inPlayerRelpyMessage, TArray<UMessageBP*> playerReplies)
+{
+	UMessageBP* tempMessage = Cast<UMessageBP>(StaticConstructObject(UMessageBP::GetClass()));
+	tempMessage->npcReplyMessage = inNpcReplyMessage;
+	tempMessage->playerRelpyMessage = inPlayerRelpyMessage;
+	tempMessage->PlayerReplies = playerReplies;
+	return tempMessage;
+}
 
 bool UMessageBP::IsEnd()
 {

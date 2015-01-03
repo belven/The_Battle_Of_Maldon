@@ -28,10 +28,11 @@ namespace DodgeEnums
 #include "Array.h"
 #include "Combos.h"
 #include "CombosBP.h"
-#include "DefenseAction.h"
+#include "DodgeAction.h"
 #include "Item.h"
 #include "UnrealString.h"
 #include "Message.h"
+#include "MessageBP.h"
 #include "TimerManager.h"
 #include "Weapon.h"
 #include "Damage.h"
@@ -46,7 +47,7 @@ class ALivingEntity : public AEntity, public ModifierManager
 public:
 	ALivingEntity(const FObjectInitializer& ObjectInitializer);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AggressionType)
-	TEnumAsByte<LivingEntityEnums::AggressionType> CurrentAggressionType;
+		TEnumAsByte<LivingEntityEnums::AggressionType> CurrentAggressionType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Senses)
 		float sightRange;
@@ -92,6 +93,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combo)
 		ACombosBP* EntityCombosBP;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Messages)
+		UMessageBP* startingMessageBP;
+
 	Combos* EntityCombos;
 	ALivingEntity* Target;
 	float currentHealth;
@@ -99,14 +103,14 @@ public:
 	Message* startingMessage;
 	TArray<Effect*> currentEffects;
 
-	void TakeDamage(Damage* damage);
+	void InflictDamage(Damage* damage);
 	void Dodge(DodgeEnums::DodgeDirection dodgeDirection);
 	void StopCombo();
 	void SetStopComboTimer(float ComboDelay);
 	void ClearStopComboTimer();
 
 	UFUNCTION(BlueprintCallable, Category = "AddItem")
-	void AddItemToInventory(AItem* itemToAdd);
+		void AddItemToInventory(AItem* itemToAdd);
 
 	void AttachItemToSocket(AItem* itemToAdd, FName socketName);
 	void CheckEffects(double deltaTime);

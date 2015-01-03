@@ -20,7 +20,7 @@ public:
 	float ComboDelay;
 	TArray<Combo*> ComboList;
 	FString ComboButton;
-	CombatEnums::CombatType CurrentCombatActionType;
+	CombatEnums::CombatType currentCombatActionType;
 
 	void Add(Combo* ComboToAdd)
 	{

@@ -19,5 +19,5 @@ public:
 		CurrentActionType = ActionEnums::Combat;
 	}
 
-	CombatEnums::CombatType CurrentCombatActionType;
+	CombatEnums::CombatType currentCombatActionType;
 };

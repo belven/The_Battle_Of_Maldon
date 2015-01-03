@@ -15,14 +15,16 @@ class THE_BATTLE_OF_MALDON_API UMessageBP : public UObject
 	GENERATED_BODY()
 
 public:
-	/*UFUNCTION(BlueprintCallable, Category = "Messages")
-		UMessageBP(const FObjectInitializer& ObjectInitializer);*/
+	UMessageBP(const FObjectInitializer& ObjectInitializer);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Messages")
 		FString npcReplyMessage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Messages")
 		FString playerRelpyMessage;
+
+	UFUNCTION(BlueprintCallable, Category = "Messages")
+		UMessageBP* GetMessageBP(FString inNpcReplyMessage, FString inPlayerRelpyMessage, TArray<UMessageBP*> playerReplies);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Messages")
 		TArray<UMessageBP*> PlayerReplies;

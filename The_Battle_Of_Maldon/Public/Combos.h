@@ -5,165 +5,107 @@
 #include "UnrealString.h"
 #include "TimerManager.h"
 #include "CombatAction.h"
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
 
 class Combos
 {
 
 public:
 	int CombosID;
-	float LastDamage;
-	int HitCounter;
-	Combo* OriganalCombo;
-	Combo* CurrentCombo;
+	float lastDamage;
+	int hitCounter;
+	Combo* origanalCombo;
+	Combo* currentCombo;
 	bool lastComboSucsessfull;
 	class ALivingEntity* Owner;
-	//Name AnimNode;
-	//Name ComboAnim;
-	//SoundCue SwordClank;
-	//AnimNodePlayCustomAnim CustomAnimNode;
-	//Combo_DataProvider CurrentDB;
 
 	Combos(class ALivingEntity* inOwner)
 	{
 		Owner = inOwner;
-		LastDamage = 0;
+		lastDamage = 0;
 		lastComboSucsessfull = false;
-		HitCounter = 0;
+		hitCounter = 0;
 		CombosID = 1;
 		GetAndSetCombos();
 	}
 
+	void getCombos(){
+		try
+		{
+
+			std::ifstream data("test.csv");
+			std::string line;
+
+			while (std::getline(data, line))
+			{
+				std::stringstream lineStream(line);
+				std::string cell;
+
+				while (std::getline(lineStream, cell, ','))
+				{
+					// You have a cell!!!!
+				}
+			}
+		}
+		catch (...){
+			UE_LOG(LogTemp, Warning, TEXT("Failed to load file"));
+		}
+	}
+
 	void GetAndSetCombos()
 	{
-		//CurrentDB = RPGGame(WorldInfo.Game).ComboDB;
-		//GetFirstCombo();
 		createTestCombos();
 	}
 
 	void createTestCombos()
 	{
-		/*	if (Owner->CurrentAggressionType == LivingEntityEnums::Aggressive)
-			{
-			Combo* tempCombo = GenerateCombo(1, 1, 0.5f, "E");
+		float delay = 1;
+		Combo* tempCombo = GenerateCombo(1, 1, delay, "");
+		Combo* tempCombo2 = GenerateCombo(2, 1.75, 1, "E");
+		Combo* tempCombo3 = GenerateCombo(3, 2.25, 2, "F");
+		Combo* tempCombo4 = GenerateCombo(4, 1.15, 1.5, "Q");
+		Combo* tempCombo5 = GenerateCombo(5, 2.25, 1, "E");
+		Combo* tempCombo6 = GenerateCombo(6, 2.75, 1.25, "R");
+		Combo* tempCombo7 = GenerateCombo(7, 1.4, 2, "F");
+		Combo* tempCombo8 = GenerateCombo(8, 3.8, 1.75, "Q");
 
-			Combo* tempCombo2 = GenerateCombo(2, 1, 0.5f, "E");
-			Combo* tempCombo3 = GenerateCombo(3, 1, 2.5f, "F");
-			Combo* tempCombo4 = GenerateCombo(4, 3, 1.0f, "Q");
-			Combo* tempCombo5 = GenerateCombo(5, 1.2, 0.5f, "E");
-
-			tempCombo->ComboList.Add(tempCombo2);
-			tempCombo2->ComboList.Add(tempCombo3);
-			tempCombo2->ComboList.Add(tempCombo5);
-			tempCombo3->ComboList.Add(tempCombo4);
-			OriganalCombo = tempCombo;
-			SetNextCombo(OriganalCombo);
-			}
-			else
-			{*/
-		float modifier = 1;
-		float delay = rand() % 3 + modifier;
-		Combo* tempCombo = GenerateCombo(1, 1, delay, "F");
-
-		delay = rand() % 2 + modifier;
-		Combo* tempCombo2 = GenerateCombo(2, 1, delay, "E");
-
-		delay = rand() % 2 + modifier;
-		Combo* tempCombo3 = GenerateCombo(3, 2, delay, "F");
-
-		delay = rand() % 2 + modifier;
-		Combo* tempCombo4 = GenerateCombo(4, 3, delay, "Q");
-
-		delay = rand() % 2 + modifier;
-		Combo* tempCombo5 = GenerateCombo(5, 1.5, delay, "E");
-
-		delay = rand() % 2 + modifier;
-		Combo* tempCombo6 = GenerateCombo(6, 1.5, delay, "R");
-
-		delay = rand() % 2 + modifier;
-		Combo* tempCombo7 = GenerateCombo(7, 1.5, delay, "F");
-
+		//--------------------------
 		tempCombo->ComboList.Add(tempCombo2);
+
+		//E - R - F
+		tempCombo->ComboList.Add(tempCombo6);
+
+		//E - F
 		tempCombo2->ComboList.Add(tempCombo3);
-		tempCombo2->ComboList.Add(tempCombo5);
+
+		//E - F - Q
 		tempCombo3->ComboList.Add(tempCombo4);
+
+		//--------------------------
+		//E - Q
+		tempCombo2->ComboList.Add(tempCombo8);
+
+		//E - Q - E
+		tempCombo8->ComboList.Add(tempCombo5);
+
+		//--------------------------
+		//E - E
+		tempCombo2->ComboList.Add(tempCombo5);
+
+		//E - E - R
 		tempCombo5->ComboList.Add(tempCombo6);
+
+		//E - E - R - F
 		tempCombo6->ComboList.Add(tempCombo7);
 
-		OriganalCombo = tempCombo;
-		SetNextCombo(OriganalCombo);
-		//}
+		origanalCombo = tempCombo;
+		SetNextCombo(origanalCombo);
 	}
-
-	void GetFirstCombo()
-	{
-		int FirstComboID = 0;
-		TArray<FString> CurrentDBData;
-
-		/*
-		if (CurrentDB == NULL)
-		{
-		GetAndSetCombos();
-		}
-
-		CurrentDB.GetSingleCombos(CombosID);
-
-		if (CurrentDB.GetDataCount() > 0)
-		{
-		CurrentDBData = CurrentDB.GetDataSet(0);
-		FirstComboID = int(CurrentDBData[0]);
-
-		CurrentDB.GetSingleCombo(FirstComboID);
-
-		if (CurrentDB.GetDataCount() > 0)
-		{
-		CurrentDBData = CurrentDB.GetDataSet(0);
-
-		OriganalCombo = GenerateCombo(int(CurrentDBData[0]), CurrentDBData[1],
-		float(CurrentDBData[2]), float(CurrentDBData[3]), Name(CurrentDBData[4]));
-		SetNextCombo(OriganalCombo);
-		GenerateCombos(OriganalCombo);
-		}
-		else
-		{
-		`log("No Data from GetSingleCombo" @ FirstComboID);
-		}
-		}
-		else
-		{
-		`log("No Data from GetCombos" @ CombosID);
-		}*/
-	}
-
-	void GenerateCombos(Combo* tempCombo)
-	{
-		int i = 0;
-		int RowCount = 0;
-		//TArray<FString> CurrentDBData;
-
-		//CurrentDB.GetLinkedCombos(tempCombo.ComboID);
-
-		//RowCount = CurrentDB.GetDataCount();
-
-		/*if (RowCount > 0)
-		{
-		for (i = 0; i < RowCount; i++)
-		{
-		CurrentDBData = CurrentDB.GetDataSet(i);
-		tempCombo.Add(GenerateCombo(int(CurrentDBData[0]), CurrentDBData[1],
-		float(CurrentDBData[2]), float(CurrentDBData[3]), Name(CurrentDBData[4])));
-		}
-
-		for (i = 0; i < tempCombo.ComboList.Length; i++)
-		{
-		GenerateCombos(tempCombo.ComboList[i]);
-		}
-		}
-		else
-		{
-		return;
-		}*/
-	}
-
+	
+	/*Creates a new Combo with all the approprite parameters*/
 	Combo* GenerateCombo(int ComboID, float tempComboDamageScaling, float tempComboDelay, FString tempComboButton
 		, CombatEnums::CombatType ActionType = CombatEnums::Attack)
 	{
@@ -171,31 +113,33 @@ public:
 		tempCombo->ComboButton = *tempComboButton;
 		tempCombo->ComboDamageScaling = tempComboDamageScaling;
 		tempCombo->ComboDelay = tempComboDelay;
-		tempCombo->CurrentCombatActionType = ActionType;
+		tempCombo->currentCombatActionType = ActionType;
 		//tempCombo.ComboAnim = tempComboAnim;
 		tempCombo->ComboID = ComboID;
 		return tempCombo;
 	}
 
+	/*Reset the combo to the first, we might have failed to hit the buttons at the right time*/
 	void StopCombo()
 	{
-		LastDamage = 0;
-		HitCounter = 0;
-		CurrentCombo = OriganalCombo;
+		lastDamage = 0;
+		hitCounter = 0;
+		currentCombo = origanalCombo;
 	}
 
+	/*Checks to see if the button pressed, e.g. F, is one of the combos that the current one links to*/
 	bool IsWithinCombo(FString* BInput)
 	{
 		bool PartOfCombo = false;
 		int i = 0;
 
-		if (CurrentCombo != NULL)
+		if (currentCombo != NULL)
 		{
-			for (i = 0; i < CurrentCombo->ComboList.Num(); i++)
+			for (i = 0; i < currentCombo->ComboList.Num(); i++)
 			{
-				if (CurrentCombo->ComboList[i]->ComboButton == *BInput)
+				if (currentCombo->ComboList[i]->ComboButton == *BInput)
 				{
-					SetNextCombo(CurrentCombo->ComboList[i]);
+					SetNextCombo(currentCombo->ComboList[i]);
 					PartOfCombo = true;
 					break;
 				}
@@ -205,18 +149,19 @@ public:
 		return PartOfCombo;
 	}
 
+	/*This is to allow chaining of combos as we can revert back to the starting combo to cut short are current assult*/
 	bool IsWithinOriginalCombo(FString* BInput)
 	{
 		bool PartOfCombo = false;
 		int i = 0;
 
-		if (CurrentCombo != NULL)
+		if (currentCombo != NULL)
 		{
-			for (i = 0; i < OriganalCombo->ComboList.Num(); i++)
+			for (i = 0; i < origanalCombo->ComboList.Num(); i++)
 			{
-				if (OriganalCombo->ComboList[i]->ComboButton == *BInput)
+				if (origanalCombo->ComboList[i]->ComboButton == *BInput)
 				{
-					SetNextCombo(OriganalCombo->ComboList[i]);
+					SetNextCombo(origanalCombo->ComboList[i]);
 					PartOfCombo = true;
 					break;
 				}
@@ -227,23 +172,22 @@ public:
 	}
 
 	
-
 	void SetNextCombo(Combo* nextCombo)
 	{
-		CurrentCombo = nextCombo;
+		currentCombo = nextCombo;
 	}
 
 	void CalculateDamage(float WeaponDamage)
 	{
-		if (LastDamage == 0)
+		if (lastDamage == 0)
 		{
-			LastDamage = WeaponDamage;
+			lastDamage = WeaponDamage;
 		}
 		else
 		{
-			LastDamage = LastDamage * CurrentCombo->ComboDamageScaling;
+			lastDamage = lastDamage * currentCombo->ComboDamageScaling;
 		}
-		HitCounter++;
+		hitCounter++;
 	}
 
 };

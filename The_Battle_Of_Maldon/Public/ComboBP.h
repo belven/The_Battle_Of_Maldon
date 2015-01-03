@@ -39,6 +39,6 @@ public:
 		FString ComboButton;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combo)
-	//	TEnumAsByte<CombatEnums::CombatType> CurrentCombatActionType;
+	//	TEnumAsByte<CombatEnums::CombatType> currentCombatActionType;
 
 };

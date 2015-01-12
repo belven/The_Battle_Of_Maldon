@@ -2,6 +2,8 @@
 #include "CombatAIController.h"
 #include "LivingEntity.h"
 #include "Engine.h"
+#include "HealthEffect.h"
+#include "ModifierEffect.h"
 #include <iostream>
 #include <string>
 
@@ -19,6 +21,29 @@ ALivingEntity::ALivingEntity(const FObjectInitializer& ObjectInitializer)
 	rollDistance = 400;
 	rollVelocity = 300;
 
+	/*EffectStructs::HealthParams hp;
+	hp.amountOfChange = 100;
+	hp.positive = false;
+	hp.dely = 3;
+	hp.id = "Basic Damage";
+	hp.stacks = false;
+	hp.maxDuration = 30;
+
+	HealthEffect* he = new HealthEffect(hp, this);
+	GiveEffect(he);*/
+
+	EffectStructs::ModifierParams mp;
+	mp.id = "Damage Reduction";
+	mp.dely = 1;
+	mp.stacks = false;
+	mp.maxDuration = 9;
+	mp.positive = true;
+	mp.modifier = 0.3;
+	mp.modifierName = ModifierManager::defenseModiferName;
+
+	ModifierEffect* me = new ModifierEffect(mp, this);
+	GiveEffect(me);
+
 	Message* start = new Message("NPC: Hello", "");
 	Message* middle = new Message("NPC: " + entityName, "Player: Whats your name?");
 	Message* middle2 = new Message("NPC: Hello?", "Player: What did you say again?");
@@ -32,17 +57,29 @@ ALivingEntity::ALivingEntity(const FObjectInitializer& ObjectInitializer)
 	startingMessage = start;
 }
 
-void ALivingEntity::CheckEffects(double deltaTime){
-	for (Effect* e : currentEffects) {
-		if (e->ShouldApply(deltaTime))	{
-			e->ApplyEffect();
-			e->lastTimeRan = deltaTime;
-			e->EffectApplied();
+void ALivingEntity::Tick(float deltaTime){
+	Super::Tick(deltaTime);
+	CheckEffects(deltaTime);
+}
 
-			if (e->EffectExpired(deltaTime)) {
-				e->Expired();
-				currentEffects.Remove(e);
-			}
+void ALivingEntity::CheckEffects(float deltaTime){
+	for (Effect* e : currentEffects) {
+		CheckEffect(e, deltaTime);
+	}
+}
+
+void ALivingEntity::CheckEffect(Effect* e, float deltaTime){
+	e->lastDuration += deltaTime;
+	e->totalTime += deltaTime;
+
+	if (e->ShouldApply()) {
+		e->ApplyEffect();
+		e->EffectApplied();
+		e->lastDuration = 0;
+
+		if (e->EffectExpired()) {
+			e->Expired();
+			currentEffects.Remove(e);
 		}
 	}
 }
@@ -57,7 +94,7 @@ bool ALivingEntity::HasEffect(Effect* newE) {
 }
 
 void ALivingEntity::GiveEffect(Effect* newE) {
-	if (!newE->stacks) {
+	if (!newE->stacks && HasEffect(newE)) {
 		for (Effect* e : currentEffects) {
 			if (e->id.Equals(newE->id) && e->Score() < newE->Score()){
 				e = newE;
@@ -189,6 +226,12 @@ void ALivingEntity::RollForwards()
 
 void ALivingEntity::InflictDamage(Damage* damage)
 {
+	Modifier* m = GetModifier(ModifierManager::defenseModiferName);
+
+	if (m){
+		damage->damageDone = damage->damageDone * (1 - (m->value - 1));
+	}
+
 	if (__raise source.LivingEntityDamageEvent(damage))
 	{
 		if ((currentHealth - damage->damageDone) > 0)

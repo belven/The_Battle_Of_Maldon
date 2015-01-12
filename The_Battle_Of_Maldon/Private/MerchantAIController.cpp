@@ -37,6 +37,11 @@ void AMerchantAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowi
 	}
 	//We have supplies therefore we must have reached a village or it's supplies
 	else if (mechantHasSupplies() && targetVillage){
+		FVector tempLoc = getMerchant()->GetActorLocation();
+		tempLoc.X += 10;
+		tempLoc.Z += 10;
+
+		getMerchant()->supplies[0]->SetActorLocation(tempLoc);
 		getMerchant()->supplies.Remove(targetVillage->giveSupplies(getMerchant()->supplies[0]));
 	}
 }

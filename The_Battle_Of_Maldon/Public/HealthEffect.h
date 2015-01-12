@@ -1,6 +1,7 @@
 #pragma once
 #include "Array.h"
 #include "Effect.h"
+#include "Damage.h"
 #include "UnrealString.h"
 #include "LivingEntity.h"
 
@@ -17,12 +18,11 @@ public:
 	}
 
 	virtual void ApplyEffect(){
-		if (positive){
-			
+		if (positive) {			
 			//EffectOwner->GiveHealth(healthModifier);
 		}
-		else{
-			//EffectOwner->TakeHealth(healthModifier);
+		else {
+			effectOwner->InflictDamage(new Damage(amountOfChange));
 		}
 	}
 

@@ -16,6 +16,7 @@ public:
 		modifier = params.modifier;
 		modifierName = params.modifierName;
 		positive = params.positive;
+		ApplyEffect();
 	}
 
 	virtual void ApplyEffect(){
@@ -28,6 +29,6 @@ public:
 	}
 
 	virtual void Expired(){
-		effectOwner->SetModifier(modifierName, 1, !positive);
+		effectOwner->SetModifier(modifierName, modifier, !positive);
 	}
 };

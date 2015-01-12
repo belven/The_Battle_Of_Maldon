@@ -47,6 +47,5 @@ public:
 	Modifier* GetBaseModifier(FString name){
 		return new Modifier(name, 1);
 	}
-
-
+	
 };

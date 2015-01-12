@@ -113,9 +113,11 @@ public:
 		void AddItemToInventory(AItem* itemToAdd);
 
 	void AttachItemToSocket(AItem* itemToAdd, FName socketName);
-	void CheckEffects(double deltaTime);
+	void CheckEffects(float deltaTime);
+	void CheckEffect(Effect* e, float deltaTime);
 	bool HasEffect(Effect* newE);
 	void GiveEffect(Effect* newE);
+	void Tick(float deltaTime) override;
 protected:
 	void RollRight();
 	void RollLeft();

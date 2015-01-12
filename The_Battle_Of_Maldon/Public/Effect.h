@@ -16,7 +16,6 @@ namespace EffectStructs {
 	struct EffectParams {
 		double dely = 1.0;
 		double lastTimeRan = 0.0;
-		double startTime = 0.0;
 		double maxDuration = 1.0;
 		bool stacks = false;
 		FString id = "Default";
@@ -53,16 +52,16 @@ public:
 		effectOwner = owner;
 		type = EffectEnums::Default;
 		dely = params.dely;
-		lastTimeRan = params.lastTimeRan;
-		startTime = params.startTime;
+		lastDuration = params.lastTimeRan;
 		maxDuration = params.maxDuration;
 		stacks = params.stacks;
 		id = params.id;
+		//effectOwner->GiveEffect(this);
 	}
 
 	double dely = 1.0;
-	double lastTimeRan = 0.0;
-	double startTime = 0.0;
+	double lastDuration = 0.0;
+	double totalTime = 0.0;
 	double maxDuration = 1.0;
 	int timesRun = 0;
 	FString id = "Default";
@@ -75,18 +74,18 @@ public:
 	virtual void Expired() = 0;
 
 	double Score(){
-		return lastTimeRan - startTime;
+		return totalTime;
 	};
 
 	void EffectApplied() {
 		timesRun++;
 	};
 
-	bool ShouldApply(double deltaTime){
-		return (deltaTime - lastTimeRan) >= dely;
+	bool ShouldApply(){
+		return lastDuration >= dely;
 	}
 
-	bool EffectExpired(double deltaTime){
-		return (deltaTime - startTime) >= maxDuration;
+	bool EffectExpired(){
+		return totalTime >= maxDuration;
 	}
 };

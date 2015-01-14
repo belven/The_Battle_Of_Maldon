@@ -34,15 +34,19 @@ ALivingEntity::ALivingEntity(const FObjectInitializer& ObjectInitializer)
 
 	EffectStructs::ModifierParams mp;
 	mp.id = "Damage Reduction";
-	mp.dely = 1;
-	mp.stacks = false;
+	mp.dely = 9;
+	mp.stacks = true;
 	mp.maxDuration = 9;
-	mp.positive = true;
+	mp.positive = false;
 	mp.modifier = 0.3;
 	mp.modifierName = ModifierManager::defenseModiferName;
 
 	ModifierEffect* me = new ModifierEffect(mp, this);
 	GiveEffect(me);
+
+	mp.dely = 18;
+	ModifierEffect* me2 = new ModifierEffect(mp, this);
+	GiveEffect(me2);
 
 	Message* start = new Message("NPC: Hello", "");
 	Message* middle = new Message("NPC: " + entityName, "Player: Whats your name?");
@@ -63,7 +67,8 @@ void ALivingEntity::Tick(float deltaTime){
 }
 
 void ALivingEntity::CheckEffects(float deltaTime){
-	for (Effect* e : currentEffects) {
+	for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it != NULL; it++){
+		Effect* e = (Effect*)*it;
 		CheckEffect(e, deltaTime);
 	}
 }
@@ -85,7 +90,8 @@ void ALivingEntity::CheckEffect(Effect* e, float deltaTime){
 }
 
 bool ALivingEntity::HasEffect(Effect* newE) {
-	for (Effect* e : currentEffects) {
+	for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it != NULL; it++){
+		Effect* e = (Effect*)*it;
 		if (e->id.Equals(newE->id)){
 			return true;
 		}
@@ -95,7 +101,8 @@ bool ALivingEntity::HasEffect(Effect* newE) {
 
 void ALivingEntity::GiveEffect(Effect* newE) {
 	if (!newE->stacks && HasEffect(newE)) {
-		for (Effect* e : currentEffects) {
+		for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it != NULL; it++){
+			Effect* e = (Effect*)*it;
 			if (e->id.Equals(newE->id) && e->Score() < newE->Score()){
 				e = newE;
 			}
@@ -229,7 +236,7 @@ void ALivingEntity::InflictDamage(Damage* damage)
 	Modifier* m = GetModifier(ModifierManager::defenseModiferName);
 
 	if (m){
-		damage->damageDone = damage->damageDone * (1 - (m->value - 1));
+		damage->damageDone = damage->damageDone * m->value;
 	}
 
 	if (__raise source.LivingEntityDamageEvent(damage))

@@ -36,16 +36,22 @@ public:
 	}
 
 	Modifier* GetModifier(FString name){
-		for (Modifier* m : currentModifiers){
+		for (TArray<Modifier*>::TConstIterator it = currentModifiers.CreateConstIterator(); it != NULL; it++){
+			Modifier* m = (Modifier*)*it;
 			if (m->name.Equals(name))
 				return m;
 		}
 
+		/*for (Modifier* m : currentModifiers){
+		if (m->name.Equals(name))
+		return m;
+		}
+		*/
 		return NULL;
 	}
 
 	Modifier* GetBaseModifier(FString name){
 		return new Modifier(name, 1);
 	}
-	
+
 };

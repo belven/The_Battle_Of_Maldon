@@ -41,6 +41,7 @@ AVillageSupplies* AVillageVolume::giveSupplies(AVillageSupplies* suppliesToGive)
 	return suppliesToGive;
 }
 
+/*Returns the villages supplies of that particular supply type, if it has any*/
 AVillageSupplies* AVillageVolume::getSupplies(VillageSuppliesEnums::VillageSupplyType type){
 	for (AVillageSupplies* supply : supplies){
 		if (supply->currentVillageSupplyType == type){
@@ -51,6 +52,7 @@ AVillageSupplies* AVillageVolume::getSupplies(VillageSuppliesEnums::VillageSuppl
 	return NULL;
 }
 
+/*Sets up the supplies and merchants within a village, makes it eaiser to set up within the UE*/
 void AVillageVolume::BeginPlay(){
 	TArray<AActor*> actors;
 	GetOverlappingActors(actors, AActor::StaticClass());
@@ -70,6 +72,7 @@ void AVillageVolume::BeginPlay(){
 	}
 }
 
+/*Returns a list of all the villages allies, i.e. bots with the same clan*/
 TArray<ALivingEntity*> AVillageVolume::GetAlliesInVillage(){
 	TArray<ALivingEntity*> allies;
 	FString message = "";
@@ -85,6 +88,7 @@ TArray<ALivingEntity*> AVillageVolume::GetAlliesInVillage(){
 	return allies;
 }
 
+/*Returns a list of all the villages enimies, i.e. bots not in the same clan*/
 TArray<ALivingEntity*> AVillageVolume::GetEnimiesInVillage(){
 	TArray<ALivingEntity*> enimies;
 	FString message = "";

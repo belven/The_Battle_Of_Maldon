@@ -44,6 +44,7 @@ namespace EffectStructs {
 	};
 }
 
+/*An effect is a timed event that performs tasks each tick,used to do damage/healing and buffs/debuffs*/
 class Effect {
 
 public:
@@ -73,18 +74,23 @@ public:
 	virtual void ApplyEffect() = 0;
 	virtual void Expired() = 0;
 
+	/*Returns a double based on the time the effect has left
+	used to determine if it should be replaced*/
 	double Score(){
-		return totalTime;
+		return maxDuration - totalTime;
 	};
 
+	/*increments the run times of the effect*/
 	void EffectApplied() {
 		timesRun++;
 	};
 
+	/*Determines if the effect should apply, this should happen when the time passed is greater than the delay*/
 	bool ShouldApply(){
 		return lastDuration >= dely;
 	}
 
+	/*Determines if the effects totalTime is over the maxDuration, i.e. the effect has ended*/
 	bool EffectExpired(){
 		return totalTime >= maxDuration;
 	}

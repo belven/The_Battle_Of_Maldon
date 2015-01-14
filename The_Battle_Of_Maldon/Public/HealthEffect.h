@@ -5,6 +5,7 @@
 #include "UnrealString.h"
 #include "LivingEntity.h"
 
+/*This effect is used to heal/damage entities, positive is a heal, !positive is damage*/
 class HealthEffect : public Effect {
 
 public:
@@ -17,6 +18,7 @@ public:
 		positive = params.positive;
 	}
 
+	/*Run when the effect is applied, i.e. deal damage/heal*/
 	virtual void ApplyEffect(){
 		if (positive) {			
 			//EffectOwner->GiveHealth(healthModifier);

@@ -4,6 +4,7 @@
 #include "UnrealString.h"
 #include "LivingEntity.h"
 
+/*A modifier effect is an effect that applies a duration to a modifier, this allows us to create buffs and debuffs*/
 class ModifierEffect : public Effect {
 
 public:

@@ -31,6 +31,7 @@ void AMyAIController::Tick(float DeltaTime)
 	}
 }
 
+/*This method will make the bot go towards it's next PathObject*/
 void AMyAIController::lookForTarget()
 {
 	//Check if there is anything within the bots patrol range otherwise move towards next RouteObject

@@ -4,6 +4,7 @@
 #include "The_Battle_Of_Maldon.h"
 #include "MerchantAIController.h"
 
+/*Runs every frame and makes sure the mechant is always doing something*/
 void AMerchantAIController::Tick(float DeltaTime)
 {
 	//The controller has a bot, and the bot can move
@@ -21,8 +22,14 @@ void AMerchantAIController::Tick(float DeltaTime)
 	}
 }
 
+/*Makes the merchant give his supplies to his target village*/
 void AMerchantAIController::giveSuppliesToTargetVillage(){
+	FVector tempLoc = getMerchant()->GetActorLocation();
+	tempLoc.X += 10;
+	tempLoc.Z += 10;
 
+	getMerchant()->supplies[0]->SetActorLocation(tempLoc);
+	getMerchant()->supplies.Remove(targetVillage->giveSupplies(getMerchant()->supplies[0]));
 }
 
 /*This is used to make sure that the pawn can only move after it's reached it's current destination.*/
@@ -37,12 +44,7 @@ void AMerchantAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowi
 	}
 	//We have supplies therefore we must have reached a village or it's supplies
 	else if (mechantHasSupplies() && targetVillage){
-		FVector tempLoc = getMerchant()->GetActorLocation();
-		tempLoc.X += 10;
-		tempLoc.Z += 10;
-
-		getMerchant()->supplies[0]->SetActorLocation(tempLoc);
-		getMerchant()->supplies.Remove(targetVillage->giveSupplies(getMerchant()->supplies[0]));
+		giveSuppliesToTargetVillage();
 	}
 }
 

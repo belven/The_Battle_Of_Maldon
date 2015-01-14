@@ -4,6 +4,7 @@
 #include "Engine.h"
 #include "HealthEffect.h"
 #include "ModifierEffect.h"
+#include "LivingEntityDamage.h"
 #include <iostream>
 #include <string>
 
@@ -61,11 +62,13 @@ ALivingEntity::ALivingEntity(const FObjectInitializer& ObjectInitializer)
 	startingMessage = start;
 }
 
+/*This method is used to control the effects on the entity, this runs each frame*/
 void ALivingEntity::Tick(float deltaTime){
 	Super::Tick(deltaTime);
 	CheckEffects(deltaTime);
 }
 
+/*This will check all current effects to see if they need applying or removing*/
 void ALivingEntity::CheckEffects(float deltaTime){
 	for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it != NULL; it++){
 		Effect* e = (Effect*)*it;
@@ -73,6 +76,7 @@ void ALivingEntity::CheckEffects(float deltaTime){
 	}
 }
 
+/*Checks a single effect to allow for re-usability*/
 void ALivingEntity::CheckEffect(Effect* e, float deltaTime){
 	e->lastDuration += deltaTime;
 	e->totalTime += deltaTime;
@@ -89,6 +93,7 @@ void ALivingEntity::CheckEffect(Effect* e, float deltaTime){
 	}
 }
 
+/*Checks to see if an entity has an effect with a matching ID*/
 bool ALivingEntity::HasEffect(Effect* newE) {
 	for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it != NULL; it++){
 		Effect* e = (Effect*)*it;
@@ -99,6 +104,7 @@ bool ALivingEntity::HasEffect(Effect* newE) {
 	return false;
 }
 
+/*Assigns a new effect to an entity or replaces an existing one, based on if the effect stacks*/
 void ALivingEntity::GiveEffect(Effect* newE) {
 	if (!newE->stacks && HasEffect(newE)) {
 		for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it != NULL; it++){
@@ -113,43 +119,26 @@ void ALivingEntity::GiveEffect(Effect* newE) {
 	}
 }
 
-void ALivingEntity::Dodge(DodgeEnums::DodgeDirection dodgeDirection = DodgeEnums::Backwards)
-{
-	switch (dodgeDirection)
-	{
-	case DodgeEnums::Left:
-		RollLeft();
-		break;
-	case DodgeEnums::Right:
-		RollRight();
-		break;
-	case DodgeEnums::Forwards:
-		RollForwards();
-		break;
-	case DodgeEnums::Backwards:
-		RollBackwards();
-		break;
-	default:
-		RollBackwards();
-		break;
-	}
-}
-
+/*Clears the entities combo timer, restting there combo to the start, 
+may be run when blocked or the player fails to press the button in time*/
 void ALivingEntity::SetStopComboTimer(float ComboDelay){
 	ClearStopComboTimer();
 	GetWorldTimerManager().SetTimer(this, &ALivingEntity::StopCombo, ComboDelay);
 }
 
+/*Removes the current time from the entity, possibly to add a new one*/
 void ALivingEntity::ClearStopComboTimer(){
 	//GetWorldTimerManager().ClearTimer(this, &ALivingEntity::StopCombo);
 	GetWorldTimerManager().ClearAllTimersForObject(this);
 }
 
+/*Resets the entities combo to the start*/
 void ALivingEntity::StopCombo()
 {
 	EntityCombos->StopCombo();
 }
 
+/*Adds an item to the entities inventory and will attach it to a socket if any*/
 void ALivingEntity::AddItemToInventory(AItem* itemToAdd)
 {
 	Inventory.Add(itemToAdd);
@@ -166,17 +155,18 @@ void ALivingEntity::AddItemToInventory(AItem* itemToAdd)
 	}
 }
 
+/*Places the items mesh at the inputted socket*/
 void ALivingEntity::AttachItemToSocket(AItem* itemToAdd, FName socketName){
 	itemToAdd->AttachRootComponentToActor(itemToAdd, socketName);
 }
 
-
-void ALivingEntity::RollLeft()
+/*Launchs the character in the desired direction*/
+void ALivingEntity::Dodge(DodgeEnums::DodgeDirection dodgeDirection = DodgeEnums::Backwards)
 {
 	if (GetCharacterMovement()->IsMovingOnGround())
 	{
 		const FVector ForwardDir = GetActorRightVector();
-		const FVector AddForce = (ForwardDir * (0 - rollDistance)) + FVector(0, 0, 1) * rollVelocity;
+		const FVector AddForce = GetForceForRoll(dodgeDirection, ForwardDir);
 
 		GetController()->StopMovement();
 		LaunchCharacter(AddForce, true, true);
@@ -186,56 +176,37 @@ void ALivingEntity::RollLeft()
 	}
 }
 
-void ALivingEntity::RollRight()
-{
-	if (GetCharacterMovement()->IsMovingOnGround())
+/*Returns a vector based on another vector and the desired direction*/
+FVector ALivingEntity::GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection, FVector ForwardDir) {
+	switch (dodgeDirection)
 	{
-		const FVector ForwardDir = GetActorRightVector();
-		const FVector AddForce = (ForwardDir * rollDistance) + FVector(0, 0, 1) * rollVelocity;
-
-		GetController()->StopMovement();
-		LaunchCharacter(AddForce, true, true);
-
-		DodgeAction* tempDefenseAction = new DodgeAction();
-		CurrentAction = tempDefenseAction;
+	case DodgeEnums::Left:
+		return (ForwardDir * (0 - rollDistance)) + FVector(0, 0, 1) * rollVelocity; 
+	case DodgeEnums::Right:
+		return (ForwardDir * rollDistance) + FVector(0, 0, 1) * rollVelocity;
+	case DodgeEnums::Forwards:
+		return	(ForwardDir * rollDistance) + FVector(0, 0, 1) * rollVelocity;
+	case DodgeEnums::Backwards:
+		return (ForwardDir * (0 - rollDistance)) + FVector(0, 0, 1) * rollVelocity;
+	default:
+		return (ForwardDir * (0 - rollDistance)) + FVector(0, 0, 1) * rollVelocity;
 	}
 }
 
-void ALivingEntity::RollBackwards()
-{
-	if (GetCharacterMovement()->IsMovingOnGround())
-	{
-		const FVector ForwardDir = GetActorForwardVector();
-		const FVector AddForce = (ForwardDir * (0 - rollDistance)) + FVector(0, 0, 1) * rollVelocity;
-
-		GetController()->StopMovement();
-		LaunchCharacter(AddForce, true, true);
-
-		DodgeAction* tempDefenseAction = new DodgeAction();
-		CurrentAction = tempDefenseAction;
-	}
-}
-
-void ALivingEntity::RollForwards()
-{
-	if (GetCharacterMovement()->IsMovingOnGround())
-	{
-		const FVector ForwardDir = GetActorForwardVector();
-		const FVector AddForce = (ForwardDir * rollDistance) + FVector(0, 0, 1) * rollVelocity;
-
-		GetController()->StopMovement();
-		LaunchCharacter(AddForce, true, true);
-
-		DodgeAction* tempDefenseAction = new DodgeAction();
-		CurrentAction = tempDefenseAction;
-	}
-}
-
+/*This damages the entiies health and will include damage reduction from defense modifiers**/
 void ALivingEntity::InflictDamage(Damage* damage)
 {
 	Modifier* m = GetModifier(ModifierManager::defenseModiferName);
+	LivingEntityDamage* led = (LivingEntityDamage*)damage;
+	FString damageDone = FString::SanitizeFloat(damage->damageDone);
 
-	if (m){
+	FString damagedBy = "Other";
+
+	if (led) {
+		damagedBy = led->damager->entityName;
+	}
+
+	if (m) {
 		damage->damageDone = damage->damageDone * m->value;
 	}
 
@@ -243,7 +214,7 @@ void ALivingEntity::InflictDamage(Damage* damage)
 	{
 		if ((currentHealth - damage->damageDone) > 0)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::SanitizeFloat(damage->damageDone) + " damage dealt to " + entityName);
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, damagedBy + " delt " + damageDone + " damage to " + entityName);
 			currentHealth -= damage->damageDone;
 		}
 		else

@@ -119,8 +119,5 @@ public:
 	void GiveEffect(Effect* newE);
 	void Tick(float deltaTime) override;
 protected:
-	void RollRight();
-	void RollLeft();
-	void RollForwards();
-	void RollBackwards();
+	FVector GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection, FVector ForwardDir);
 };

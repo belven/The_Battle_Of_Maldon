@@ -3,7 +3,7 @@
 #include "The_Battle_Of_Maldon.h"
 #include "CombatAIController.h"
 #include "Combo.h"
-#include "Damage.h"
+#include "LivingEntityDamage.h"
 #include "DefenseAction.h"
 #include "AttackAction.h"
 #include "Engine.h"
@@ -19,7 +19,7 @@ ACombatAIController::ACombatAIController(const FObjectInitializer& ObjectInitial
 	canAttack = true;
 }
 
-
+/*Runs each frame to make sure bots are always doing something*/
 void ACombatAIController::Tick(float DeltaTime)
 {
 	AAIController::Tick(DeltaTime);
@@ -30,12 +30,14 @@ void ACombatAIController::Tick(float DeltaTime)
 	}
 }
 
+/*Runs once the controller is being used by a pawn*/
 void ACombatAIController::Possess(APawn* InPawn)
 {
 	Super::Possess(InPawn);
 	canAttack = true;
 }
 
+/*Looks for actors that the bot can go towards and possibly attack*/
 void ACombatAIController::lookForTarget()
 {
 	//Check if there is anything within the bots patrol range otherwise move towards next RouteObject
@@ -147,6 +149,7 @@ void ACombatAIController::attackTarget(FString ButtonPressed, AActor* attackTarg
 	}
 }
 
+/*Extracted from entityCombos, this is designed to control the combo system by checking button presses against a list of possile combos*/
 float ACombatAIController::ComboButtonPressed(FString BInput, float WeaponDamage)
 {
 	Combos* combos = Bot->EntityCombos;
@@ -244,7 +247,7 @@ bool ACombatAIController::isTargetInAttackRange(AActor* tempTarget)
 void ACombatAIController::attackAgain()
 {
 	ALivingEntity* tempTarget = (ALivingEntity*)target;
-	Damage* damage = new Damage(Bot->EntityCombos->lastDamage);
+	LivingEntityDamage* damage = new LivingEntityDamage(Bot, tempTarget, Bot->EntityCombos->lastDamage);
 	if (tempTarget)	tempTarget->InflictDamage(damage);
 
 	Bot->CurrentAction = NULL;

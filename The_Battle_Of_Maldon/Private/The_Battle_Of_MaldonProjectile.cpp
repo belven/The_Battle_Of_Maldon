@@ -1,7 +1,6 @@
 // Copyright 1998-2014 Epic Games, Inc. All Rights Reserved.
 
 #include "The_Battle_Of_Maldon.h"
-#include "The_Battle_Of_MaldonProjectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 
 AThe_Battle_Of_MaldonProjectile::AThe_Battle_Of_MaldonProjectile(const FObjectInitializer& ObjectInitializer) 

@@ -1,15 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "The_Battle_Of_Maldon.h"
-#include "CombatAIController.h"
-#include "Combo.h"
-#include "LivingEntityDamage.h"
-#include "DefenseAction.h"
-#include "AttackAction.h"
 #include "Engine.h"
-#include <iostream>
-#include <string>
-
 //DEFINE_LOG_CATEGORY(CombatCombos);
 //DEFINE_LOG_CATEGORY(CombatDecisions);
 
@@ -90,8 +82,8 @@ ALivingEntity* ACombatAIController::findNearestEnemyLivingEntity()
 		}
 	}
 
-	for (ALivingEntity* le : EntitiesFound)
-	{
+	for (TArray<ALivingEntity*>::TConstIterator it = EntitiesFound.CreateConstIterator(); it != NULL; it++){
+		ALivingEntity* le = (ALivingEntity*)*it;
 		currentDistanceTo = Bot->GetDistanceTo(le);
 
 		if (tempPawn != NULL && currentDistanceTo < lastDistanceTo)
@@ -105,6 +97,7 @@ ALivingEntity* ACombatAIController::findNearestEnemyLivingEntity()
 			tempPawn = le;
 		}
 	}
+		
 	return tempPawn;
 }
 
@@ -263,6 +256,11 @@ void ACombatAIController::attackAgain()
 /*Sets the Bots action, and sets the dely on the attack and canAttack to false*/
 void ACombatAIController::performCombo(Combo* currentCombo)
 {
+	ALivingEntity* tempTarget = (ALivingEntity*)target;
+	if (tempTarget && currentCombo->effect) {
+		tempTarget->GiveEffect(currentCombo->effect);
+	}
+
 	setAction(currentCombo);
 	float delay = currentCombo ? currentCombo->ComboDelay - 0.4 : 1;
 	GetWorldTimerManager().SetTimer(this, &ACombatAIController::attackAgain, delay > 0 ? delay : 1);

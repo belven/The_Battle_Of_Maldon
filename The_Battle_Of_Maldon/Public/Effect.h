@@ -1,7 +1,7 @@
 #pragma once
-#include "Array.h"
-#include "LivingEntity.h"
 #include "UnrealString.h"
+
+class ALivingEntity;
 
 namespace EffectEnums {
 	enum EffectType {
@@ -49,7 +49,7 @@ class Effect {
 
 public:
 
-	Effect(EffectStructs::EffectParams params, ALivingEntity* owner){
+	inline Effect(EffectStructs::EffectParams params, ALivingEntity* owner){
 		effectOwner = owner;
 		type = EffectEnums::Default;
 		dely = params.dely;

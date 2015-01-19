@@ -10,8 +10,7 @@ namespace DefenseEnums
 
 
 #pragma once
-#include "CombatAction.h"
-#include "Combo.h"
+#include "The_Battle_of_Maldon.h"
 
 class DefenseAction : public CombatAction
 {

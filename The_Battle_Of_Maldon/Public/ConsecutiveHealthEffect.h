@@ -1,7 +1,5 @@
 #pragma once
-#include "Array.h"
 #include "HealthEffect.h"
-#include "UnrealString.h"
 #include "LivingEntity.h"
 
 class ConsecutiveHealthEffect : public HealthEffect {

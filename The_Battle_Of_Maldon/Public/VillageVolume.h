@@ -5,11 +5,9 @@
 #include "BaseVolume.h"
 #include "UnrealString.h"
 #include "VillageSupplies.h"
+#include "SupplyRequirement.h"
 #include "VillageVolume.generated.h"
 
-/**
- * 
- */
 UCLASS(Blueprintable, BlueprintType)
 class THE_BATTLE_OF_MALDON_API AVillageVolume : public ABaseVolume
 {
@@ -17,11 +15,15 @@ class THE_BATTLE_OF_MALDON_API AVillageVolume : public ABaseVolume
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Clan)
-	FString clan;
+		FString clan;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Name)
+		FString name;
 
 	TArray<ALivingEntity*> GetAlliesInVillage();
 	TArray<ALivingEntity*> GetEnimiesInVillage();
 	TArray<AVillageSupplies*> supplies;
+	TArray<ASupplyRequirement*> supplyRequirements;
 
 	bool villageHasSupplies();
 	AVillageSupplies* takeSupplies(AVillageSupplies* suppliesToTake);

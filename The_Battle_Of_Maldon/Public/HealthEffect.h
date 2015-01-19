@@ -1,9 +1,5 @@
 #pragma once
-#include "Array.h"
 #include "Effect.h"
-#include "Damage.h"
-#include "UnrealString.h"
-#include "LivingEntity.h"
 
 /*This effect is used to heal/damage entities, positive is a heal, !positive is damage*/
 class HealthEffect : public Effect {

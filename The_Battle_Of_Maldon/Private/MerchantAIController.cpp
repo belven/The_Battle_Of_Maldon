@@ -2,7 +2,6 @@
 
 #pragma once
 #include "The_Battle_Of_Maldon.h"
-#include "MerchantAIController.h"
 
 /*Runs every frame and makes sure the mechant is always doing something*/
 void AMerchantAIController::Tick(float DeltaTime)
@@ -38,8 +37,8 @@ void AMerchantAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowi
 	canMove = true;
 
 	//We have no supplies, therefore we have just moved towards some to pickup
-	if (!mechantHasSupplies() && targetSupplies && currentVillage){
-		getMerchant()->supplies.Add(currentVillage->takeSupplies(targetSupplies));
+	if (!mechantHasSupplies() && targetSupplies && getMerchant()->GetVillage()){
+		getMerchant()->supplies.Add(getMerchant()->GetVillage()->takeSupplies(targetSupplies));
 		targetSupplies = NULL;
 	}
 	//We have supplies therefore we must have reached a village or it's supplies
@@ -52,11 +51,11 @@ void AMerchantAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowi
 void AMerchantAIController::pickUpVillageSupplies()
 {
 	//Do we have a village, and does it have supplies
-	if (currentVillage && currentVillage->villageHasSupplies()){
+	if (getMerchant()->GetVillage() && getMerchant()->GetVillage()->villageHasSupplies()){
 
 		//Move towards the villages supplies
-		moveToTarget(currentVillage->supplies[0]);
-		targetSupplies = currentVillage->supplies[0];
+		moveToTarget(getMerchant()->GetVillage()->supplies[0]);
+		targetSupplies = getMerchant()->GetVillage()->supplies[0];
 	}
 }
 
@@ -80,7 +79,7 @@ void AMerchantAIController::goToNearestVillage(){
 		AVillageVolume* tempVillage = Cast<AVillageVolume>(*It);
 
 		//Did we find a village and is it not the same as our current village
-		if (tempVillage  && currentVillage != tempVillage)
+		if (tempVillage  && getMerchant()->GetVillage() != tempVillage)
 		{
 			//Move towards the village
 			moveToTarget(tempVillage);

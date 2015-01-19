@@ -1,12 +1,5 @@
 #include "The_Battle_of_Maldon.h"
-#include "CombatAIController.h"
-#include "LivingEntity.h"
 #include "Engine.h"
-#include "HealthEffect.h"
-#include "ModifierEffect.h"
-#include "LivingEntityDamage.h"
-#include <iostream>
-#include <string>
 
 ALivingEntity::ALivingEntity(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
@@ -33,21 +26,21 @@ ALivingEntity::ALivingEntity(const FObjectInitializer& ObjectInitializer)
 	HealthEffect* he = new HealthEffect(hp, this);
 	GiveEffect(he);*/
 
-	EffectStructs::ModifierParams mp;
-	mp.id = "Damage Reduction";
-	mp.dely = 9;
-	mp.stacks = true;
-	mp.maxDuration = 9;
-	mp.positive = false;
-	mp.modifier = 0.3;
-	mp.modifierName = ModifierManager::defenseModiferName;
+	//EffectStructs::ModifierParams mp;
+	//mp.id = "Damage Reduction";
+	//mp.dely = 9;
+	//mp.stacks = true;
+	//mp.maxDuration = 9;
+	//mp.positive = false;
+	//mp.modifier = 0.3;
+	//mp.modifierName = ModifierManager::defenseModiferName;
 
-	ModifierEffect* me = new ModifierEffect(mp, this);
-	GiveEffect(me);
+	//ModifierEffect* me = new ModifierEffect(mp, this);
+	//GiveEffect(me);
 
-	mp.dely = 18;
-	ModifierEffect* me2 = new ModifierEffect(mp, this);
-	GiveEffect(me2);
+	//mp.dely = 18;
+	//ModifierEffect* me2 = new ModifierEffect(mp, this);
+	//GiveEffect(me2);
 
 	Message* start = new Message("NPC: Hello", "");
 	Message* middle = new Message("NPC: " + entityName, "Player: Whats your name?");
@@ -66,6 +59,15 @@ ALivingEntity::ALivingEntity(const FObjectInitializer& ObjectInitializer)
 void ALivingEntity::Tick(float deltaTime){
 	Super::Tick(deltaTime);
 	CheckEffects(deltaTime);
+	
+	//Modifier* m = GetModifier(ModifierManager::speedModiferName);
+
+	//Adjust speed here
+	/*if (GetMovementComponent() && GetMovementComponent()->IsMovingOnGround()){
+		if (m) {
+
+		}
+	}*/
 }
 
 /*This will check all current effects to see if they need applying or removing*/
@@ -84,7 +86,7 @@ void ALivingEntity::CheckEffect(Effect* e, float deltaTime){
 	if (e->ShouldApply()) {
 		e->ApplyEffect();
 		e->EffectApplied();
-		e->lastDuration = 0;
+		e->lastDuration -= e->dely;
 
 		if (e->EffectExpired()) {
 			e->Expired();

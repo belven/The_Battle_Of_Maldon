@@ -1,8 +1,6 @@
 #pragma once
-#include "Array.h"
-#include "LivingEntity.h"
-#include "Message.h"
 #include "UnrealString.h"
+#include "Message.h"
 
 class Conversation
 {

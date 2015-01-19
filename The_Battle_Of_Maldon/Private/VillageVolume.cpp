@@ -1,8 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "The_Battle_Of_Maldon.h"
-#include "VillageVolume.h"
-#include "Merchant.h"
+#pragma once
+#include "The_Battle_of_Maldon.h"
 
 void AVillageVolume::ReceiveActorBeginOverlap(AActor* OtherActor) {
 	ABaseVolume::ReceiveActorBeginOverlap(OtherActor);
@@ -65,8 +64,8 @@ void AVillageVolume::BeginPlay(){
 			AVillageSupplies* tempSupplies = Cast<AVillageSupplies>(actor);
 			supplies.Add(tempSupplies);
 		}
-		else if (aClass->IsChildOf(AMerchant::StaticClass())){
-			AMerchant* tempLivingEntity = Cast<AMerchant>(actor);
+		else if (aClass->IsChildOf(AVillager::StaticClass())){
+			AVillager* tempLivingEntity = Cast<AVillager>(actor);
 			tempLivingEntity->setVillage(this);
 		}
 	}

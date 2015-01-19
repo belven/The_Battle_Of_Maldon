@@ -2,19 +2,19 @@
 
 #pragma once
 
-#include "Person.h"
+#include "Villager.h"
+#include "SupplyRequirement.h"
 #include "Merchant.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class THE_BATTLE_OF_MALDON_API AMerchant : public APerson
+class THE_BATTLE_OF_MALDON_API AMerchant : public AVillager
 {
 	GENERATED_BODY()
 public:
 	AMerchant(const FObjectInitializer& ObjectInitializer);	
-	void setVillage(AVillageVolume* inVillage);
 	TArray<AVillageSupplies*> supplies;
-	AVillageVolume* GetVillage();
+	TArray<ASupplyRequirement*> supplyRequirements;
 };

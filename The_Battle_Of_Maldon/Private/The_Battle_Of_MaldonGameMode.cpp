@@ -1,9 +1,6 @@
 // Copyright 1998-2014 Epic Games, Inc. All Rights Reserved.
 
 #include "The_Battle_Of_Maldon.h"
-#include "The_Battle_Of_MaldonGameMode.h"
-#include "The_Battle_Of_MaldonHUD.h"
-#include "The_Battle_Of_MaldonCharacter.h"
 
 AThe_Battle_Of_MaldonGameMode::AThe_Battle_Of_MaldonGameMode(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

@@ -1,11 +1,4 @@
 #include "The_Battle_of_Maldon.h"
-#include "MyAIController.h"
-#include "LivingEntity.h"
-#include "Person.h"
-#include "MoveAction.h"
-#include "DrawDebugHelpers.h"
-#include "ColorList.h"
-#include "Engine.h"
 
 AMyAIController::AMyAIController(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)

@@ -10,6 +10,7 @@ namespace ItemEnumns
 }
 
 #pragma once
+
 #include "UnrealString.h"
 #include "Item.generated.h"
 

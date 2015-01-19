@@ -12,8 +12,7 @@
 #pragma once
 
 #include "Object.h"
-#include "Array.h"
-#include "UnrealString.h"
+#include "The_Battle_of_Maldon.h"
 #include "ComboBP.generated.h"
 
 /**

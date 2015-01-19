@@ -1,10 +1,7 @@
 // Copyright 1998-2014 Epic Games, Inc. All Rights Reserved.
 
 #include "The_Battle_Of_Maldon.h"
-#include "The_Battle_Of_MaldonHUD.h"
 #include "Engine/Canvas.h"
-#include "TextureResource.h"
-#include "CanvasItem.h"
 
 AThe_Battle_Of_MaldonHUD::AThe_Battle_Of_MaldonHUD(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {

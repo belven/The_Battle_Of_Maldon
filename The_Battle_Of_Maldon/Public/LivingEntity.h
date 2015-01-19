@@ -21,23 +21,17 @@ namespace DodgeEnums
 		Backwards
 	};
 }
-
 #pragma once
-#include "GameFramework/Actor.h"
-#include "Entity.h"
-#include "Array.h"
-#include "Combos.h"
-#include "CombosBP.h"
-#include "DodgeAction.h"
-#include "Item.h"
-#include "UnrealString.h"
-#include "Message.h"
-#include "MessageBP.h"
-#include "TimerManager.h"
-#include "Weapon.h"
-#include "Damage.h"
 #include "ModifierManager.h"
+#include "Entity.h"
+#include "Combos.h"
+#include "Message.h"
+#include "Weapon.h"
 #include "Effect.h"
+#include "Damage.h"
+#include "CombosBP.h"
+#include "MessageBP.h"
+
 #include "LivingEntity.generated.h"
 
 UCLASS()

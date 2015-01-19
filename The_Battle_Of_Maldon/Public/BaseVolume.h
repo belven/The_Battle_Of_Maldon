@@ -3,9 +3,8 @@
 #pragma once
 
 #include "GameFramework/Volume.h"
+#include "GameFramework/Actor.h"
 #include "LivingEntity.h"
-#include "Array.h"
-#include "Engine.h"
 #include "BaseVolume.generated.h"
 
 /**

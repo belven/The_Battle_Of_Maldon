@@ -1,9 +1,4 @@
 #include "The_Battle_Of_Maldon.h"
-#include "The_Battle_Of_MaldonCharacter.h"
-#include "LivingEntity.h"
-#include "Person.h"
-#include "DefenseAction.h"
-#include "CombatAIController.h"
 
 AThe_Battle_Of_MaldonCharacter::AThe_Battle_Of_MaldonCharacter(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)

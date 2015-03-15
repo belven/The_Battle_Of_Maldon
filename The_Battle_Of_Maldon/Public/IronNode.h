@@ -2,18 +2,19 @@
 
 #pragma once
 
-#include "ResourceVolume.h"
-#include "Quarry.generated.h"
+#include "ResourceNode.h"
+#include "IronNode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class THE_BATTLE_OF_MALDON_API AQuarry : public AResourceVolume
+class THE_BATTLE_OF_MALDON_API AIronNode : public AResourceNode
 {
 	GENERATED_BODY()
+	
 public:
-	AQuarry();
+	AIronNode();
 	
 	
 };

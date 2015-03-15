@@ -13,7 +13,7 @@ void AVillageVolume::ReceiveActorEndOverlap(AActor* OtherActor) {
 
 /*Checks to see if this village has any supplies*/
 bool AVillageVolume::villageHasSupplies() {
-	return  supplies.Num() > 0;
+	return supplies.Num() > 0;
 }
 
 /*Removes the supplies from the village, will also hide the mesh of the supplies*/
@@ -29,7 +29,7 @@ AVillageSupplies* AVillageVolume::takeSupplies(AVillageSupplies* suppliesToTake)
 /*Adds the supplies from the village, will also show the mesh of the supplies*/
 AVillageSupplies* AVillageVolume::giveSupplies(AVillageSupplies* suppliesToGive){
 	suppliesToGive->SetActorHiddenInGame(false);
-	AVillageSupplies* supply = getSupplies(suppliesToGive->currentVillageSupplyType);
+	AVillageSupplies* supply = getSupplies(suppliesToGive->currentSupplyType);
 
 	if (supply){
 		supply->amount += suppliesToGive->amount;
@@ -41,13 +41,12 @@ AVillageSupplies* AVillageVolume::giveSupplies(AVillageSupplies* suppliesToGive)
 }
 
 /*Returns the villages supplies of that particular supply type, if it has any*/
-AVillageSupplies* AVillageVolume::getSupplies(VillageSuppliesEnums::VillageSupplyType type){
+AVillageSupplies* AVillageVolume::getSupplies(SuppliesEnums::SupplyType type){
 	for (AVillageSupplies* supply : supplies){
-		if (supply->currentVillageSupplyType == type){
+		if (supply->currentSupplyType == type){
 			return supply;
 		}
 	}
-
 	return NULL;
 }
 
@@ -83,7 +82,7 @@ TArray<ALivingEntity*> AVillageVolume::GetAlliesInVillage(){
 		}
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, message);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, message);
 	return allies;
 }
 
@@ -99,7 +98,7 @@ TArray<ALivingEntity*> AVillageVolume::GetEnimiesInVillage(){
 		}
 	}
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, message);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, message);
 	return enimies;
 }
 

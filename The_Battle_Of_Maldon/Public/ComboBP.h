@@ -24,7 +24,7 @@ class AComboBP : public AActor
 	GENERATED_BODY()
 
 public:
-	AComboBP(const FObjectInitializer& ObjectInitializer);
+	AComboBP();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ComboStuff)
 		float ComboDamageScaling;
 

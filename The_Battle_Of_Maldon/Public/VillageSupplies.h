@@ -15,5 +15,5 @@ class THE_BATTLE_OF_MALDON_API AVillageSupplies : public ASupply
 	GENERATED_BODY()
 
 public:
-	AVillageSupplies(const FObjectInitializer& ObjectInitializer);		
+	AVillageSupplies();		
 };

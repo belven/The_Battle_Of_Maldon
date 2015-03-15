@@ -9,6 +9,8 @@
 
 #include "EngineMinimal.h"
 #include "GameFramework/Actor.h"
+#include "EngineUtils.h"
+#include "EngineGlobals.h"
 //#include "Engine.h"
 
 #include "Array.h"

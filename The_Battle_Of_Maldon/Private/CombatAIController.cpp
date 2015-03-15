@@ -82,7 +82,7 @@ ALivingEntity* ACombatAIController::findNearestEnemyLivingEntity()
 		}
 	}
 
-	for (TArray<ALivingEntity*>::TConstIterator it = EntitiesFound.CreateConstIterator(); it != NULL; it++){
+	for (TArray<ALivingEntity*>::TConstIterator it = EntitiesFound.CreateConstIterator(); it; it++){
 		ALivingEntity* le = (ALivingEntity*)*it;
 		currentDistanceTo = Bot->GetDistanceTo(le);
 

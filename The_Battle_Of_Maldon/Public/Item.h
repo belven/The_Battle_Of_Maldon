@@ -24,8 +24,8 @@ class AItem : public APawn
 
 
 public:
+	AItem();
 	AItem(const FObjectInitializer& ObjectInitializer);
-
 	ItemEnumns::ItemType CurrentItemType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Temp)

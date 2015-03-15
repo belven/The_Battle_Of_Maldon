@@ -40,7 +40,7 @@ public:
 
 	/*Returns a modifier, if it exists, with the inputted name*/
 	Modifier* GetModifier(FString name){
-		for (TArray<Modifier*>::TConstIterator it = currentModifiers.CreateConstIterator(); it != NULL; it++){
+		for (TArray<Modifier*>::TConstIterator it = currentModifiers.CreateConstIterator(); it.GetIndex() != NULL; it++){
 			Modifier* m = (Modifier*)*it;
 			if (m->name.Equals(name))
 				return m;

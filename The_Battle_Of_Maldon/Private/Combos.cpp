@@ -12,26 +12,26 @@ Combos::Combos(ALivingEntity* inOwner)
 }
 
 void Combos::getCombos(){
-	try
-	{
+	//try
+	//{
 
-		std::ifstream data("test.csv");
-		std::string line;
+	//	std::ifstream data("test.csv");
+	//	std::string line;
 
-		while (std::getline(data, line))
-		{
-			std::stringstream lineStream(line);
-			std::string cell;
+	//	while (std::getline(data, line))
+	//	{
+	//		std::stringstream lineStream(line);
+	//		std::string cell;
 
-			while (std::getline(lineStream, cell, ','))
-			{
-				// You have a cell!!!!
-			}
-		}
-	}
-	catch (...){
-		UE_LOG(LogTemp, Warning, TEXT("Failed to load file"));
-	}
+	//		while (std::getline(lineStream, cell, ','))
+	//		{
+	//			// You have a cell!!!!
+	//		}
+	//	}
+	//}
+	//catch (...){
+	//	UE_LOG(LogTemp, Warning, TEXT("Failed to load file"));
+	//}
 }
 
 void Combos::GetAndSetCombos()

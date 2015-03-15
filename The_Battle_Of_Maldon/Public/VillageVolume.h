@@ -28,7 +28,7 @@ public:
 	bool villageHasSupplies();
 	AVillageSupplies* takeSupplies(AVillageSupplies* suppliesToTake);
 	AVillageSupplies* giveSupplies(AVillageSupplies* suppliesToGive);
-	AVillageSupplies* getSupplies(VillageSuppliesEnums::VillageSupplyType type);
+	AVillageSupplies* getSupplies(SuppliesEnums::SupplyType type);
 	virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 	virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
 	virtual void BeginPlay() override;

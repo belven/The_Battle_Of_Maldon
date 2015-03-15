@@ -72,7 +72,7 @@ void ALivingEntity::Tick(float deltaTime){
 
 /*This will check all current effects to see if they need applying or removing*/
 void ALivingEntity::CheckEffects(float deltaTime){
-	for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it != NULL; it++){
+	for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it; it++){
 		Effect* e = (Effect*)*it;
 		CheckEffect(e, deltaTime);
 	}
@@ -97,7 +97,7 @@ void ALivingEntity::CheckEffect(Effect* e, float deltaTime){
 
 /*Checks to see if an entity has an effect with a matching ID*/
 bool ALivingEntity::HasEffect(Effect* newE) {
-	for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it != NULL; it++){
+	for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it; it++){
 		Effect* e = (Effect*)*it;
 		if (e->id.Equals(newE->id)){
 			return true;
@@ -109,7 +109,7 @@ bool ALivingEntity::HasEffect(Effect* newE) {
 /*Assigns a new effect to an entity or replaces an existing one, based on if the effect stacks*/
 void ALivingEntity::GiveEffect(Effect* newE) {
 	if (!newE->stacks && HasEffect(newE)) {
-		for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it != NULL; it++){
+		for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it; it++){
 			Effect* e = (Effect*)*it;
 			if (e->id.Equals(newE->id) && e->Score() < newE->Score()){
 				e = newE;

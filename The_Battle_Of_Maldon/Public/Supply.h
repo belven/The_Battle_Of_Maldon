@@ -1,13 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 UENUM(BlueprintType)
-namespace VillageSuppliesEnums
+namespace SuppliesEnums
 {
-	enum VillageSupplyType
+	enum SupplyType
 	{
 		Wood,
 		Iron,
-		Wheat
+		Wheat,
+		All
 	};
 }
 
@@ -25,11 +26,12 @@ class THE_BATTLE_OF_MALDON_API ASupply : public AItem
 	GENERATED_BODY()
 
 public:
-	ASupply(const FObjectInitializer& ObjectInitializer);
+	ASupply();
+	ASupply(SuppliesEnums::SupplyType type);
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = VillageSupplyType)
-	TEnumAsByte<VillageSuppliesEnums::VillageSupplyType> currentVillageSupplyType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SupplyType)
+		TEnumAsByte<SuppliesEnums::SupplyType> currentSupplyType;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = VillageSupplies)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Supplies)
 		int32 amount;	
 };

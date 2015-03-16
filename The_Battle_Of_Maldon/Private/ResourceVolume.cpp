@@ -31,3 +31,12 @@ void AResourceVolume::BeginPlay(){
 	}
 }
 
+bool AResourceVolume::hasReources() {
+	for (AResourceNode* resource : resources){
+		if (resource->amount > 0){
+			return true;
+		}
+	}
+	return false;
+}
+

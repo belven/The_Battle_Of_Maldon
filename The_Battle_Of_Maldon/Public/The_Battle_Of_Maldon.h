@@ -53,7 +53,7 @@
 #include "Weapon.h"
 #include "Supply.h"
 #include "SupplyRequirement.h"
-#include "VillageSupplies.h"
+#include "Supply.h"
 
 #include "Damage.h"
 #include "LivingEntityDamage.h"

@@ -4,7 +4,7 @@
 
 #include "BaseVolume.h"
 #include "UnrealString.h"
-#include "VillageSupplies.h"
+#include "Supply.h"
 #include "SupplyRequirement.h"
 #include "VillageVolume.generated.h"
 
@@ -22,13 +22,13 @@ public:
 
 	TArray<ALivingEntity*> GetAlliesInVillage();
 	TArray<ALivingEntity*> GetEnimiesInVillage();
-	TArray<AVillageSupplies*> supplies;
+	TArray<ASupply*> supplies;
 	TArray<ASupplyRequirement*> supplyRequirements;
 
 	bool villageHasSupplies();
-	AVillageSupplies* takeSupplies(AVillageSupplies* suppliesToTake);
-	AVillageSupplies* giveSupplies(AVillageSupplies* suppliesToGive);
-	AVillageSupplies* getSupplies(SuppliesEnums::SupplyType type);
+	ASupply* takeSupplies(ASupply* suppliesToTake);
+	ASupply* giveSupplies(ASupply* suppliesToGive);
+	ASupply* getSupplies(SuppliesEnums::SupplyType type);
 	virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 	virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
 	virtual void BeginPlay() override;

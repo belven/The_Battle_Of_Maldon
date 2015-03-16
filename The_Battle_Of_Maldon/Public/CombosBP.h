@@ -18,7 +18,7 @@ class ACombosBP : public AActor
 	GENERATED_BODY()
 
 public:
-	ACombosBP(const FObjectInitializer& ObjectInitializer);
+	ACombosBP();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ComboStuff)
 		AComboBP* OriganalCombo;
 

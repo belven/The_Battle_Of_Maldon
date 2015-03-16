@@ -15,7 +15,7 @@ class THE_BATTLE_OF_MALDON_API UMessageBP : public UObject
 	GENERATED_BODY()
 
 public:
-	UMessageBP(const FObjectInitializer& ObjectInitializer);
+	UMessageBP();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Messages")
 		FString npcReplyMessage;

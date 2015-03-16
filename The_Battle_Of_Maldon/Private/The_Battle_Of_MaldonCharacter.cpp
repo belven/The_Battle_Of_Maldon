@@ -1,7 +1,7 @@
 #include "The_Battle_Of_Maldon.h"
 
 AThe_Battle_Of_MaldonCharacter::AThe_Battle_Of_MaldonCharacter(const FObjectInitializer& ObjectInitializer)
-: Super(ObjectInitializer)
+: Super()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);

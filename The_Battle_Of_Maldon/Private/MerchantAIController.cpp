@@ -92,6 +92,7 @@ void AMerchantAIController::goToNearestVillage(){
 			}
 
 			targetVillage = tempVillage;
+			break;
 		}
 	}
 }

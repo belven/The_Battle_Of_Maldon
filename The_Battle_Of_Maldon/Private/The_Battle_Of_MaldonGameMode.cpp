@@ -3,7 +3,7 @@
 #include "The_Battle_Of_Maldon.h"
 
 AThe_Battle_Of_MaldonGameMode::AThe_Battle_Of_MaldonGameMode(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer)
+: Super(ObjectInitializer)
 {
 	// set default pawn class to our Blueprinted character
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnClassFinder(TEXT("/Game/Blueprints/MyCharacter"));

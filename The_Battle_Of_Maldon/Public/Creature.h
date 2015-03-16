@@ -12,6 +12,6 @@ class ACreature : public ALivingEntity
 {
 	GENERATED_BODY()
 public:
-	ACreature(const FObjectInitializer& ObjectInitializer);
+	ACreature();
 	
 };

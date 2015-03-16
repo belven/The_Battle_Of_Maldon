@@ -1,8 +1,8 @@
 #include "The_Battle_of_Maldon.h"
 
 
-ACreature::ACreature(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer)
+ACreature::ACreature()
+	: Super()
 {
 	CurrentEntityType = EntityEnums::Creature;
 }

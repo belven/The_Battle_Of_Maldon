@@ -23,7 +23,7 @@ class AEntity : public ACharacter
 	GENERATED_BODY()
 
 public:
-	AEntity(const FObjectInitializer& ObjectInitializer);
+	AEntity();
 	UPROPERTY(VisibleAnywhere, Category = EntityType)
 	TEnumAsByte<EntityEnums::EntityType> CurrentEntityType;
 

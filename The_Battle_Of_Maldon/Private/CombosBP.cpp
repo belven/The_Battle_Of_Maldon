@@ -3,8 +3,8 @@
 #pragma once
 #include "The_Battle_of_Maldon.h"
 
-ACombosBP::ACombosBP(const FObjectInitializer& ObjectInitializer)
-: Super(ObjectInitializer)
+ACombosBP::ACombosBP()
+: Super()
 {
 	/*LastDamage = 0;
 	lastComboSucsessfull = false;

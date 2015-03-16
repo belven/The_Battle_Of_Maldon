@@ -3,7 +3,7 @@
 #include "The_Battle_Of_Maldon.h"
 
 
-UMessageBP::UMessageBP(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer){
+UMessageBP::UMessageBP() : Super(){
 
 
 }

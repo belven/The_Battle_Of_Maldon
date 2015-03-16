@@ -8,7 +8,7 @@ class AWeapon : public AItem
 	GENERATED_BODY()
 
 public:
-	AWeapon(const FObjectInitializer& ObjectInitializer);
+	AWeapon();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
 	float weaponDamage;
 

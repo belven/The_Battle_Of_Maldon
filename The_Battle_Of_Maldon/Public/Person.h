@@ -12,5 +12,5 @@ class APerson : public ALivingEntity
 {
 	GENERATED_BODY()
 public:
-	APerson(const FObjectInitializer& ObjectInitializer);	
+	APerson();
 };

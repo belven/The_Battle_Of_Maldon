@@ -14,7 +14,7 @@ class THE_BATTLE_OF_MALDON_API AVillager : public APerson
 {
 	GENERATED_BODY()
 public:
-	AVillager(const FObjectInitializer& ObjectInitializer);
+	AVillager();
 	AVillageVolume* GetVillage();
 	void setVillage(AVillageVolume* inVillage);	
 	AVillageVolume* village;

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-#include "VillageSupplies.h"
+#include "Supply.h"
 #include "Merchant.h"
 #include "VillageVolume.h"
 #include "VillagerAIController.h"
@@ -23,7 +23,7 @@ public:
 	void giveSuppliesToTargetVillage();
 	AMerchant* getMerchant();	
 	AVillageVolume* targetVillage;
-	AVillageSupplies* targetSupplies;
+	ASupply* targetSupplies;
 	bool mechantHasSupplies();
 	
 };

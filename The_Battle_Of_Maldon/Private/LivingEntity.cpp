@@ -1,8 +1,7 @@
 #include "The_Battle_of_Maldon.h"
 #include "Engine.h"
 
-ALivingEntity::ALivingEntity(const FObjectInitializer& ObjectInitializer)
-: Super(ObjectInitializer)
+ALivingEntity::ALivingEntity(): Super()
 {
 	CurrentEntityType = EntityEnums::Living;
 	AIControllerClass = ACombatAIController::StaticClass();

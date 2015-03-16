@@ -39,7 +39,7 @@ class ALivingEntity : public AEntity, public ModifierManager
 {
 	GENERATED_BODY()
 public:
-	ALivingEntity(const FObjectInitializer& ObjectInitializer);
+	ALivingEntity();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AggressionType)
 		TEnumAsByte<LivingEntityEnums::AggressionType> CurrentAggressionType;
 

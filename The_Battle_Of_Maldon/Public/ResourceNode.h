@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Supply.h"
+#include "Supply.h"
 #include "ResourceNode.generated.h"
 
 /**
@@ -15,7 +16,6 @@ class THE_BATTLE_OF_MALDON_API AResourceNode : public ASupply
 public:
 	AResourceNode();
 	AResourceNode(SuppliesEnums::SupplyType type);
-
-
+	void takeResources(int amountToTake);
 
 };

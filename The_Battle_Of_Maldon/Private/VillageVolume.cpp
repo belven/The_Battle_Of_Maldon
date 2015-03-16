@@ -17,7 +17,7 @@ bool AVillageVolume::villageHasSupplies() {
 }
 
 /*Removes the supplies from the village, will also hide the mesh of the supplies*/
-AVillageSupplies* AVillageVolume::takeSupplies(AVillageSupplies* suppliesToTake){
+ASupply* AVillageVolume::takeSupplies(ASupply* suppliesToTake){
 	if (supplies.Contains(suppliesToTake)){
 		suppliesToTake->SetActorHiddenInGame(true);
 		supplies.Remove(suppliesToTake);
@@ -27,9 +27,9 @@ AVillageSupplies* AVillageVolume::takeSupplies(AVillageSupplies* suppliesToTake)
 }
 
 /*Adds the supplies from the village, will also show the mesh of the supplies*/
-AVillageSupplies* AVillageVolume::giveSupplies(AVillageSupplies* suppliesToGive){
+ASupply* AVillageVolume::giveSupplies(ASupply* suppliesToGive){
 	suppliesToGive->SetActorHiddenInGame(false);
-	AVillageSupplies* supply = getSupplies(suppliesToGive->currentSupplyType);
+	ASupply* supply = getSupplies(suppliesToGive->currentSupplyType);
 
 	if (supply){
 		supply->amount += suppliesToGive->amount;
@@ -41,8 +41,8 @@ AVillageSupplies* AVillageVolume::giveSupplies(AVillageSupplies* suppliesToGive)
 }
 
 /*Returns the villages supplies of that particular supply type, if it has any*/
-AVillageSupplies* AVillageVolume::getSupplies(SuppliesEnums::SupplyType type){
-	for (AVillageSupplies* supply : supplies){
+ASupply* AVillageVolume::getSupplies(SuppliesEnums::SupplyType type){
+	for (ASupply* supply : supplies){
 		if (supply->currentSupplyType == type){
 			return supply;
 		}
@@ -59,8 +59,8 @@ void AVillageVolume::BeginPlay(){
 	for (AActor* actor : actors){
 		aClass = actor->GetClass();
 
-		if (aClass->IsChildOf(AVillageSupplies::StaticClass())){
-			AVillageSupplies* tempSupplies = Cast<AVillageSupplies>(actor);
+		if (aClass->IsChildOf(ASupply::StaticClass())){
+			ASupply* tempSupplies = Cast<ASupply>(actor);
 			supplies.Add(tempSupplies);
 		}
 		else if (aClass->IsChildOf(AVillager::StaticClass())){

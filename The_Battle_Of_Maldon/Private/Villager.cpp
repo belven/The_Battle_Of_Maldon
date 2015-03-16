@@ -4,8 +4,7 @@
 #include "The_Battle_of_Maldon.h"
 
 
-AVillager::AVillager(const FObjectInitializer& ObjectInitializer)
-: Super(ObjectInitializer)
+AVillager::AVillager() : Super()
 {
 	//AIControllerClass = AMerchantAIController::StaticClass();
 }

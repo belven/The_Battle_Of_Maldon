@@ -14,7 +14,7 @@ class THE_BATTLE_OF_MALDON_API AMerchant : public AVillager
 {
 	GENERATED_BODY()
 public:
-	AMerchant(const FObjectInitializer& ObjectInitializer);	
-	TArray<AVillageSupplies*> supplies;
+	AMerchant();	
+	TArray<ASupply*> supplies;
 	TArray<ASupplyRequirement*> supplyRequirements;
 };

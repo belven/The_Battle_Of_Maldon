@@ -7,7 +7,7 @@
 #include "ResourceVolume.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class THE_BATTLE_OF_MALDON_API AResourceVolume : public ABaseVolume
@@ -16,7 +16,11 @@ class THE_BATTLE_OF_MALDON_API AResourceVolume : public ABaseVolume
 public:
 	AResourceVolume();
 	AResourceVolume(SuppliesEnums::SupplyType type);
-	virtual void BeginPlay() override;	
+	virtual void BeginPlay() override;
 	TArray<AResourceNode*> resources;
-	SuppliesEnums::SupplyType supplyType;	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Resources)
+		TEnumAsByte<SuppliesEnums::SupplyType> supplyType;
+
+	bool hasReources();
 };

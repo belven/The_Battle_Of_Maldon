@@ -4,11 +4,18 @@
 #include "ResourceNode.h"
 
 AResourceNode::AResourceNode() : Super(){
-
+	amount = 100;
 }
 
-AResourceNode::AResourceNode(SuppliesEnums::SupplyType type) : Super() {
+AResourceNode::AResourceNode(SuppliesEnums::SupplyType type) : Super(type) {
 	amount = 100;
 	currentSupplyType = type;
 }
 
+void AResourceNode::takeResources(int amountToTake){
+	amount -= amountToTake;
+
+	if (amount <= 0){
+		SetActorHiddenInGame(true);
+	}
+}

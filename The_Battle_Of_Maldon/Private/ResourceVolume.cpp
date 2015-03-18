@@ -15,18 +15,13 @@ AResourceVolume::AResourceVolume(SuppliesEnums::SupplyType type) : Super(){
 /*Sets up the supplies and merchants within a village, makes it eaiser to set up within the UE*/
 void AResourceVolume::BeginPlay(){
 	TArray<AActor*> actors;
-	GetOverlappingActors(actors, AActor::StaticClass());
-	UClass* aClass;
+	GetOverlappingActors(actors, AResourceNode::StaticClass());
 
 	for (AActor* actor : actors){
-		aClass = actor->GetClass();
+		AResourceNode* tempSupplies = Cast<AResourceNode>(actor);
 
-		if (aClass->IsChildOf(AResourceNode::StaticClass())){
-			AResourceNode* tempSupplies = Cast<AResourceNode>(actor);
-
-			if (supplyType == SuppliesEnums::All || tempSupplies->currentSupplyType == supplyType){
-				resources.Add(tempSupplies);
-			}
+		if (supplyType == SuppliesEnums::All || tempSupplies->currentSupplyType == supplyType){
+			resources.Add(tempSupplies);
 		}
 	}
 }

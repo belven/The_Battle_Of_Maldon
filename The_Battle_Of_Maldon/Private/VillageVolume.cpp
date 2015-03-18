@@ -31,12 +31,14 @@ ASupply* AVillageVolume::giveSupplies(ASupply* suppliesToGive){
 	suppliesToGive->SetActorHiddenInGame(false);
 	ASupply* supply = getSupplies(suppliesToGive->currentSupplyType);
 
-	if (supply){
+	if (supply) {
 		supply->amount += suppliesToGive->amount;
 	}
 	else {
 		supplies.Add(suppliesToGive);
 	}
+	
+	//OnSuppliesGivenEvent.Broadcast(suppliesToGive);
 	return suppliesToGive;
 }
 
@@ -68,6 +70,21 @@ void AVillageVolume::BeginPlay(){
 			tempLivingEntity->setVillage(this);
 		}
 	}
+}
+
+TArray<SuppliesEnums::SupplyType> AVillageVolume::getVillageSupplyRequirements(){
+	TArray<SuppliesEnums::SupplyType> tempRequirements;
+
+	for (int i = 0; i < SuppliesEnums::All; i++){
+		SuppliesEnums::SupplyType type = (SuppliesEnums::SupplyType)i;
+		ASupply* supply = getSupplies(type);
+
+		if (supply && supply->amount <= 0){
+			tempRequirements.Add(type);
+		}
+	}
+
+	return tempRequirements;
 }
 
 /*Returns a list of all the villages allies, i.e. bots with the same clan*/

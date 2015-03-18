@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
+#include <stdio.h>
 #include "Supply.h"
 #include "Merchant.h"
 #include "VillageVolume.h"
@@ -10,6 +11,8 @@
 /**
  * 
  */
+
+//[event_receiver(native)]
 UCLASS()
 class THE_BATTLE_OF_MALDON_API AMerchantAIController : public AVillagerAIController
 {
@@ -25,5 +28,7 @@ public:
 	AVillageVolume* targetVillage;
 	ASupply* targetSupplies;
 	bool mechantHasSupplies();
+	virtual void BeginPlay() override;
+	void SuppliesGivenEvent(ASupply* supply);
 	
 };

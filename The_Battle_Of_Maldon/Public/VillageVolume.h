@@ -8,6 +8,8 @@
 #include "SupplyRequirement.h"
 #include "VillageVolume.generated.h"
 
+//DECLARE_MULTICAST_DELEGATE_OneParam(SuppliesGivenEvent, ASupply*);
+
 UCLASS(Blueprintable, BlueprintType)
 class THE_BATTLE_OF_MALDON_API AVillageVolume : public ABaseVolume
 {
@@ -26,10 +28,14 @@ public:
 	TArray<ASupplyRequirement*> supplyRequirements;
 
 	bool villageHasSupplies();
+	TArray<SuppliesEnums::SupplyType> getVillageSupplyRequirements();
 	ASupply* takeSupplies(ASupply* suppliesToTake);
 	ASupply* giveSupplies(ASupply* suppliesToGive);
 	ASupply* getSupplies(SuppliesEnums::SupplyType type);
 	virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 	virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
 	virtual void BeginPlay() override;
+
+	//UPROPERTY(BlueprintAssignable, Category = "Events")
+		//SuppliesGivenEvent OnSuppliesGivenEvent;
 };

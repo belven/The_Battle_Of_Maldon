@@ -35,23 +35,31 @@ void AGathererAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowi
 void AGathererAIController::goToNearestResource() {
 	for (FActorIterator It(GetWorld()); It; ++It)
 	{
-		AResourceVolume* tempResource = Cast<AResourceVolume>(*It);
+		AActor* actor = *It;
 
-		//Did we find a resource and is it not the same as our current resource
-		if (tempResource && tempResource->supplyType == getGatherer()->supplyType)
-		{
+		if (actor->GetClass()->IsChildOf(AResourceVolume::StaticClass())){
+			AResourceVolume* tempResource = Cast<AResourceVolume>(*It);
 
-			//If we find they have supplies then target them, 
-			//This needs to be a check to see if they have the same type, if so move to and add to them 
-			if (tempResource->hasReources()) {
-				targetResourceNode = tempResource->resources[0];
-				targetResource = tempResource;
+			//Did we find a resource and is it not the same as our current resource
+			if (tempResource && tempResource->supplyType == getGatherer()->supplyType)
+			{
+				//If we find they have supplies then target them, 
+				//This needs to be a check to see if they have the same type, if so move to and add to them 
+				if (tempResource->hasReources()) {
+					for (AResourceNode* resourceNode : tempResource->resources){
+						if (resourceNode->amount > 0){
+							targetResourceNode = resourceNode;
+							targetResource = tempResource;
 
-				//Move towards the resource node
-				moveToTarget(targetResourceNode);
-				break;
+							//Move towards the resource node
+							moveToTarget(targetResourceNode);
+							break;
+						}
+					}
+
+					break;
+				}
 			}
-
 		}
 	}
 }
@@ -60,9 +68,9 @@ void AGathererAIController::pickUpResources() {
 	if (targetResourceNode) {
 		int amountToTake = targetResourceNode->amount;
 
-	/*	FActorSpawnParameters Parameters;
+		FActorSpawnParameters Parameters;
 		Parameters.Template = targetResourceNode;
-		Parameters.Owner = getGatherer();*/
+		//Parameters.Owner = getGatherer();
 
 		AResourceNode* newResource = GetWorld()->SpawnActor<class AResourceNode>(AResourceNode::StaticClass());
 		newResource->amount = targetResourceNode->amount;

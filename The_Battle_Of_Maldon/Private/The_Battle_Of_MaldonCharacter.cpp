@@ -1,4 +1,5 @@
 #include "The_Battle_Of_Maldon.h"
+#include "Engine.h"
 
 AThe_Battle_Of_MaldonCharacter::AThe_Battle_Of_MaldonCharacter(const FObjectInitializer& ObjectInitializer)
 : Super()
@@ -21,7 +22,7 @@ AThe_Battle_Of_MaldonCharacter::AThe_Battle_Of_MaldonCharacter(const FObjectInit
 	FirstPersonCameraComponent->AttachParent = GetCapsuleComponent();
 	FirstPersonCameraComponent->RelativeLocation = FVector(0, 0, 64.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
-	
+
 	// Create a mesh component that will be used when being viewed from a '1st person' view (when controlling this pawn)
 	Mesh1P = ObjectInitializer.CreateDefaultSubobject<USkeletalMeshComponent>(this, TEXT("CharacterMesh1P"));
 	Mesh1P->SetOnlyOwnerSee(true);			// only the owning player will see this mesh
@@ -34,9 +35,7 @@ AThe_Battle_Of_MaldonCharacter::AThe_Battle_Of_MaldonCharacter(const FObjectInit
 void AThe_Battle_Of_MaldonCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	// set up gameplay key bindings
-	UE_LOG(LogTemp, Log, TEXT("Test 2"));
 	check(InputComponent);
-	UE_LOG(LogTemp, Log, TEXT("Test 3"));
 
 	InputComponent->BindAction("CombatActionQ", IE_Pressed, this, &AThe_Battle_Of_MaldonCharacter::CombatActionQ);
 	InputComponent->BindAction("CombatActionE", IE_Pressed, this, &AThe_Battle_Of_MaldonCharacter::CombatActionE);
@@ -53,7 +52,7 @@ void AThe_Battle_Of_MaldonCharacter::SetupPlayerInputComponent(class UInputCompo
 
 	InputComponent->BindAction("Lock", IE_Pressed, this, &AThe_Battle_Of_MaldonCharacter::LockOn);
 	InputComponent->BindAction("Lock", IE_Released, this, &AThe_Battle_Of_MaldonCharacter::LockOnStopped);
-	
+
 	//InputComponent->BindTouch(EInputEvent::IE_Pressed, this, &AThe_Battle_Of_MaldonCharacter::TouchStarted);
 
 	InputComponent->BindAxis("MoveForward", this, &AThe_Battle_Of_MaldonCharacter::MoveForward);
@@ -77,7 +76,6 @@ void AThe_Battle_Of_MaldonCharacter::PossessedBy(class AController* NewControlle
 
 void AThe_Battle_Of_MaldonCharacter::Tick(float DeltaTime)
 {
-	UE_LOG(LogTemp, Log, TEXT("Test 1"));
 	Super::Tick(DeltaTime);
 
 	if (Target && isLocking)
@@ -110,11 +108,14 @@ void AThe_Battle_Of_MaldonCharacter::Tick(float DeltaTime)
 
 		if (GetWorld()->LineTraceSingle(testHitResult, testStartFVector, testEndFVector, ECC_WorldStatic, TraceParams))
 		{
-			ALivingEntity* tempActor = (testHitResult.GetActor() != NULL ? Cast<ALivingEntity>(testHitResult.GetActor()) : NULL);
+			AActor* tempActor = testHitResult.GetActor();
 
-			if (tempActor != NULL)
+			if (tempActor != NULL &&
+				(tempActor->GetClass()->IsChildOf(AItem::StaticClass()) || tempActor->GetClass()->IsChildOf(ALivingEntity::StaticClass())))
 			{
+				ACombatAIController* controller = (ACombatAIController*)GetController();
 				Target = tempActor;
+				controller->target = Target;
 			}
 		}
 	}
@@ -163,19 +164,22 @@ void AThe_Battle_Of_MaldonCharacter::CombatActionQ()
 
 void AThe_Battle_Of_MaldonCharacter::CombatActionE()
 {
-	if (Target)
+	if (Target && Target->GetClass()->IsChildOf(ALivingEntity::StaticClass()))
 	{
-		if (Target->clan == clan){
-			StartConverstation(Target);
+		ALivingEntity* target = Cast<ALivingEntity>(Target);
+		if (target->clan == clan){
+			StartConverstation(target);
 		}
 		else
 		{
 			DealDamage("E");
 		}
 	}
-	else
-	{
-		DealDamage("E");
+	else if (Target && Target->GetClass()->IsChildOf(AItem::StaticClass())){
+		AItem* target = Cast<AItem>(Target);
+		Inventory.Add(target);
+		target->SetActorHiddenInGame(true);
+		target->SetActorEnableCollision(false); 
 	}
 }
 
@@ -218,31 +222,34 @@ The player would recieve a message from the NPC, then a list of possible respons
 */
 void AThe_Battle_Of_MaldonCharacter::GoToConverstation(int index)
 {
+	ALivingEntity* target = Cast<ALivingEntity>(Target);
 	//Have we already been talking to them 
 	if (currentConversation){
 		//Get messages to display
 		TArray<FString> messagesToDisplay = currentConversation->SetNextMessages(index);
+		currentMessages = messagesToDisplay;
 
 		//We have reached the end of the Conversation
 		if (messagesToDisplay.Num() <= 0){
 			currentMessage = NULL;
 			currentConversation = NULL;
+			currentMessages.Empty();
 		}
 		else
 		{
 			//Display each message
 			for (int i = 0; i < messagesToDisplay.Num(); i++){
-				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, messagesToDisplay[i]);
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, messagesToDisplay[i]);
 			}
 		}
 	}
 	else {
 		//Start a new Conversation with the entity and move back into this method
-		if (Target && Target->startingMessage)
+		if (target && target->startingMessage)
 		{
 			//Display a kind of welcome message
-			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, "You started talking to " + Target->entityName);
-			currentMessage = Target->startingMessage;
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, "You started talking to " + target->entityName);
+			currentMessage = target->startingMessage;
 
 			//Create a new Conversation
 			currentConversation = new Conversation(currentMessage);

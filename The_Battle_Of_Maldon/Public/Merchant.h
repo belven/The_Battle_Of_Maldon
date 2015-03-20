@@ -16,5 +16,5 @@ class THE_BATTLE_OF_MALDON_API AMerchant : public AVillager
 public:
 	AMerchant();	
 	TArray<ASupply*> supplies;
-	TArray<ASupplyRequirement*> supplyRequirements;
+	TArray<FSupplyRequirement> supplyRequirements;
 };

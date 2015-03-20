@@ -34,4 +34,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Supplies)
 		int32 amount;	
+
+	
 };

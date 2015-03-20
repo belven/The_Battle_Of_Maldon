@@ -17,9 +17,30 @@ bool AVillageVolume::villageHasSupplies() {
 }
 
 /*Removes the supplies from the village, will also hide the mesh of the supplies*/
+ASupply* AVillageVolume::takeSupplies(FSupplyRequirement suppliesToTake){
+	ASupply* supply = getSupplies(suppliesToTake.currentSupplyType);
+
+	if (supply){	
+		if (supply->amount > suppliesToTake.amount){
+			supply->amount -= suppliesToTake.amount;
+			supply = GetWorld()->SpawnActor<ASupply>(ASupply::StaticClass());
+			supply->amount = suppliesToTake.amount;
+			supply->currentSupplyType = suppliesToTake.currentSupplyType;
+		}
+		else {
+			supply->SetActorHiddenInGame(true);
+			supplies.Remove(supply);
+		}
+		return supply;
+	}
+	return NULL;
+}
+
+/*Removes the supplies from the village, will also hide the mesh of the supplies*/
 ASupply* AVillageVolume::takeSupplies(ASupply* suppliesToTake){
 	if (supplies.Contains(suppliesToTake)){
 		suppliesToTake->SetActorHiddenInGame(true);
+		suppliesToTake->SetActorEnableCollision(true);
 		supplies.Remove(suppliesToTake);
 		return suppliesToTake;
 	}
@@ -29,6 +50,7 @@ ASupply* AVillageVolume::takeSupplies(ASupply* suppliesToTake){
 /*Adds the supplies from the village, will also show the mesh of the supplies*/
 ASupply* AVillageVolume::giveSupplies(ASupply* suppliesToGive){
 	suppliesToGive->SetActorHiddenInGame(false);
+	suppliesToGive->SetActorEnableCollision(true);
 	ASupply* supply = getSupplies(suppliesToGive->currentSupplyType);
 
 	if (supply) {
@@ -37,7 +59,7 @@ ASupply* AVillageVolume::giveSupplies(ASupply* suppliesToGive){
 	else {
 		supplies.Add(suppliesToGive);
 	}
-	
+
 	//OnSuppliesGivenEvent.Broadcast(suppliesToGive);
 	return suppliesToGive;
 }
@@ -72,15 +94,73 @@ void AVillageVolume::BeginPlay(){
 	}
 }
 
-TArray<SuppliesEnums::SupplyType> AVillageVolume::getVillageSupplyRequirements(){
-	TArray<SuppliesEnums::SupplyType> tempRequirements;
+FSupplyRequirement AVillageVolume::getRequirement(SuppliesEnums::SupplyType type){
+	FSupplyRequirement temp;
+	temp.amount = 0;
+	temp.currentSupplyType = type;
 
-	for (int i = 0; i < SuppliesEnums::All; i++){
-		SuppliesEnums::SupplyType type = (SuppliesEnums::SupplyType)i;
-		ASupply* supply = getSupplies(type);
+	for (FSupplyRequirement requirement : supplyRequirements){
+		if (requirement.currentSupplyType == type){
+			return requirement;
+		}
+	}
+	return temp;
+}
 
-		if (supply && supply->amount <= 0){
-			tempRequirements.Add(type);
+
+FSupplyRequirement AVillageVolume::getSupplyRequirement(SuppliesEnums::SupplyType type){
+	FSupplyRequirement tempRequirement;
+	tempRequirement.currentSupplyType = SuppliesEnums::All;
+	tempRequirement.amount = 0;
+
+	for (FSupplyRequirement requirement : supplyRequirements){
+		if (requirement.currentSupplyType == type){
+			return requirement;
+		}
+	}
+	return tempRequirement;
+}
+
+FSupplyRequirement AVillageVolume::getFirstRequirementThatWeCanSupply(AVillageVolume* otherVillage){
+	FSupplyRequirement tempRequirement;
+	tempRequirement.currentSupplyType = SuppliesEnums::All;
+	tempRequirement.amount = 0;
+
+	//Check each of our villages requirements
+	for (FSupplyRequirement requirement : otherVillage->getVillageSupplyRequirements()){
+
+		//Get the amount of supplies the village has that ours requires
+		ASupply* supply = getSupplies(requirement.currentSupplyType);
+
+		//Get the amount of that item that the other village requires
+		FSupplyRequirement otherRequirement = getRequirement(requirement.currentSupplyType);
+
+		//Do they have more supplies than they need of that type
+		if (supply && supply->amount > 0 && otherRequirement.amount < supply->amount){
+			tempRequirement.amount = supply->amount - otherRequirement.amount;
+			tempRequirement.currentSupplyType = requirement.currentSupplyType;
+			return tempRequirement;
+		}
+	}
+
+	return tempRequirement;
+}
+
+TArray<FSupplyRequirement> AVillageVolume::getVillageSupplyRequirements(){
+	TArray<FSupplyRequirement> tempRequirements;
+
+	for (FSupplyRequirement requirement : supplyRequirements){
+		ASupply* supply = getSupplies(requirement.currentSupplyType);
+
+		if (supply && supply->amount < requirement.amount){
+			FSupplyRequirement newRequirement;
+			newRequirement.currentSupplyType = requirement.currentSupplyType;
+			newRequirement.amount = requirement.amount - supply->amount;
+
+			tempRequirements.Add(newRequirement);
+		}
+		else if (supply == NULL){
+			tempRequirements.Add(requirement);
 		}
 	}
 

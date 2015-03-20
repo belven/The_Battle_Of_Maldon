@@ -70,12 +70,13 @@ void AGathererAIController::pickUpResources() {
 
 		FActorSpawnParameters Parameters;
 		Parameters.Template = targetResourceNode;
+		Parameters.bNoFail = true;
 		//Parameters.Owner = getGatherer();
 
-		AResourceNode* newResource = GetWorld()->SpawnActor<class AResourceNode>(AResourceNode::StaticClass());
-		newResource->amount = targetResourceNode->amount;
-		newResource->currentSupplyType = targetResourceNode->currentSupplyType;
-
+		ASupply* newResource = GetWorld()->SpawnActor<ASupply>(ASupply::StaticClass(), Parameters);
+		//newResource->amount = targetResourceNode->amount;
+		//newResource->currentSupplyType = targetResourceNode->currentSupplyType;
+		newResource->SetActorHiddenInGame(false);
 		getGatherer()->resources.Add(newResource);
 		targetResourceNode->takeResources(amountToTake);
 	}

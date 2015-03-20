@@ -197,7 +197,7 @@ FVector ALivingEntity::GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection
 /*This damages the entiies health and will include damage reduction from defense modifiers**/
 void ALivingEntity::InflictDamage(Damage* damage)
 {
-	Modifier* m = GetModifier(ModifierManager::defenseModiferName);
+	Modifier* modifier = GetModifier(ModifierManager::defenseModiferName);
 	LivingEntityDamage* led = (LivingEntityDamage*)damage;
 	FString damageDone = FString::SanitizeFloat(damage->damageDone);
 
@@ -207,8 +207,8 @@ void ALivingEntity::InflictDamage(Damage* damage)
 		damagedBy = led->damager->entityName;
 	}
 
-	if (m) {
-		damage->damageDone = damage->damageDone * m->value;
+	if (modifier) {
+		damage->damageDone = damage->damageDone * modifier->value;
 	}
 
 	if (__raise source.LivingEntityDamageEvent(damage))

@@ -24,17 +24,30 @@ public:
 
 	TArray<ALivingEntity*> GetAlliesInVillage();
 	TArray<ALivingEntity*> GetEnimiesInVillage();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Supplies)
 	TArray<ASupply*> supplies;
-	TArray<ASupplyRequirement*> supplyRequirements;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Supplies)
+	TArray<FSupplyRequirement> supplyRequirements;
 
 	bool villageHasSupplies();
-	TArray<SuppliesEnums::SupplyType> getVillageSupplyRequirements();
+
+	TArray<FSupplyRequirement> getVillageSupplyRequirements();
+
 	ASupply* takeSupplies(ASupply* suppliesToTake);
+	ASupply* takeSupplies(FSupplyRequirement suppliesToTake);
 	ASupply* giveSupplies(ASupply* suppliesToGive);
 	ASupply* getSupplies(SuppliesEnums::SupplyType type);
+
+
 	virtual void ReceiveActorBeginOverlap(AActor* OtherActor) override;
 	virtual void ReceiveActorEndOverlap(AActor* OtherActor) override;
 	virtual void BeginPlay() override;
+
+	FSupplyRequirement getRequirement(SuppliesEnums::SupplyType type);
+	FSupplyRequirement getSupplyRequirement(SuppliesEnums::SupplyType type);
+	FSupplyRequirement getFirstRequirementThatWeCanSupply(AVillageVolume* otherVillage);
 
 	//UPROPERTY(BlueprintAssignable, Category = "Events")
 		//SuppliesGivenEvent OnSuppliesGivenEvent;

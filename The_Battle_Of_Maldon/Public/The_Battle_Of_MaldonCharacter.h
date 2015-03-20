@@ -3,6 +3,7 @@
 #include "Person.h"
 #include "UnrealString.h"
 #include "Message.h"
+#include "MessageBP.h"
 #include "Conversation.h"
 #include "LivingEntity.h"
 #include "Quest.h"
@@ -32,6 +33,10 @@ public:
 	float BaseLookUpRate;
 			
 	Message* currentMessage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Message)
+		TArray<FString> currentMessages;
+
 	Conversation* currentConversation;
 	TArray<Quest*> currentQuests;
 	bool isLocking;

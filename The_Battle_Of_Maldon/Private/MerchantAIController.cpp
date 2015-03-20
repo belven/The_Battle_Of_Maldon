@@ -11,7 +11,7 @@ void AMerchantAIController::BeginPlay(){
 
 void AMerchantAIController::SuppliesGivenEvent(ASupply* supply){
 	if (Bot && !mechantHasSupplies()){
-		pickUpVillageSupplies();
+		setVillageSuppliesToCollect();
 	}
 }
 
@@ -28,7 +28,13 @@ void AMerchantAIController::Tick(float DeltaTime)
 		}
 		else {
 			//We have no suplies so go and pick some up
-			pickUpVillageSupplies();
+			setVillageSuppliesToCollect();
+			
+			//If we found supplies, move towards them
+			if (targetSupplies){
+				//Move towards the villages supplies
+				moveToTarget(targetSupplies);
+			}
 		}
 	}
 }
@@ -55,10 +61,17 @@ void AMerchantAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowi
 	//We have no supplies, therefore we have just moved towards some to pickup
 	if (!mechantHasSupplies() && getMerchant()->GetVillage()){
 		if (targetSupplies) {
-			getMerchant()->supplies.Add(getMerchant()->GetVillage()->takeSupplies(targetSupplies));
+			getMerchant()->supplies.Add(getMerchant()->GetVillage()->takeSupplies(targetVillageRequirements));
+			targetSupplies = NULL;
 		}
 		else {
-			pickUpVillageSupplies();
+			setVillageSuppliesToCollect();
+
+			//If we found supplies, move towards them
+			if (targetSupplies){
+				//Move towards the villages supplies
+				moveToTarget(targetSupplies);
+			}
 		}
 	}
 	//We have supplies therefore we must have reached a village or it's supplies
@@ -68,15 +81,32 @@ void AMerchantAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowi
 }
 
 /*Moves the bot to the first supplies found within the bots starting village*/
-void AMerchantAIController::pickUpVillageSupplies()
+void AMerchantAIController::setVillageSuppliesToCollect()
 {
 	//Do we have a village, and does it have supplies
 	if (getMerchant()->GetVillage() && getMerchant()->GetVillage()->villageHasSupplies()){
 
-		targetSupplies = getMerchant()->GetVillage()->supplies[0];
+		//Get the amount of resources our village requires
 
-		//Move towards the villages supplies
-		moveToTarget(targetSupplies);
+		//Check each village for supplies
+		for (AVillageVolume* village : getVillages()){
+			if (village != getMerchant()->GetVillage() && targetSupplies == NULL){
+
+				//Get what the other village needs from us, that we have
+				FSupplyRequirement thierRequirement = getMerchant()->GetVillage()->getFirstRequirementThatWeCanSupply(village);
+
+				//Get what the our village needs from them, that they have
+				FSupplyRequirement ourRequirement = village->getFirstRequirementThatWeCanSupply(getMerchant()->GetVillage());
+
+				//Is there something that both villages need?
+				if (thierRequirement.currentSupplyType != SuppliesEnums::All && ourRequirement.currentSupplyType != SuppliesEnums::All){
+					ourVillageRequirements = ourRequirement;
+					targetVillageRequirements = thierRequirement;
+					targetSupplies = getMerchant()->GetVillage()->getSupplies(thierRequirement.currentSupplyType);
+					break;
+				}
+			}
+		}
 	}
 }
 
@@ -84,7 +114,7 @@ void AMerchantAIController::pickUpVillageSupplies()
 bool AMerchantAIController::mechantHasSupplies(){
 	if (getMerchant()){
 		for (ASupply* supply : getMerchant()->supplies){
-			if (supply->amount > 0){
+			if (supply && supply->amount > 0){
 				return true;
 			}
 		}
@@ -95,6 +125,19 @@ bool AMerchantAIController::mechantHasSupplies(){
 /*Returns the bot as a merchant*/
 AMerchant* AMerchantAIController::getMerchant(){
 	return Cast<AMerchant>(Bot);
+}
+
+TArray<AVillageVolume*> AMerchantAIController::getVillages(){
+	TArray<AVillageVolume*> tempVillages;
+	for (FActorIterator It(GetWorld()); It; ++It)
+	{
+		AActor* actor = *It;
+		if (actor->GetClass()->IsChildOf(AVillageVolume::StaticClass())){
+			AVillageVolume* tempVillage = Cast<AVillageVolume>(*It);
+			tempVillages.Add(tempVillage);
+		}
+	}
+	return tempVillages;
 }
 
 /*

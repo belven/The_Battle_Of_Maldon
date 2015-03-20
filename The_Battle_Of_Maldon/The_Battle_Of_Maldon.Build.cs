@@ -6,6 +6,6 @@ public class The_Battle_Of_Maldon : ModuleRules
 {
 	public The_Battle_Of_Maldon(TargetInfo Target)
 	{
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AIModule", "UMG", "Slate", "SlateCore" });
 	}
 }

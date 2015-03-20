@@ -91,7 +91,7 @@ public:
 		UMessageBP* startingMessageBP;
 
 	Combos* EntityCombos;
-	ALivingEntity* Target;
+	AActor* Target;
 	float currentHealth;
 	int intelligence;
 	Message* startingMessage;

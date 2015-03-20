@@ -9,7 +9,7 @@ struct FSupplyData
 	GENERATED_USTRUCT_BODY()
 public:
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SupplyType)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Supplies)
 	TEnumAsByte<SuppliesEnums::SupplyType> currentSupplyType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Supplies)

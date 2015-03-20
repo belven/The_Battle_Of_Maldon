@@ -22,7 +22,7 @@ public:
 	virtual void OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)  override;
 
 	void goToNearestVillage();
-	void pickUpVillageSupplies();
+	void setVillageSuppliesToCollect();
 	void giveSuppliesToTargetVillage();
 	AMerchant* getMerchant();	
 	AVillageVolume* targetVillage;
@@ -30,5 +30,8 @@ public:
 	bool mechantHasSupplies();
 	virtual void BeginPlay() override;
 	void SuppliesGivenEvent(ASupply* supply);
-	
+	TArray<AVillageVolume*> getVillages();
+	FSupplyRequirement ourVillageRequirements;
+	FSupplyRequirement targetVillageRequirements;
+
 };

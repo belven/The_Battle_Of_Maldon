@@ -2,18 +2,19 @@
 
 #pragma once
 
-#include "Supply.h"
+#include "SupplyData.h"
 #include "SupplyRequirement.generated.h"
 
 /**
  * 
  */
-UCLASS()
-class THE_BATTLE_OF_MALDON_API ASupplyRequirement : public ASupply
+USTRUCT(BlueprintType)
+struct THE_BATTLE_OF_MALDON_API FSupplyRequirement : public FSupplyData
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Supplies)
+	int32 value;
 	
 	
 };

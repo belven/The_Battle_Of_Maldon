@@ -13,3 +13,7 @@ ASupply::ASupply(SuppliesEnums::SupplyType type) {
 	amount = 100;
 	currentSupplyType = type;
 }
+
+
+
+

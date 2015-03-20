@@ -58,7 +58,7 @@ void Combos::createTestCombos()
 
 	HealthEffect* he = new HealthEffect(hp, Owner);
 
-	Combo* tempCombo6 = GenerateCombo(6, 2.75, 1.25, "R", he);
+	Combo* tempCombo6 = GenerateCombo(6, 2.75, 1.25, "R");
 	Combo* tempCombo7 = GenerateCombo(7, 1.4, 2, "F");
 	Combo* tempCombo8 = GenerateCombo(8, 3.8, 1.75, "Q");
 

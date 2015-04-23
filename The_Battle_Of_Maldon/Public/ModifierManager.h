@@ -4,9 +4,11 @@
 #include "UnrealString.h"
 #include "LivingEntity.h"
 #include "Modifier.h"
+#include "EffectManager.h"
 
 /*This class is used to add modifier based methods and proporties to another class so it can utilise modifiers*/
-class ModifierManager {
+class ModifierManager : public EffectManager
+{
 public:
 	TArray<Modifier*> currentModifiers;
 
@@ -18,7 +20,7 @@ public:
 	void SetModifier(FString name, double value, bool positive){
 		Modifier* m = GetModifier(name);
 
-		if (m){
+		if (m) {
 			ChangeModifier(m, value, positive);
 		}
 		else{
@@ -40,12 +42,25 @@ public:
 
 	/*Returns a modifier, if it exists, with the inputted name*/
 	Modifier* GetModifier(FString name){
-		for (TArray<Modifier*>::TConstIterator it = currentModifiers.CreateConstIterator(); it.GetIndex() != NULL; it++){
+		Modifier* mReturn = NULL;
+		std::unique_lock<std::mutex> lk(m);
+		cv.wait(lk, [&]{ return !beingRed; });
+		beingRed = true;
+
+		UE_LOG(LogTemp, Log, TEXT("Get Modifier"));
+		for (TArray<Modifier*>::TConstIterator it = currentModifiers.CreateConstIterator(); it; it++){
 			Modifier* m = (Modifier*)*it;
-			if (m->name.Equals(name))
-				return m;
+			if (m->name.Equals(name)){
+				mReturn = m;
+				break;
+			}
 		}
-		return NULL;
+
+		UE_LOG(LogTemp, Log, TEXT("Got Modifier"));
+		beingRed = false;
+		lk.unlock();
+		cv.notify_one();
+		return mReturn;
 	}
 
 	/*Returns a new basic modifier i.e. 100% with the inputted name*/

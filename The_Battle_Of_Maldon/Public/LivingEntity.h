@@ -27,11 +27,10 @@ namespace DodgeEnums
 #include "Combos.h"
 #include "Message.h"
 #include "Weapon.h"
-#include "Effect.h"
 #include "Damage.h"
 #include "CombosBP.h"
 #include "MessageBP.h"
-
+#include "EffectManager.h"
 #include "LivingEntity.generated.h"
 
 UCLASS()
@@ -95,7 +94,6 @@ public:
 	float currentHealth;
 	int intelligence;
 	Message* startingMessage;
-	TArray<Effect*> currentEffects;
 
 	void InflictDamage(Damage* damage);
 	void Dodge(DodgeEnums::DodgeDirection dodgeDirection);
@@ -107,10 +105,6 @@ public:
 		void AddItemToInventory(AItem* itemToAdd);
 
 	void AttachItemToSocket(AItem* itemToAdd, FName socketName);
-	void CheckEffects(float deltaTime);
-	void CheckEffect(Effect* e, float deltaTime);
-	bool HasEffect(Effect* newE);
-	void GiveEffect(Effect* newE);
 	void Tick(float deltaTime) override;
 protected:
 	FVector GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection, FVector ForwardDir);

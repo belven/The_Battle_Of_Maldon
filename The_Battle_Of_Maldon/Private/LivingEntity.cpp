@@ -1,7 +1,7 @@
 #include "The_Battle_of_Maldon.h"
 #include "Engine.h"
 
-ALivingEntity::ALivingEntity(): Super()
+ALivingEntity::ALivingEntity() : Super()
 {
 	CurrentEntityType = EntityEnums::Living;
 	AIControllerClass = ACombatAIController::StaticClass();
@@ -14,7 +14,7 @@ ALivingEntity::ALivingEntity(): Super()
 	rollDistance = 400;
 	rollVelocity = 300;
 
-	/*EffectStructs::HealthParams hp;
+	EffectStructs::HealthParams hp;
 	hp.amountOfChange = 100;
 	hp.positive = false;
 	hp.dely = 3;
@@ -23,22 +23,22 @@ ALivingEntity::ALivingEntity(): Super()
 	hp.maxDuration = 30;
 
 	HealthEffect* he = new HealthEffect(hp, this);
-	GiveEffect(he);*/
+	GiveEffect(he);
 
-	//EffectStructs::ModifierParams mp;
-	//mp.id = "Damage Reduction";
-	//mp.dely = 9;
-	//mp.stacks = true;
-	//mp.maxDuration = 9;
-	//mp.positive = false;
-	//mp.modifier = 0.3;
-	//mp.modifierName = ModifierManager::defenseModiferName;
+	EffectStructs::ModifierParams mp;
+	mp.id = "Damage Reduction";
+	mp.dely = 9;
+	mp.stacks = true;
+	mp.maxDuration = 9;
+	mp.positive = false;
+	mp.modifier = 0.3;
+	mp.modifierName = ModifierManager::defenseModiferName;
 
-	//ModifierEffect* me = new ModifierEffect(mp, this);
+	ModifierEffect* me = new ModifierEffect(mp, this);
 	//GiveEffect(me);
 
-	//mp.dely = 18;
-	//ModifierEffect* me2 = new ModifierEffect(mp, this);
+	mp.dely = 18;
+	ModifierEffect* me2 = new ModifierEffect(mp, this);
 	//GiveEffect(me2);
 
 	Message* start = new Message("NPC: Hello", "");
@@ -58,7 +58,7 @@ ALivingEntity::ALivingEntity(): Super()
 void ALivingEntity::Tick(float deltaTime){
 	Super::Tick(deltaTime);
 	CheckEffects(deltaTime);
-	
+
 	//Modifier* m = GetModifier(ModifierManager::speedModiferName);
 
 	//Adjust speed here
@@ -66,61 +66,12 @@ void ALivingEntity::Tick(float deltaTime){
 		if (m) {
 
 		}
-	}*/
+		}*/
 }
 
-/*This will check all current effects to see if they need applying or removing*/
-void ALivingEntity::CheckEffects(float deltaTime){
-	for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it; it++){
-		Effect* e = (Effect*)*it;
-		CheckEffect(e, deltaTime);
-	}
-}
 
-/*Checks a single effect to allow for re-usability*/
-void ALivingEntity::CheckEffect(Effect* e, float deltaTime){
-	e->lastDuration += deltaTime;
-	e->totalTime += deltaTime;
 
-	if (e->ShouldApply()) {
-		e->ApplyEffect();
-		e->EffectApplied();
-		e->lastDuration -= e->dely;
-
-		if (e->EffectExpired()) {
-			e->Expired();
-			currentEffects.Remove(e);
-		}
-	}
-}
-
-/*Checks to see if an entity has an effect with a matching ID*/
-bool ALivingEntity::HasEffect(Effect* newE) {
-	for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it; it++){
-		Effect* e = (Effect*)*it;
-		if (e->id.Equals(newE->id)){
-			return true;
-		}
-	}
-	return false;
-}
-
-/*Assigns a new effect to an entity or replaces an existing one, based on if the effect stacks*/
-void ALivingEntity::GiveEffect(Effect* newE) {
-	if (!newE->stacks && HasEffect(newE)) {
-		for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it; it++){
-			Effect* e = (Effect*)*it;
-			if (e->id.Equals(newE->id) && e->Score() < newE->Score()){
-				e = newE;
-			}
-		}
-	}
-	else {
-		currentEffects.Add(newE);
-	}
-}
-
-/*Clears the entities combo timer, restting there combo to the start, 
+/*Clears the entities combo timer, restting there combo to the start,
 may be run when blocked or the player fails to press the button in time*/
 void ALivingEntity::SetStopComboTimer(float ComboDelay){
 	ClearStopComboTimer();
@@ -182,7 +133,7 @@ FVector ALivingEntity::GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection
 	switch (dodgeDirection)
 	{
 	case DodgeEnums::Left:
-		return (ForwardDir * (0 - rollDistance)) + FVector(0, 0, 1) * rollVelocity; 
+		return (ForwardDir * (0 - rollDistance)) + FVector(0, 0, 1) * rollVelocity;
 	case DodgeEnums::Right:
 		return (ForwardDir * rollDistance) + FVector(0, 0, 1) * rollVelocity;
 	case DodgeEnums::Forwards:
@@ -222,6 +173,12 @@ void ALivingEntity::InflictDamage(Damage* damage)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, entityName + " was killed!!!");
 			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::SanitizeFloat(currentHealth - Damage) +  " overkill damage!!");
+			
+			std::unique_lock<std::mutex> lk(m);
+			cv.wait(lk, [&]{ return !beingRed; });
+			beingRed = true;
+			lk.unlock();
+			cv.notify_one();
 			Destroy();
 		}
 	}

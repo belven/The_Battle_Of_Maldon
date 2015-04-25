@@ -44,7 +44,7 @@ public:
 		e->lastDuration += deltaTime;
 		e->totalTime += deltaTime;
 
-		if (e->ShouldApply()) {
+		while (e->ShouldApply()) {
 			e->ApplyEffect();
 			e->EffectApplied();
 			e->lastDuration -= e->dely;

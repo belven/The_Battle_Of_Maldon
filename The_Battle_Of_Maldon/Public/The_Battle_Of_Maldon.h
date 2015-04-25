@@ -63,6 +63,15 @@
 #include "Damage.h"
 #include "LivingEntityDamage.h"
 
+#include "Body.h"
+#include "PersonBody.h"
+#include "CreatureBody.h"
+
+#include "Arm.h"
+#include "Leg.h"
+#include "Head.h"
+#include "Chest.h"
+
 #include "Modifier.h"
 #include "ModifierEffect.h"
 #include "ModifierManager.h"

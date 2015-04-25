@@ -69,6 +69,18 @@ void ALivingEntity::Tick(float deltaTime){
 		}*/
 }
 
+double ALivingEntity::GetHealth(){
+	return body.GetTotalVitality();
+}
+
+Body ALivingEntity::GetBody(){
+	return body;
+}
+
+
+void ALivingEntity::SetBody(Body value){
+	body = value;
+}
 
 
 /*Clears the entities combo timer, restting there combo to the start,

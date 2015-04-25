@@ -31,12 +31,16 @@ namespace DodgeEnums
 #include "CombosBP.h"
 #include "MessageBP.h"
 #include "EffectManager.h"
+#include "Body.h"
 #include "LivingEntity.generated.h"
 
 UCLASS()
 class ALivingEntity : public AEntity, public ModifierManager
 {
 	GENERATED_BODY()
+private:
+	Body body = *new Body();
+
 public:
 	ALivingEntity();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AggressionType)
@@ -106,6 +110,11 @@ public:
 
 	void AttachItemToSocket(AItem* itemToAdd, FName socketName);
 	void Tick(float deltaTime) override;
+	double GetHealth();
+	Body GetBody();
+	void SetBody(Body value);
 protected:
 	FVector GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection, FVector ForwardDir);
 };
+
+

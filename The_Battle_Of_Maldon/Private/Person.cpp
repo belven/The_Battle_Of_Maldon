@@ -5,5 +5,6 @@ APerson::APerson()
 {
 	CurrentEntityType = EntityEnums::Person;
 	CurrentAggressionType = LivingEntityEnums::Passive;
+	SetBody(*new PersonBody());
 
 }

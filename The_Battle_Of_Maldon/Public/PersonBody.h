@@ -8,6 +8,7 @@
 #if !defined(EA_1149FD36_402D_45f8_928C_5962BE3AC4BF__INCLUDED_)
 #define EA_1149FD36_402D_45f8_928C_5962BE3AC4BF__INCLUDED_
 
+#pragma once
 #include "Body.h"
 class PersonBody : public Body
 {

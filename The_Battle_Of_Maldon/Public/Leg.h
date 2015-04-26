@@ -8,6 +8,7 @@
 #if !defined(EA_CF516254_0860_480c_B773_D9174865082A__INCLUDED_)
 #define EA_CF516254_0860_480c_B773_D9174865082A__INCLUDED_
 
+#pragma once
 #include "Part.h"
 
 class Leg : public Part

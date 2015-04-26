@@ -8,6 +8,7 @@
 #if !defined(EA_0865252D_DAC2_43de_B077_B693DDD183B9__INCLUDED_)
 #define EA_0865252D_DAC2_43de_B077_B693DDD183B9__INCLUDED_
 
+#pragma once
 #include "Part.h"
 #include <vector>
 
@@ -33,7 +34,7 @@ public:
 	//Sets the current body parts
 	void SetParts(std::vector<Part*> newVal);
 
-	virtual double GetTotalVitality();
+	virtual double GetTotalVitality() = 0;
 
 private:
 	std::vector<Part*> parts;

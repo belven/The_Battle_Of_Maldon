@@ -23,7 +23,7 @@ ALivingEntity::ALivingEntity() : Super()
 	hp.maxDuration = 30;
 
 	HealthEffect* he = new HealthEffect(hp, this);
-	GiveEffect(he);
+	//GiveEffect(he);
 
 	EffectStructs::ModifierParams mp;
 	mp.id = "Damage Reduction";
@@ -58,27 +58,18 @@ ALivingEntity::ALivingEntity() : Super()
 void ALivingEntity::Tick(float deltaTime){
 	Super::Tick(deltaTime);
 	CheckEffects(deltaTime);
-
-	//Modifier* m = GetModifier(ModifierManager::speedModiferName);
-
-	//Adjust speed here
-	/*if (GetMovementComponent() && GetMovementComponent()->IsMovingOnGround()){
-		if (m) {
-
-		}
-		}*/
 }
 
 double ALivingEntity::GetHealth(){
-	return body.GetTotalVitality();
+	return body->GetTotalVitality();
 }
 
-Body ALivingEntity::GetBody(){
+Body* ALivingEntity::GetBody(){
 	return body;
 }
 
 
-void ALivingEntity::SetBody(Body value){
+void ALivingEntity::SetBody(Body* value){
 	body = value;
 }
 
@@ -162,8 +153,6 @@ void ALivingEntity::InflictDamage(Damage* damage)
 {
 	Modifier* modifier = GetModifier(ModifierManager::defenseModiferName);
 	LivingEntityDamage* led = (LivingEntityDamage*)damage;
-	FString damageDone = FString::SanitizeFloat(damage->damageDone);
-
 	FString damagedBy = "Other";
 
 	if (led) {
@@ -171,11 +160,12 @@ void ALivingEntity::InflictDamage(Damage* damage)
 	}
 
 	if (modifier) {
-		damage->damageDone = damage->damageDone * modifier->value;
+		damage->damageDone *= modifier->value;
 	}
 
 	if (__raise source.LivingEntityDamageEvent(damage))
 	{
+		FString damageDone = FString::SanitizeFloat(damage->damageDone);
 		if ((currentHealth - damage->damageDone) > 0)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, damagedBy + " delt " + damageDone + " damage to " + entityName);
@@ -185,7 +175,7 @@ void ALivingEntity::InflictDamage(Damage* damage)
 		{
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, entityName + " was killed!!!");
 			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::SanitizeFloat(currentHealth - Damage) +  " overkill damage!!");
-			
+
 			std::unique_lock<std::mutex> lk(m);
 			cv.wait(lk, [&]{ return !beingRed; });
 			beingRed = true;

@@ -5,7 +5,6 @@
 //  Original author: sam
 ///////////////////////////////////////////////////////////
 #include "The_Battle_of_Maldon.h"
-#include "Part.h"
 
 
 Part::Part(){
@@ -26,7 +25,7 @@ void Part::SetVitality(double newVal){
 	vitality = newVal;
 }
 
-PartEnums::PartType GetPartType(){
+PartEnums::PartType Part::GetPartType(){
 	return partType;
 }
 

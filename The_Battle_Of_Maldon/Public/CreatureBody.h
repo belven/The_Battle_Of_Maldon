@@ -8,6 +8,7 @@
 #if !defined(EA_E7C4D473_5050_4baa_A249_C964C6D5B7A8__INCLUDED_)
 #define EA_E7C4D473_5050_4baa_A249_C964C6D5B7A8__INCLUDED_
 
+#pragma once
 #include "Body.h"
 class CreatureBody : public Body
 {

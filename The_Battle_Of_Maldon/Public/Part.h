@@ -24,11 +24,13 @@ namespace PartEnums
 	};
 
 }
+#pragma once
 
 class Part
 {
 private:
 	double vitality = 1000;
+	TEnumAsByte<PartEnums::PartType> partType = PartEnums::Other;
 
 public:	
 	Part();
@@ -37,9 +39,6 @@ public:
 	void SetVitality(double newVal);
 	PartEnums::PartType GetPartType();
 	void SetPartType(PartEnums::PartType value);
-private:
-	TEnumAsByte<PartEnums::PartType> partType = PartEnums::Other;
-
 
 };
 #endif // !defined(EA_EDB72366_6253_46fc_8917_6BC649218681__INCLUDED_)

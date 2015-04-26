@@ -8,6 +8,7 @@
 #if !defined(EA_B5B722B4_B784_45e5_BA41_2CA3CA68F1A5__INCLUDED_)
 #define EA_B5B722B4_B784_45e5_BA41_2CA3CA68F1A5__INCLUDED_
 
+#pragma once
 #include "Part.h"
 
 class Arm : public Part

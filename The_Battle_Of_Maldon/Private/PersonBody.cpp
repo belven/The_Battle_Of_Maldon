@@ -8,7 +8,7 @@
 #include "PersonBody.h"
 
 
-PersonBody::PersonBody() : Super(){
+PersonBody::PersonBody(){
 	GetParts().push_back(new Arm(PartEnums::LeftArm));
 	GetParts().push_back(new Arm(PartEnums::RightArm));
 	GetParts().push_back(new Leg(PartEnums::RightLeg));

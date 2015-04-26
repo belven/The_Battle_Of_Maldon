@@ -66,6 +66,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void PossessedBy(class AController* NewController) override;
 	void WriteMessage(FString message);
+	void OutputConversation();
 
 protected:
 	/** Fires a projectile. */

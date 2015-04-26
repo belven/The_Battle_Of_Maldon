@@ -32,6 +32,9 @@ AThe_Battle_Of_MaldonCharacter::AThe_Battle_Of_MaldonCharacter(const FObjectInit
 	Mesh1P->CastShadow = false;
 }
 
+/**
+ * APawn interface
+ */
 void AThe_Battle_Of_MaldonCharacter::SetupPlayerInputComponent(class UInputComponent* InputComponent)
 {
 	// set up gameplay key bindings
@@ -121,6 +124,9 @@ void AThe_Battle_Of_MaldonCharacter::Tick(float DeltaTime)
 	}
 }
 
+/**
+ * Fires a projectile.
+ */
 void AThe_Battle_Of_MaldonCharacter::OnFire()
 {
 	// try and fire a projectile
@@ -179,7 +185,7 @@ void AThe_Battle_Of_MaldonCharacter::CombatActionE()
 		AItem* target = Cast<AItem>(Target);
 		Inventory.Add(target);
 		target->SetActorHiddenInGame(true);
-		target->SetActorEnableCollision(false); 
+		target->SetActorEnableCollision(false);
 	}
 }
 
@@ -222,41 +228,9 @@ The player would recieve a message from the NPC, then a list of possible respons
 */
 void AThe_Battle_Of_MaldonCharacter::GoToConverstation(int index)
 {
-	ALivingEntity* target = Cast<ALivingEntity>(Target);
-	//Have we already been talking to them 
 	if (currentConversation){
-		//Get messages to display
-		TArray<FString> messagesToDisplay = currentConversation->SetNextMessages(index);
-		currentMessages = messagesToDisplay;
-
-		//We have reached the end of the Conversation
-		if (messagesToDisplay.Num() <= 0){
-			currentMessage = NULL;
-			currentConversation = NULL;
-			currentMessages.Empty();
-		}
-		else
-		{
-			//Display each message
-			for (int i = 0; i < messagesToDisplay.Num(); i++){
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, messagesToDisplay[i]);
-			}
-		}
-	}
-	else {
-		//Start a new Conversation with the entity and move back into this method
-		if (target && target->startingMessage)
-		{
-			//Display a kind of welcome message
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, "You started talking to " + target->entityName);
-			currentMessage = target->startingMessage;
-
-			//Create a new Conversation
-			currentConversation = new Conversation(currentMessage);
-
-			//Go back into the method with the new data
-			GoToConverstation(index);
-		}
+		currentConversation->SelectChoice(index - 1);
+		OutputConversation();
 	}
 }
 
@@ -265,7 +239,33 @@ This method was used to initilse a conversation but is almost unused
 Will leave this incase of future changes
 */
 void AThe_Battle_Of_MaldonCharacter::StartConverstation(ALivingEntity* le){
-	GoToConverstation(1);
+	ALivingEntity* target = Cast<ALivingEntity>(Target);
+
+	if (target->GetConversation() != NULL && currentConversation == NULL) {
+		currentConversation = target->GetConversation();
+		OutputConversation();
+	}
+}
+
+void AThe_Battle_Of_MaldonCharacter::OutputConversation(){
+	// Write out the NPCs response
+	WriteMessage(currentConversation->GetCurrentResponse()->GetText());
+
+	TArray<UConversationChoice*> choices = currentConversation->GetCurrentChoices();
+
+	// If we have any choices then write them out
+	if (choices.Num() > 0){
+		for (UConversationChoice* choice : choices){
+			WriteMessage(choice->GetText());
+		}
+	}
+	else // Otherwise we've reached the end of the conversation 
+	{
+		currentConversation->ResetConversation();
+		currentConversation = NULL;
+	}
+
+	WriteMessage("------------------------------");
 }
 
 /**
@@ -339,6 +339,9 @@ void AThe_Battle_Of_MaldonCharacter::DealDamage(FString ButtonPressed)
 	controller->attackTarget(ButtonPressed, Target);
 }
 
+/**
+ * Handles moving forward/backward
+ */
 void AThe_Battle_Of_MaldonCharacter::MoveForward(float Value)
 {
 	if (Value != 0.0f && canMove)
@@ -348,6 +351,9 @@ void AThe_Battle_Of_MaldonCharacter::MoveForward(float Value)
 	}
 }
 
+/**
+ * Handles stafing movement, left and right
+ */
 void AThe_Battle_Of_MaldonCharacter::MoveRight(float Value)
 {
 	if (Value != 0.0f && canMove)
@@ -357,6 +363,10 @@ void AThe_Battle_Of_MaldonCharacter::MoveRight(float Value)
 	}
 }
 
+/**
+ * Called via input to turn at a given rate.
+ * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
+ */
 void AThe_Battle_Of_MaldonCharacter::TurnAtRate(float Rate)
 {
 	if (canMove && !isLocking){
@@ -365,6 +375,10 @@ void AThe_Battle_Of_MaldonCharacter::TurnAtRate(float Rate)
 	}
 }
 
+/**
+ * Called via input to turn look up/down at a given rate.
+ * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
+ */
 void AThe_Battle_Of_MaldonCharacter::LookUpAtRate(float Rate)
 {
 	if (canMove && !isLocking){
@@ -372,3 +386,11 @@ void AThe_Battle_Of_MaldonCharacter::LookUpAtRate(float Rate)
 		AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 	}
 }
+
+
+
+void AThe_Battle_Of_MaldonCharacter::WriteMessage(FString message){
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, message);
+}
+
+

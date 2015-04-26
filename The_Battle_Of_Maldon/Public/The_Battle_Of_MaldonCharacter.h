@@ -2,9 +2,9 @@
 #pragma once
 #include "Person.h"
 #include "UnrealString.h"
-#include "Message.h"
-#include "MessageBP.h"
-#include "Conversation.h"
+//#include "Message.h"
+//#include "MessageBP.h"
+//#include "Conversation.h"
 #include "LivingEntity.h"
 #include "Quest.h"
 #include "The_Battle_Of_MaldonCharacter.generated.h"
@@ -21,6 +21,9 @@ class AThe_Battle_Of_MaldonCharacter : public APerson
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FirstPersonCameraComponent;
+private:
+	UConversation* currentConversation;
+
 public:
 	AThe_Battle_Of_MaldonCharacter(const FObjectInitializer& ObjectInitializer);
 
@@ -32,12 +35,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 			
-	Message* currentMessage;
+	//Message* currentMessage;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Message)
 		TArray<FString> currentMessages;
 
-	Conversation* currentConversation;
+	//Conversation* currentConversation;
 	TArray<Quest*> currentQuests;
 	bool isLocking;
 	bool canMove;
@@ -62,6 +65,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void PossessedBy(class AController* NewController) override;
+	void WriteMessage(FString message);
 
 protected:
 	/** Fires a projectile. */

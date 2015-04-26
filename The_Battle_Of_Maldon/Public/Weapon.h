@@ -1,5 +1,5 @@
 #pragma once
-#include "The_Battle_of_Maldon.h"
+#include "Item.h"
 #include "Weapon.generated.h"
 
 UCLASS()

@@ -25,11 +25,9 @@ namespace DodgeEnums
 #include "ModifierManager.h"
 #include "Entity.h"
 #include "Combos.h"
-#include "Message.h"
 #include "Weapon.h"
 #include "Damage.h"
-#include "CombosBP.h"
-#include "MessageBP.h"
+#include "Conversation.h"
 #include "EffectManager.h"
 #include "Body.h"
 #include "LivingEntity.generated.h"
@@ -40,6 +38,7 @@ class ALivingEntity : public AEntity, public ModifierManager
 	GENERATED_BODY()
 private:
 	Body* body;
+	UConversation* conversation;
 
 public:
 	ALivingEntity();
@@ -85,36 +84,32 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
 		AWeapon* Weapon;
 
-	TArray<AItem*> Inventory;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combo)
-		ACombosBP* EntityCombosBP;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Messages)
-		UMessageBP* startingMessageBP;
-
+	TArray<AItem*> Inventory;		
 	Combos* EntityCombos;
 	AActor* Target;
 	float currentHealth;
 	int intelligence;
-	Message* startingMessage;
 
+	Body* GetBody();
+	double GetHealth();
+
+	void ClearStopComboTimer();
+	void StopCombo();
+
+	void SetStopComboTimer(float ComboDelay);
 	void InflictDamage(Damage* damage);
 	void Dodge(DodgeEnums::DodgeDirection dodgeDirection);
-	void StopCombo();
-	void SetStopComboTimer(float ComboDelay);
-	void ClearStopComboTimer();
+	void SetBody(Body* value);
 
 	UFUNCTION(BlueprintCallable, Category = "AddItem")
 		void AddItemToInventory(AItem* itemToAdd);
 
 	void AttachItemToSocket(AItem* itemToAdd, FName socketName);
 	void Tick(float deltaTime) override;
-	double GetHealth();
-	Body* GetBody();
-	void SetBody(Body* value);
+
+	UConversation* GetConversation();
+	void SetConversation(UConversation* newVal);
+
 protected:
 	FVector GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection, FVector ForwardDir);
 };
-
-

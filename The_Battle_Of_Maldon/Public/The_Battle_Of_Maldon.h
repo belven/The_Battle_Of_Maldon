@@ -45,8 +45,12 @@
 #include "CombosBP.h"
 
 #include "Message.h"
-#include "Conversation.h"
 #include "MessageBP.h"
+
+
+#include "Conversation.h"
+#include "ConversationChoice.h"
+#include "ChoiceResponse.h"
 
 #include "MyAIController.h"
 #include "CombatAIController.h"

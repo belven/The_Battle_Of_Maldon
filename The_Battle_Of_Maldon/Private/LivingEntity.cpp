@@ -14,44 +14,22 @@ ALivingEntity::ALivingEntity() : Super()
 	rollDistance = 400;
 	rollVelocity = 300;
 
-	EffectStructs::HealthParams hp;
-	hp.amountOfChange = 100;
-	hp.positive = false;
-	hp.dely = 3;
-	hp.id = "Basic Damage";
-	hp.stacks = false;
-	hp.maxDuration = 30;
+	UChoiceResponse* start = new UChoiceResponse("Hello");
+	UChoiceResponse* middle = new UChoiceResponse("Greg");
+	UChoiceResponse* end = new UChoiceResponse("Good bye");
 
-	HealthEffect* he = new HealthEffect(hp, this);
-	//GiveEffect(he);
+	UConversationChoice* name = new UConversationChoice("What's you're name?");
+	name->SetResponse(middle);
+	
+	UConversationChoice* sorry = new UConversationChoice("Sorry to disturb you, cya");
+	sorry->SetResponse(end);
 
-	EffectStructs::ModifierParams mp;
-	mp.id = "Damage Reduction";
-	mp.dely = 9;
-	mp.stacks = true;
-	mp.maxDuration = 9;
-	mp.positive = false;
-	mp.modifier = 0.3;
-	mp.modifierName = ModifierManager::defenseModiferName;
+	start->AddChoice(name);
+	start->AddChoice(sorry);
 
-	ModifierEffect* me = new ModifierEffect(mp, this);
-	//GiveEffect(me);
+	middle->AddChoice(sorry);
 
-	mp.dely = 18;
-	ModifierEffect* me2 = new ModifierEffect(mp, this);
-	//GiveEffect(me2);
-
-	Message* start = new Message("NPC: Hello", "");
-	Message* middle = new Message("NPC: " + entityName, "Player: Whats your name?");
-	Message* middle2 = new Message("NPC: Hello?", "Player: What did you say again?");
-	Message* end = new Message("NPC: Cya", "Player: ok, Bye");
-
-	start->Add(middle);
-	middle2->Add(end);
-
-	middle->Add(end);
-	middle->Add(middle2);
-	startingMessage = start;
+	SetConversation(new UConversation(start));
 }
 
 /*This method is used to control the effects on the entity, this runs each frame*/
@@ -184,4 +162,14 @@ void ALivingEntity::InflictDamage(Damage* damage)
 			Destroy();
 		}
 	}
+}
+
+
+UConversation* ALivingEntity::GetConversation(){
+	return conversation;
+}
+
+
+void ALivingEntity::SetConversation(UConversation* newVal){
+	conversation = newVal;
 }

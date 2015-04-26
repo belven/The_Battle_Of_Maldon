@@ -55,3 +55,8 @@ void UConversation::SelectChoice(int choiceIndex){
 		SetCurrentResponse(response);
 	}
 }
+
+
+void UConversation::ResetConversation(){
+	SetCurrentResponse(GetStartingResponse());
+}

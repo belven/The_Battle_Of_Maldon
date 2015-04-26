@@ -23,4 +23,5 @@ public:
 	UChoiceResponse* GetStartingResponse();
 
 	void SelectChoice(int choiceIndex);
+	void ResetConversation();
 };

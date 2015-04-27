@@ -81,9 +81,9 @@ void AThe_Battle_Of_MaldonCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (Target && isLocking)
+	if (GetTarget() && isLocking)
 	{
-		FVector Direction = Target->GetActorLocation() - GetActorLocation();
+		FVector Direction = GetTarget()->GetActorLocation() - GetActorLocation();
 		FRotator NewControlRotation = Direction.Rotation();
 
 		if (GetMovementComponent() && GetMovementComponent()->IsMovingOnGround())
@@ -98,7 +98,7 @@ void AThe_Battle_Of_MaldonCharacter::Tick(float DeltaTime)
 	}
 	else
 	{
-		Target = NULL;
+		SetTarget(NULL);
 
 		FHitResult testHitResult(ForceInit);
 		FVector testStartFVector = GetActorLocation();
@@ -117,8 +117,8 @@ void AThe_Battle_Of_MaldonCharacter::Tick(float DeltaTime)
 				(tempActor->GetClass()->IsChildOf(AItem::StaticClass()) || tempActor->GetClass()->IsChildOf(ALivingEntity::StaticClass())))
 			{
 				ACombatAIController* controller = (ACombatAIController*)GetController();
-				Target = tempActor;
-				controller->target = Target;
+				SetTarget(tempActor);
+				controller->target = GetTarget();
 			}
 		}
 	}
@@ -170,22 +170,22 @@ void AThe_Battle_Of_MaldonCharacter::CombatActionQ()
 
 void AThe_Battle_Of_MaldonCharacter::CombatActionE()
 {
-	if (Target && Target->GetClass()->IsChildOf(ALivingEntity::StaticClass()))
+	if (GetTarget() && GetTarget()->GetClass()->IsChildOf(ALivingEntity::StaticClass()))
 	{
-		ALivingEntity* target = Cast<ALivingEntity>(Target);
-		if (target->clan == clan){
-			StartConverstation(target);
+		ALivingEntity* tempTarget = Cast<ALivingEntity>(GetTarget());
+		if (tempTarget->clan == clan){
+			StartConverstation(tempTarget);
 		}
 		else
 		{
 			DealDamage("E");
 		}
 	}
-	else if (Target && Target->GetClass()->IsChildOf(AItem::StaticClass())){
-		AItem* target = Cast<AItem>(Target);
-		Inventory.Add(target);
-		target->SetActorHiddenInGame(true);
-		target->SetActorEnableCollision(false);
+	else if (GetTarget() && GetTarget()->GetClass()->IsChildOf(AItem::StaticClass())){
+		AItem* tempTarget = Cast<AItem>(GetTarget());
+		AddItemToInventory(tempTarget);
+		GetTarget()->SetActorHiddenInGame(true);
+		GetTarget()->SetActorEnableCollision(false);
 	}
 }
 
@@ -221,7 +221,7 @@ void AThe_Battle_Of_MaldonCharacter::ConverstationActionFour()
 
 /**
 Creates or moves a conversation on based on the players choice
-If the player were to press 'E' then 1 when targeting an NPC
+If the player were to press 'E' then 1 when GetTarget()ing an NPC
 The player would recieve a message from the NPC, then a list of possible responses
 
 @parma index The index of the messages last displayed, starting at 1
@@ -244,10 +244,10 @@ This method was used to initilse a conversation but is almost unused
 Will leave this incase of future changes
 */
 void AThe_Battle_Of_MaldonCharacter::StartConverstation(ALivingEntity* le){
-	ALivingEntity* target = Cast<ALivingEntity>(Target);
+	ALivingEntity* tempTarget = Cast<ALivingEntity>(GetTarget());
 
-	if (target->GetConversation() != NULL && currentConversation == NULL) {
-		currentConversation = target->GetConversation();
+	if (tempTarget->GetConversation() != NULL && currentConversation == NULL) {
+		currentConversation = tempTarget->GetConversation();
 		OutputConversation();
 	}
 }
@@ -274,7 +274,7 @@ void AThe_Battle_Of_MaldonCharacter::OutputConversation(){
 }
 
 /**
-This method will cause the players camera and pawn to rotate towards thier target as they both move
+This method will cause the players camera and pawn to rotate towards thier GetTarget() as they both move
 This is done by the player pressing and holding the shift key
 */
 void AThe_Battle_Of_MaldonCharacter::LockOn()
@@ -289,9 +289,9 @@ Used by the LockOn() method to use the controllers base SetFocus() method
 */
 void AThe_Battle_Of_MaldonCharacter::FocusOnLockOn()
 {
-	if (Target)
+	if (GetTarget())
 	{
-		((ACombatAIController*)GetController())->SetFocus(Target);
+		((ACombatAIController*)GetController())->SetFocus(GetTarget());
 	}
 }
 
@@ -303,7 +303,7 @@ void AThe_Battle_Of_MaldonCharacter::LockOnStopped()
 {
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 	isLocking = false;
-	Target = NULL;
+	SetTarget(NULL);
 }
 
 /**
@@ -341,7 +341,7 @@ And this will check if they have pressed the right button, this is all handled i
 void AThe_Battle_Of_MaldonCharacter::DealDamage(FString ButtonPressed)
 {
 	ACombatAIController* controller = (ACombatAIController*)GetController();
-	controller->attackTarget(ButtonPressed, Target);
+	controller->attackTarget(ButtonPressed, GetTarget());
 }
 
 /**

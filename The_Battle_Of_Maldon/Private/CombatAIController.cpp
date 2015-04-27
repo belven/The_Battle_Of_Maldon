@@ -295,7 +295,7 @@ double ACombatAIController::getWeaponDamage(ALivingEntity* targetToCheck)
 	{
 		return targetToCheck->Weapon->GetWeaponDamage();
 	}
-	return Bot->attackDamage;
+	return 0;
 }
 
 /*Checks to see if the target is Attacking*/

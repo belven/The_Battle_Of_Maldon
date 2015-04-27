@@ -27,6 +27,7 @@ namespace DodgeEnums
 #include "Combos.h"
 #include "Weapon.h"
 #include "Damage.h"
+#include "Inventory.h"
 #include "Conversation.h"
 #include "EffectManager.h"
 #include "Body.h"
@@ -39,6 +40,8 @@ class ALivingEntity : public AEntity, public ModifierManager
 private:
 	Body* body;
 	UConversation* conversation;
+	Inventory* inventory = new Inventory();
+	AActor* target;
 
 public:
 	ALivingEntity();
@@ -47,22 +50,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Senses)
 		float sightRange;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Senses)
-		float hearingRange;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Attack)
-		float attackRange;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Senses)
-		float hearingLevel;
-
+		
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 		float health;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Attack)
-		float attackDamage;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Routes)
 		TArray<AActor*> PathObjects;
 
@@ -83,12 +74,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
 		AWeapon* Weapon;
-
-	TArray<AItem*> Inventory;		
+	
 	Combos* EntityCombos;
-	AActor* Target;
 	float currentHealth;
-	int intelligence;
 
 	Body* GetBody();
 	double GetHealth();
@@ -109,6 +97,11 @@ public:
 
 	UConversation* GetConversation();
 	void SetConversation(UConversation* newVal);
+
+	Inventory* GetInventory();
+	void SetInventory(Inventory* newVal);
+	AActor* GetTarget();
+	void SetTarget(AActor* newVal);
 
 protected:
 	FVector GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection, FVector ForwardDir);

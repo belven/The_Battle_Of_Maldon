@@ -9,7 +9,6 @@ ALivingEntity::ALivingEntity() : Super()
 	health = 1000;
 	entityName = "Test";
 	clan = "2";
-	attackDamage = 200;
 	currentHealth = health;
 	rollDistance = 400;
 	rollVelocity = 300;
@@ -74,7 +73,7 @@ void ALivingEntity::StopCombo()
 /*Adds an item to the entities inventory and will attach it to a socket if any*/
 void ALivingEntity::AddItemToInventory(AItem* itemToAdd)
 {
-	Inventory.Add(itemToAdd);
+	inventory->AddItem(itemToAdd);
 	FName itemSocket;
 
 	if (itemToAdd->SocketsToAttachTo.Num() > 0)
@@ -172,4 +171,26 @@ UConversation* ALivingEntity::GetConversation(){
 
 void ALivingEntity::SetConversation(UConversation* newVal){
 	conversation = newVal;
+}
+
+
+Inventory* ALivingEntity::GetInventory(){
+	return inventory;
+}
+
+
+void ALivingEntity::SetInventory(Inventory* newVal){
+	inventory = newVal;
+}
+
+
+AActor* ALivingEntity::GetTarget(){
+
+	return target;
+}
+
+
+void ALivingEntity::SetTarget(AActor* newVal){
+
+	target = newVal;
 }

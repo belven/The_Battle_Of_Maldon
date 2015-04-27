@@ -20,6 +20,6 @@ public:
 	void AddItem(AItem* itemToAdd);
 
 private:
-	TArray<AItem*> items;
+	TArray<AItem*> items = *new TArray<AItem*>();
 
 };

@@ -185,13 +185,11 @@ void ALivingEntity::SetInventory(Inventory* newVal){
 
 
 AActor* ALivingEntity::GetTarget(){
-
 	return target;
 }
 
 
 void ALivingEntity::SetTarget(AActor* newVal){
-
 	target = newVal;
 }
 
@@ -200,7 +198,19 @@ TArray<AArmour*> ALivingEntity::GetEquipedArmour(){
 	return equipedArmour;
 }
 
-
 void ALivingEntity::SetEquipedArmour(TArray<AArmour*> newVal){
 	equipedArmour = newVal;
+}
+
+void ALivingEntity::AddArmour(AArmour* armourToAdd){
+	GetEquipedArmour().Add(armourToAdd);
+}
+
+TArray<AWeapon*> ALivingEntity::GetEquipedWeapons(){
+	return equipedWeapons;
+}
+
+
+void ALivingEntity::SetEquipedWeapons(TArray<AWeapon*> newVal){
+	equipedWeapons = newVal;
 }

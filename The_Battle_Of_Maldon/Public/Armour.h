@@ -10,6 +10,7 @@
 #include "Item.h"
 #include "Stat.h"
 #include "Equipable.h"
+#include "Part.h"
 #include "Armour.generated.h"
 
 UCLASS()
@@ -24,13 +25,17 @@ public:
 	void SetArmourStrength(Stat newVal);
 	void SetArmourStrength(double newVal);
 
-	virtual void Equip(ALivingEntity entity);
-	virtual void UnEquip(ALivingEntity entity);
+	virtual void Equip(ALivingEntity* entity);
+	virtual void UnEquip(ALivingEntity* entity);
 
 	bool IsEquiped();
 	void SetEquiped(bool newVal);
 
+	PartEnums::PartType GetBodyPart();
+	void SetBodyPart(PartEnums::PartType newVal);
+
 private:
 	Stat armourStrength = *new Stat(10);
+	TEnumAsByte<PartEnums::PartType> bodyPart = PartEnums::Chest;
 
 };

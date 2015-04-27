@@ -7,7 +7,6 @@
 #pragma once
 #include "The_Battle_of_Maldon.h"
 #include "Armour.h"
-#include "Part.h"
 
 
 AArmour::AArmour(){
@@ -30,13 +29,28 @@ void AArmour::SetArmourStrength(double newVal){
 }
 
 
-void AArmour::Equip(ALivingEntity entity){
+void AArmour::Equip(ALivingEntity* entity){
+	AArmour* equipedArmour = NULL;
 
+	for (AArmour* a : entity->GetEquipedArmour()){
+		if (a->GetBodyPart() == GetBodyPart()){
+			equipedArmour = a;
+			break;
+		}
+	}
+
+	if (equipedArmour){
+		equipedArmour->UnEquip(entity);
+	}
+
+	entity->GetEquipedArmour().Add(this);
+	SetEquiped(true);
 }
 
 
-void AArmour::UnEquip(ALivingEntity entity) {
-
+void AArmour::UnEquip(ALivingEntity* entity) {
+	entity->GetEquipedArmour().Remove(this);
+	SetEquiped(false);
 }
 
 
@@ -47,4 +61,14 @@ bool AArmour::IsEquiped(){
 
 void AArmour::SetEquiped(bool newVal){
 	isEquiped = newVal;
+}
+
+
+PartEnums::PartType AArmour::GetBodyPart(){
+	return bodyPart;
+}
+
+
+void AArmour::SetBodyPart(PartEnums::PartType newVal){
+	bodyPart = newVal;
 }

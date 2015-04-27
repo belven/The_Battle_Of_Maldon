@@ -44,6 +44,7 @@ private:
 	Inventory* inventory = new Inventory();
 	AActor* target;
 	TArray<AArmour*> equipedArmour;
+	TArray<AWeapon*> equipedWeapons;
 
 public:
 	ALivingEntity();
@@ -108,6 +109,11 @@ public:
 
 	TArray<AArmour*> GetEquipedArmour();
 	void SetEquipedArmour(TArray<AArmour*> newVal);
+	
+	void AddArmour(AArmour* armourToAdd);
+
+	TArray<AWeapon*> GetEquipedWeapons();
+	void SetEquipedWeapons(TArray<AWeapon*> newVal);
 
 protected:
 	FVector GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection, FVector ForwardDir);

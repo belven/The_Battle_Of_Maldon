@@ -119,7 +119,7 @@ void Combos::StopCombo()
 }
 
 /*Checks to see if the button pressed, e.g. F, is one of the combos that the current one links to*/
-bool Combos::IsWithinCombo(FString* BInput)
+bool Combos::IsWithinCombo(FString BInput)
 {
 	bool PartOfCombo = false;
 	int i = 0;
@@ -141,7 +141,7 @@ bool Combos::IsWithinCombo(FString* BInput)
 }
 
 /*This is to allow chaining of combos as we can revert back to the starting combo to cut short are current assult*/
-bool Combos::IsWithinOriginalCombo(FString* BInput)
+bool Combos::IsWithinOriginalCombo(FString BInput)
 {
 	bool PartOfCombo = false;
 	int i = 0;
@@ -150,7 +150,7 @@ bool Combos::IsWithinOriginalCombo(FString* BInput)
 	{
 		for (i = 0; i < origanalCombo->ComboList.Num(); i++)
 		{
-			if (origanalCombo->ComboList[i]->ComboButton == *BInput)
+			if (origanalCombo->ComboList[i]->ComboButton == BInput)
 			{
 				SetNextCombo(origanalCombo->ComboList[i]);
 				PartOfCombo = true;

@@ -22,6 +22,7 @@ public:
 	void SetWeaponRange(Stat newVal);
 
 	virtual void Equip(ALivingEntity entity);
+	virtual void UnEquip(ALivingEntity entity);
 
 	bool IsEquiped();
 	void SetEquiped(bool newVal);

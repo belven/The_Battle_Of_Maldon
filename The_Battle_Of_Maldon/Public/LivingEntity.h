@@ -31,6 +31,7 @@ namespace DodgeEnums
 #include "Conversation.h"
 #include "EffectManager.h"
 #include "Body.h"
+#include "Armour.h"
 #include "LivingEntity.generated.h"
 
 UCLASS()
@@ -42,6 +43,7 @@ private:
 	UConversation* conversation;
 	Inventory* inventory = new Inventory();
 	AActor* target;
+	TArray<AArmour*> equipedArmour;
 
 public:
 	ALivingEntity();
@@ -100,8 +102,12 @@ public:
 
 	Inventory* GetInventory();
 	void SetInventory(Inventory* newVal);
+
 	AActor* GetTarget();
 	void SetTarget(AActor* newVal);
+
+	TArray<AArmour*> GetEquipedArmour();
+	void SetEquipedArmour(TArray<AArmour*> newVal);
 
 protected:
 	FVector GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection, FVector ForwardDir);

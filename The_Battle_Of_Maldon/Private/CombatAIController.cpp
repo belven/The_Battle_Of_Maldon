@@ -151,7 +151,7 @@ float ACombatAIController::ComboButtonPressed(FString BInput, float WeaponDamage
 	CustomAnimNode = AnimNodePlayCustomAnim(ItemOwner.Mesh.FindAnimNode(AnimNode));
 	}*/
 
-	if (combos->IsWithinCombo(&BInput))
+	if (combos->IsWithinCombo(BInput))
 	{
 		//Run combo animation
 		/*if (CustomAnimNode != NULL)
@@ -163,7 +163,7 @@ float ACombatAIController::ComboButtonPressed(FString BInput, float WeaponDamage
 		combos->lastComboSucsessfull = true;
 		combos->CalculateDamage(WeaponDamage);
 	}
-	else if (combos->IsWithinOriginalCombo(&BInput))
+	else if (combos->IsWithinOriginalCombo(BInput))
 	{
 		Bot->SetStopComboTimer(combos->currentCombo->ComboDelay);
 		combos->lastComboSucsessfull = true;

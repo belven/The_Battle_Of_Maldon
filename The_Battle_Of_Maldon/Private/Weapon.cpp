@@ -32,6 +32,10 @@ void AWeapon::Equip(ALivingEntity entity){
 
 }
 
+void AWeapon::UnEquip(ALivingEntity entity) {
+
+}
+
 
 bool AWeapon::IsEquiped(){
 

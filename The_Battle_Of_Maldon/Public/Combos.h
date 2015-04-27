@@ -37,10 +37,10 @@ public:
 	void StopCombo();
 
 	/*Checks to see if the button pressed, e.g. F, is one of the combos that the current one links to*/
-	bool IsWithinCombo(FString* BInput);
+	bool IsWithinCombo(FString BInput);
 
 	/*This is to allow chaining of combos as we can revert back to the starting combo to cut short are current assult*/
-	bool IsWithinOriginalCombo(FString* BInput);
+	bool IsWithinOriginalCombo(FString BInput);
 	void SetNextCombo(Combo* nextCombo);
 	void CalculateDamage(float WeaponDamage);
 };

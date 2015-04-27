@@ -194,3 +194,13 @@ void ALivingEntity::SetTarget(AActor* newVal){
 
 	target = newVal;
 }
+
+
+TArray<AArmour*> ALivingEntity::GetEquipedArmour(){
+	return equipedArmour;
+}
+
+
+void ALivingEntity::SetEquipedArmour(TArray<AArmour*> newVal){
+	equipedArmour = newVal;
+}

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////
-//  AArmor.h
-//  Implementation of the Class Armor
+//  AArmour.h
+//  Implementation of the Class Armour
 //  Created on:      27-Apr-2015 19:37:53
 //  Original author: sam
 ///////////////////////////////////////////////////////////
@@ -10,21 +10,22 @@
 #include "Item.h"
 #include "Stat.h"
 #include "Equipable.h"
-#include "Armor.generated.h"
+#include "Armour.generated.h"
 
 UCLASS()
-class AArmor : public AItem, public Equipable
+class AArmour : public AItem, public Equipable
 {
 	GENERATED_BODY()
 
 public:
-	AArmor();
+	AArmour();
 
 	double GetArmourStrength();
 	void SetArmourStrength(Stat newVal);
 	void SetArmourStrength(double newVal);
 
 	virtual void Equip(ALivingEntity entity);
+	virtual void UnEquip(ALivingEntity entity);
 
 	bool IsEquiped();
 	void SetEquiped(bool newVal);

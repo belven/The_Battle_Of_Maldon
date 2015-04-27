@@ -43,3 +43,13 @@ void UChoiceResponse::SetText(FString newVal){
 void UChoiceResponse::AddChoice(UConversationChoice* choice){
 	choices.Add(choice);
 }
+
+
+Quest* UChoiceResponse::GetQuest(){
+	return quest;
+}
+
+
+void UChoiceResponse::SetQuest(Quest* newVal){
+	quest = newVal;
+}

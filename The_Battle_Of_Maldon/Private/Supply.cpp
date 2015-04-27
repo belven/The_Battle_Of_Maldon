@@ -6,12 +6,14 @@
 ASupply::ASupply() {
 	amount = 100;
 	currentSupplyType = SuppliesEnums::Wood;
+	CurrentItemType = ItemEnumns::Supply;
 }
 
 /*This class is used by a village and mechant to hold supplies they might need*/
 ASupply::ASupply(SuppliesEnums::SupplyType type) {
 	amount = 100;
 	currentSupplyType = type;
+	CurrentItemType = ItemEnumns::Supply;
 }
 
 

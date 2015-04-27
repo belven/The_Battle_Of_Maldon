@@ -67,6 +67,7 @@ public:
 	virtual void PossessedBy(class AController* NewController) override;
 	void WriteMessage(FString message);
 	void OutputConversation();
+	void GiveQuest(Quest* quest);
 
 protected:
 	/** Fires a projectile. */

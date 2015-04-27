@@ -5,6 +5,7 @@ namespace ItemEnumns
 	{
 		Weapon,
 		Armor,
+		Supply,
 		Other
 	};
 }

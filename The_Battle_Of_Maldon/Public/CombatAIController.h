@@ -16,7 +16,7 @@ public:
 	ACombatAIController(const FObjectInitializer& ObjectInitializer);
 	bool canAttack; 
 
-	int getWeaponDamage(ALivingEntity* targetToCheck);
+	double getWeaponDamage(ALivingEntity* targetToCheck);
 
 	float ComboButtonPressed(FString BInput, float WeaponDamage);
 

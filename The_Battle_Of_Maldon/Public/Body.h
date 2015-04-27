@@ -10,7 +10,7 @@
 
 #pragma once
 #include "Part.h"
-#include <vector>
+#include "Array.h"
 
 /*
 * A body is a collection of zero to many parts
@@ -29,15 +29,15 @@ public:
 	virtual ~Body();
 
 	// Returns a list of current body parts
-	std::vector<Part*> GetParts();
+	TArray<Part*> GetParts();
 
 	//Sets the current body parts
-	void SetParts(std::vector<Part*> newVal);
+	void SetParts(TArray<Part*> newVal);
 
 	virtual double GetTotalVitality() = 0;
 
 private:
-	std::vector<Part*> parts;
+	TArray<Part*> parts;
 
 };
 #endif // !defined(EA_0865252D_DAC2_43de_B077_B693DDD183B9__INCLUDED_)

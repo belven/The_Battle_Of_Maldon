@@ -4,6 +4,7 @@
 //#include "ChoiceResponse.generated.h"
 #include "Array.h"
 #include "UnrealString.h"
+#include "Quest.h"
 
 class UConversationChoice;
 
@@ -20,8 +21,11 @@ public:
 	FString GetText();
 	void SetText(FString newVal);
 	void AddChoice(UConversationChoice* choice);
+	Quest* GetQuest();
+	void SetQuest(Quest* newVal);
 
 private:
 	TArray<UConversationChoice*> choices;
 	FString text;
+	Quest* quest;
 };

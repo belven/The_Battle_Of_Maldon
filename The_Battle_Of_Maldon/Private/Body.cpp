@@ -21,11 +21,11 @@ Body::~Body(){
 
 }
 
-std::vector<Part*> Body::GetParts(){
+TArray<Part*> Body::GetParts(){
 	return parts;
 }
 
 
-void Body::SetParts(std::vector<Part*> newVal){
+void Body::SetParts(TArray<Part*> newVal){
 	parts = newVal;
 }

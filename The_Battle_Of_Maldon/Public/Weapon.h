@@ -1,18 +1,32 @@
 #pragma once
 #include "Item.h"
+#include "Stat.h"
+#include "Equipable.h"
 #include "Weapon.generated.h"
 
 UCLASS()
-class AWeapon : public AItem
+class AWeapon : public AItem, public Equipable
 {
 	GENERATED_BODY()
 
 public:
 	AWeapon();
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
-	float weaponDamage;
 
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		double GetWeaponDamage();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
-		float weaponRange;
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+		double GetWeaponRange();
+
+	void SetWeaponDamage(Stat newVal);
+	void SetWeaponRange(Stat newVal);
+
+	virtual void Equip(ALivingEntity entity);
+
+	bool IsEquiped();
+	void SetEquiped(bool newVal);
+
+private:
+	Stat weaponDamage = *new Stat(10);
+	Stat weaponRange = *new Stat(200);
 };

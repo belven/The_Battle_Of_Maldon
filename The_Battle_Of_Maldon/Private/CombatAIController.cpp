@@ -229,7 +229,7 @@ bool ACombatAIController::isTargetInAttackRange(AActor* tempTarget)
 	{
 		if (tempBot && tempBot->Weapon)
 		{
-			attackRange = tempBot->Weapon->weaponRange;
+			attackRange = tempBot->Weapon->GetWeaponRange();
 		}
 	}
 
@@ -289,11 +289,11 @@ void ACombatAIController::setAction(Combo* currentCombo)
 }
 
 /*Returns the passed in LivingEntities weawpon damage*/
-int ACombatAIController::getWeaponDamage(ALivingEntity* targetToCheck)
+double ACombatAIController::getWeaponDamage(ALivingEntity* targetToCheck)
 {
 	if (targetToCheck && targetToCheck->Weapon)
 	{
-		return targetToCheck->Weapon->weaponDamage;
+		return targetToCheck->Weapon->GetWeaponDamage();
 	}
 	return Bot->attackDamage;
 }

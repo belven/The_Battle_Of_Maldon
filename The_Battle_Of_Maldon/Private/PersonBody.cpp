@@ -9,11 +9,11 @@
 
 
 PersonBody::PersonBody(){
-	GetParts().push_back(new Arm(PartEnums::LeftArm));
-	GetParts().push_back(new Arm(PartEnums::RightArm));
-	GetParts().push_back(new Leg(PartEnums::RightLeg));
-	GetParts().push_back(new Leg(PartEnums::RightLeg));
-	GetParts().push_back(new Chest(PartEnums::Chest));
+	GetParts().Add(new Arm(PartEnums::LeftArm));
+	GetParts().Add(new Arm(PartEnums::RightArm));
+	GetParts().Add(new Leg(PartEnums::RightLeg));
+	GetParts().Add(new Leg(PartEnums::RightLeg));
+	GetParts().Add(new Chest(PartEnums::Chest));
 }
 
 

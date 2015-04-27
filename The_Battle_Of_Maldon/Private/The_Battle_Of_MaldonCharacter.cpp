@@ -230,6 +230,11 @@ void AThe_Battle_Of_MaldonCharacter::GoToConverstation(int index)
 {
 	if (currentConversation){
 		currentConversation->SelectChoice(index - 1);
+
+		if (currentConversation->GetCurrentResponse()->GetQuest() != NULL){
+			GiveQuest(currentConversation->GetCurrentResponse()->GetQuest());
+		}
+
 		OutputConversation();
 	}
 }
@@ -394,3 +399,6 @@ void AThe_Battle_Of_MaldonCharacter::WriteMessage(FString message){
 }
 
 
+void AThe_Battle_Of_MaldonCharacter::GiveQuest(Quest* quest){
+	currentQuests.Add(quest);
+}

@@ -58,33 +58,33 @@ void Combos::createTestCombos()
 	Combo* tempCombo8 = GenerateCombo(8, 3.8, 1.75, "Q");
 
 	//--------------------------
-	tempCombo->GetComboList().Add(tempCombo2);
+	tempCombo->Add(tempCombo2);
 
 	//E - R - F
-	tempCombo->GetComboList().Add(tempCombo6);
+	tempCombo->Add(tempCombo6);
 
 	//E - F
-	tempCombo2->GetComboList().Add(tempCombo3);
+	tempCombo2->Add(tempCombo3);
 
 	//E - F - Q
-	tempCombo3->GetComboList().Add(tempCombo4);
+	tempCombo3->Add(tempCombo4);
 
 	//--------------------------
 	//E - Q
-	tempCombo2->GetComboList().Add(tempCombo8);
+	tempCombo2->Add(tempCombo8);
 
 	//E - Q - E
-	tempCombo8->GetComboList().Add(tempCombo5);
+	tempCombo8->Add(tempCombo5);
 
 	//--------------------------
 	//E - E
-	tempCombo2->GetComboList().Add(tempCombo5);
+	tempCombo2->Add(tempCombo5);
 
 	//E - E - R
-	tempCombo5->GetComboList().Add(tempCombo6);
+	tempCombo5->Add(tempCombo6);
 
 	//E - E - R - F
-	tempCombo6->GetComboList().Add(tempCombo7);
+	tempCombo6->Add(tempCombo7);
 
 	SetOriganalCombo(tempCombo);
 	SetNextCombo(tempCombo);
@@ -117,15 +117,14 @@ void Combos::StopCombo()
 bool Combos::IsWithinCombo(FString BInput)
 {
 	bool PartOfCombo = false;
-	int i = 0;
 
 	if (currentCombo != NULL)
 	{
-		for (i = 0; i < currentCombo->GetComboList().Num(); i++)
+		for (Combo* combo : currentCombo->GetComboList())
 		{
-			if (currentCombo->GetComboList()[i]->GetComboButton().Equals(BInput))
+			if (combo->GetComboButton().Equals(BInput))
 			{
-				SetNextCombo(currentCombo->GetComboList()[i]);
+				SetNextCombo(combo);
 				PartOfCombo = true;
 				break;
 			}
@@ -143,11 +142,11 @@ bool Combos::IsWithinOriginalCombo(FString BInput)
 
 	if (currentCombo != NULL)
 	{
-		for (i = 0; i < origanalCombo->GetComboList().Num(); i++)
+		for (Combo* combo : currentCombo->GetComboList())
 		{
-			if (origanalCombo->GetComboList()[i]->GetComboButton().Equals(BInput))
+			if (combo->GetComboButton().Equals(BInput))
 			{
-				SetNextCombo(origanalCombo->GetComboList()[i]);
+				SetNextCombo(combo);
 				PartOfCombo = true;
 				break;
 			}

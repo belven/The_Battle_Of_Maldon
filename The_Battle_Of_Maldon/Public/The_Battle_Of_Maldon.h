@@ -41,12 +41,6 @@
 #include "BlockAction.h"
 
 #include "Combo.h"
-#include "ComboBP.h"
-#include "CombosBP.h"
-
-#include "Message.h"
-#include "MessageBP.h"
-
 
 #include "Conversation.h"
 #include "ConversationChoice.h"

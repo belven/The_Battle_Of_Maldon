@@ -17,7 +17,7 @@ public:
 	AResourceVolume();
 	AResourceVolume(SuppliesEnums::SupplyType type);
 	virtual void BeginPlay() override;
-	TArray<AResourceNode*> resources;
+	TArray<AResourceNode*> resources = *new TArray<AResourceNode*>();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Resources)
 		TEnumAsByte<SuppliesEnums::SupplyType> supplyType;

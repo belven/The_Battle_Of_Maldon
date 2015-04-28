@@ -43,8 +43,8 @@ private:
 	UConversation* conversation;
 	Inventory* inventory = new Inventory();
 	AActor* target;
-	TArray<AArmour*> equipedArmour;
-	TArray<AWeapon*> equipedWeapons;
+	TArray<AArmour*> equipedArmour = *new TArray<AArmour*>();
+	TArray<AWeapon*> equipedWeapons = *new TArray<AWeapon*>();
 
 public:
 	ALivingEntity();
@@ -58,7 +58,7 @@ public:
 		float health;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Routes)
-		TArray<AActor*> PathObjects;
+		TArray<AActor*> PathObjects = *new TArray<AActor*>();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Routes)
 		float patrolRange;
@@ -74,12 +74,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float rollVelocity;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
-		AWeapon* Weapon;
-	
+		
 	Combos* EntityCombos;
 	float currentHealth;
+	AWeapon *Weapon;
 
 	Body* GetBody();
 	double GetHealth();
@@ -114,6 +112,7 @@ public:
 
 	TArray<AWeapon*> GetEquipedWeapons();
 	void SetEquipedWeapons(TArray<AWeapon*> newVal);
+	void AddWeapon(AWeapon* weaponToAdd);
 
 protected:
 	FVector GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection, FVector ForwardDir);

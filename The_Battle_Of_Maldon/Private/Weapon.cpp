@@ -27,22 +27,14 @@ void AWeapon::SetWeaponRange(Stat newVal){
 
 
 void AWeapon::Equip(ALivingEntity* entity){
-	AWeapon* equipedWeapon = NULL;
-
 	for (AWeapon* w : entity->GetEquipedWeapons()){
-		if (w->GetBodyPart() == GetBodyPart()){
-			equipedWeapon = w;
-			break;
+		if (IsTwoHanded() || w->GetBodyPart() == GetBodyPart()){
+			w->UnEquip(entity);
 		}
 	}
 
-	if (equipedWeapon){
-		equipedWeapon->UnEquip(entity);
-	}
-
-	entity->GetEquipedWeapons().Add(this);
+	entity->AddWeapon(this);
 	SetEquiped(true);
-
 }
 
 void AWeapon::UnEquip(ALivingEntity* entity) {
@@ -67,4 +59,14 @@ PartEnums::PartType AWeapon::GetBodyPart(){
 
 void AWeapon::SetBodyPart(PartEnums::PartType newVal){
 	bodyPart = newVal;
+}
+
+
+bool AWeapon::IsTwoHanded(){
+	return twoHanded;
+}
+
+
+void AWeapon::SetTwoHanded(bool newVal){
+	twoHanded = newVal;
 }

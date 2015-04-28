@@ -76,6 +76,12 @@ void ALivingEntity::AddItemToInventory(AItem* itemToAdd)
 	inventory->AddItem(itemToAdd);
 	FName itemSocket;
 
+	// If we add a weapon equip it
+	if (itemToAdd->GetClass()->IsChildOf(AWeapon::StaticClass())){
+		AWeapon* w = Cast<AWeapon>(itemToAdd);
+		w->Equip(this);
+	}
+
 	if (itemToAdd->SocketsToAttachTo.Num() > 0)
 	{
 		itemSocket = itemToAdd->SocketsToAttachTo[0];
@@ -213,4 +219,9 @@ TArray<AWeapon*> ALivingEntity::GetEquipedWeapons(){
 
 void ALivingEntity::SetEquipedWeapons(TArray<AWeapon*> newVal){
 	equipedWeapons = newVal;
+}
+
+
+void ALivingEntity::AddWeapon(AWeapon* weaponToAdd){
+	equipedWeapons.Add(weaponToAdd);
 }

@@ -25,7 +25,7 @@ public:
 	void SetQuest(Quest* newVal);
 
 private:
-	TArray<UConversationChoice*> choices;
+	TArray<UConversationChoice*> choices = *new TArray<UConversationChoice*>();
 	FString text;
 	Quest* quest;
 };

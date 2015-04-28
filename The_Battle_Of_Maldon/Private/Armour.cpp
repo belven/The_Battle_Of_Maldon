@@ -30,17 +30,11 @@ void AArmour::SetArmourStrength(double newVal){
 
 
 void AArmour::Equip(ALivingEntity* entity){
-	AArmour* equipedArmour = NULL;
-
 	for (AArmour* a : entity->GetEquipedArmour()){
 		if (a->GetBodyPart() == GetBodyPart()){
-			equipedArmour = a;
+			a->UnEquip(entity);
 			break;
 		}
-	}
-
-	if (equipedArmour){
-		equipedArmour->UnEquip(entity);
 	}
 
 	entity->GetEquipedArmour().Add(this);

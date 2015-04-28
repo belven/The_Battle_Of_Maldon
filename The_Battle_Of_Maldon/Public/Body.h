@@ -37,7 +37,7 @@ public:
 	virtual double GetTotalVitality() = 0;
 
 private:
-	TArray<Part*> parts;
+	TArray<Part*> parts = *new TArray<Part*>();
 
 };
 #endif // !defined(EA_0865252D_DAC2_43de_B077_B693DDD183B9__INCLUDED_)

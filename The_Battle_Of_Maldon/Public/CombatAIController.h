@@ -17,6 +17,7 @@ public:
 	bool canAttack; 
 
 	double getWeaponDamage(ALivingEntity* targetToCheck);
+	double getWeaponRange(ALivingEntity* targetToCheck);
 
 	float ComboButtonPressed(FString BInput, float WeaponDamage);
 

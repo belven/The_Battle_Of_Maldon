@@ -6,7 +6,7 @@
 class ItemReward : public Reward
 {
 public:
-	TArray<AItem*> rewardedItems;
+	TArray<AItem*> rewardedItems = *new TArray<AItem*>();
 
 	ItemReward(TArray<AItem*> ri)
 	{

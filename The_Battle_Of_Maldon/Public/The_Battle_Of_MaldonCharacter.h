@@ -38,10 +38,10 @@ public:
 	//Message* currentMessage;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Message)
-		TArray<FString> currentMessages;
+		TArray<FString> currentMessages = *new TArray<FString>();
 
 	//Conversation* currentConversation;
-	TArray<Quest*> currentQuests;
+	TArray<Quest*> currentQuests = *new TArray<Quest*>();
 	bool isLocking;
 	bool canMove;
 

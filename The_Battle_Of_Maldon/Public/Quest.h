@@ -9,7 +9,7 @@ class Quest
 public:
 	AEntity* startEntity;
 	AEntity* endEntity;
-	TArray<Reward*> rewards;
+	TArray<Reward*> rewards = *new TArray<Reward*>();
 
 	Quest(AEntity* se, AEntity* ee, TArray<Reward*> rs)
 	{

@@ -15,18 +15,11 @@ class Combos
 {
 
 public:
-	int CombosID;
-	float lastDamage;
-	int hitCounter;
-	Combo* origanalCombo;
-	Combo* currentCombo;
-	bool lastComboSucsessfull;
-	ALivingEntity* Owner;
 
 	Combos(ALivingEntity* inOwner);
 
-	void getCombos();
-	void GetAndSetCombos();
+	void loadCombos();
+
 	void createTestCombos();
 
 	/*Creates a new Combo with all the approprite parameters*/
@@ -43,4 +36,31 @@ public:
 	bool IsWithinOriginalCombo(FString BInput);
 	void SetNextCombo(Combo* nextCombo);
 	void CalculateDamage(float WeaponDamage);
+
+	float GetLastDamage();
+	void SetLastDamage(float newVal);
+
+	int GetHitCounter();
+	void SetHitCounter(int newVal);
+
+	Combo* GetOriganalCombo();
+	void SetOriganalCombo(Combo* newVal);
+
+	Combo* GetCurrentCombo();
+	void SetCurrentCombo(Combo* newVal);
+
+	bool WasLastComboSucsessfull();
+	void SetLastComboSucsessfull(bool newVal);
+
+	ALivingEntity* GetOwner();
+	void SetOwner(ALivingEntity* newVal);
+
+private:
+	int CombosID;
+	float lastDamage;
+	int hitCounter;
+	Combo* origanalCombo;
+	Combo* currentCombo;
+	bool lastComboSucsessfull;
+	ALivingEntity* Owner;
 };

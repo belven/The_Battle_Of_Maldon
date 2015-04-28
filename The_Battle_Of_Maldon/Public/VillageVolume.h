@@ -26,10 +26,10 @@ public:
 	TArray<ALivingEntity*> GetEnimiesInVillage();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Supplies)
-	TArray<ASupply*> supplies;
+		TArray<ASupply*> supplies = *new TArray<ASupply*>();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Supplies)
-	TArray<FSupplyRequirement> supplyRequirements;
+		TArray<FSupplyRequirement> supplyRequirements = *new TArray<FSupplyRequirement>();
 
 	bool villageHasSupplies();
 

@@ -30,9 +30,12 @@ public:
 
 	PartEnums::PartType GetBodyPart();
 	void SetBodyPart(PartEnums::PartType newVal);
+	bool IsTwoHanded();
+	void SetTwoHanded(bool newVal);
 
 private:
 	Stat weaponDamage = *new Stat(10);
 	Stat weaponRange = *new Stat(200);
 	TEnumAsByte<PartEnums::PartType> bodyPart = PartEnums::Chest;
+	bool twoHanded = false;
 };

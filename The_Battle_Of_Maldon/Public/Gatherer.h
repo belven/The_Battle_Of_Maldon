@@ -18,7 +18,7 @@ public:
 	AGatherer();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Resources)
-	TArray<ASupply*> resources;
+		TArray<ASupply*> resources = *new TArray<ASupply*>();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Resources)
 		TEnumAsByte<SuppliesEnums::SupplyType> supplyType;

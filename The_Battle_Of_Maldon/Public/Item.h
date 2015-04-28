@@ -32,7 +32,7 @@ public:
 		FString Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Temp)
-		TArray<FName> SocketsToAttachTo;
+		TArray<FName> SocketsToAttachTo = *new TArray<FName>();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
 		USkeletalMesh* ItemMesh;

@@ -3,15 +3,15 @@
 
 Combos::Combos(ALivingEntity* inOwner)
 {
-	Owner = inOwner;
-	lastDamage = 0;
-	lastComboSucsessfull = false;
-	hitCounter = 0;
+	SetOwner(inOwner);
+	SetLastDamage(0);
+	SetLastComboSucsessfull(false);
+	SetHitCounter(0);
 	CombosID = 1;
-	GetAndSetCombos();
+	createTestCombos();
 }
 
-void Combos::getCombos(){
+void Combos::loadCombos(){
 	//try
 	//{
 
@@ -32,11 +32,6 @@ void Combos::getCombos(){
 	//catch (...){
 	//	UE_LOG(LogTemp, Warning, TEXT("Failed to load file"));
 	//}
-}
-
-void Combos::GetAndSetCombos()
-{
-	createTestCombos();
 }
 
 void Combos::createTestCombos()
@@ -63,36 +58,36 @@ void Combos::createTestCombos()
 	Combo* tempCombo8 = GenerateCombo(8, 3.8, 1.75, "Q");
 
 	//--------------------------
-	tempCombo->ComboList.Add(tempCombo2);
+	tempCombo->GetComboList().Add(tempCombo2);
 
 	//E - R - F
-	tempCombo->ComboList.Add(tempCombo6);
+	tempCombo->GetComboList().Add(tempCombo6);
 
 	//E - F
-	tempCombo2->ComboList.Add(tempCombo3);
+	tempCombo2->GetComboList().Add(tempCombo3);
 
 	//E - F - Q
-	tempCombo3->ComboList.Add(tempCombo4);
+	tempCombo3->GetComboList().Add(tempCombo4);
 
 	//--------------------------
 	//E - Q
-	tempCombo2->ComboList.Add(tempCombo8);
+	tempCombo2->GetComboList().Add(tempCombo8);
 
 	//E - Q - E
-	tempCombo8->ComboList.Add(tempCombo5);
+	tempCombo8->GetComboList().Add(tempCombo5);
 
 	//--------------------------
 	//E - E
-	tempCombo2->ComboList.Add(tempCombo5);
+	tempCombo2->GetComboList().Add(tempCombo5);
 
 	//E - E - R
-	tempCombo5->ComboList.Add(tempCombo6);
+	tempCombo5->GetComboList().Add(tempCombo6);
 
 	//E - E - R - F
-	tempCombo6->ComboList.Add(tempCombo7);
+	tempCombo6->GetComboList().Add(tempCombo7);
 
-	origanalCombo = tempCombo;
-	SetNextCombo(origanalCombo);
+	SetOriganalCombo(tempCombo);
+	SetNextCombo(tempCombo);
 }
 
 /*Creates a new Combo with all the approprite parameters*/
@@ -100,13 +95,13 @@ Combo* Combos::GenerateCombo(int ComboID, float tempComboDamageScaling, float te
 class Effect* inEffect, CombatEnums::CombatType ActionType)
 {
 	Combo* tempCombo = new Combo();
-	tempCombo->ComboButton = *tempComboButton;
-	tempCombo->ComboDamageScaling = tempComboDamageScaling;
-	tempCombo->ComboDelay = tempComboDelay;
-	tempCombo->currentCombatActionType = ActionType;
-	tempCombo->effect = inEffect;
+	tempCombo->SetComboButton(tempComboButton);
+	tempCombo->SetComboDamageScaling(tempComboDamageScaling);
+	tempCombo->SetComboDelay(tempComboDelay);
+	tempCombo->SetCurrentCombatActionType(ActionType);
+	tempCombo->SetEffect(inEffect);
 	//tempCombo.ComboAnim = tempComboAnim;
-	tempCombo->ComboID = ComboID;
+	tempCombo->SetComboID(ComboID);
 	return tempCombo;
 }
 
@@ -126,11 +121,11 @@ bool Combos::IsWithinCombo(FString BInput)
 
 	if (currentCombo != NULL)
 	{
-		for (i = 0; i < currentCombo->ComboList.Num(); i++)
+		for (i = 0; i < currentCombo->GetComboList().Num(); i++)
 		{
-			if (currentCombo->ComboList[i]->ComboButton == *BInput)
+			if (currentCombo->GetComboList()[i]->GetComboButton().Equals(BInput))
 			{
-				SetNextCombo(currentCombo->ComboList[i]);
+				SetNextCombo(currentCombo->GetComboList()[i]);
 				PartOfCombo = true;
 				break;
 			}
@@ -148,11 +143,11 @@ bool Combos::IsWithinOriginalCombo(FString BInput)
 
 	if (currentCombo != NULL)
 	{
-		for (i = 0; i < origanalCombo->ComboList.Num(); i++)
+		for (i = 0; i < origanalCombo->GetComboList().Num(); i++)
 		{
-			if (origanalCombo->ComboList[i]->ComboButton == BInput)
+			if (origanalCombo->GetComboList()[i]->GetComboButton().Equals(BInput))
 			{
-				SetNextCombo(origanalCombo->ComboList[i]);
+				SetNextCombo(origanalCombo->GetComboList()[i]);
 				PartOfCombo = true;
 				break;
 			}
@@ -176,7 +171,67 @@ void Combos::CalculateDamage(float WeaponDamage)
 	}
 	else
 	{
-		lastDamage = lastDamage * currentCombo->ComboDamageScaling;
+		lastDamage = lastDamage * currentCombo->GetComboDamageScaling();
 	}
 	hitCounter++;
+}
+
+
+float Combos::GetLastDamage(){
+	return lastDamage;
+}
+
+
+void Combos::SetLastDamage(float newVal){
+	lastDamage = newVal;
+}
+
+
+int Combos::GetHitCounter(){
+	return hitCounter;
+}
+
+
+void Combos::SetHitCounter(int newVal){
+	hitCounter = newVal;
+}
+
+
+Combo* Combos::GetOriganalCombo(){
+	return origanalCombo;
+}
+
+
+void Combos::SetOriganalCombo(Combo* newVal){
+	origanalCombo = newVal;
+}
+
+
+Combo* Combos::GetCurrentCombo(){
+	return currentCombo;
+}
+
+
+void Combos::SetCurrentCombo(Combo* newVal){
+	currentCombo = newVal;
+}
+
+
+bool Combos::WasLastComboSucsessfull(){
+	return lastComboSucsessfull;
+}
+
+
+void Combos::SetLastComboSucsessfull(bool newVal){
+	lastComboSucsessfull = newVal;
+}
+
+
+ALivingEntity* Combos::GetOwner(){
+	return Owner;
+}
+
+
+void Combos::SetOwner(ALivingEntity* newVal){
+	Owner = newVal;
 }

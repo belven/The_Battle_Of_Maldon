@@ -10,7 +10,7 @@
 class ModifierManager : public EffectManager
 {
 public:
-	TArray<Modifier*> currentModifiers;
+	TArray<Modifier*> currentModifiers = *new TArray<Modifier*>();
 
 	const FString speedModiferName = "Speed";
 	const FString damageModiferName = "Damage";

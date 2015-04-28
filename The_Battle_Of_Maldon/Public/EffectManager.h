@@ -7,8 +7,8 @@
 
 class EffectManager {
 public:
-	TArray<Effect*> currentEffects;
-	TArray<Effect*> effectsToRemove;
+	TArray<Effect*> currentEffects = *new TArray<Effect*>();
+	TArray<Effect*> effectsToRemove = *new TArray<Effect*>();
 	bool beingRed = false;
 	std::condition_variable cv;
 	std::mutex m;

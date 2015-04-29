@@ -22,7 +22,7 @@ public:
 	AArmour();
 
 	double GetArmourStrength();
-	void SetArmourStrength(Stat newVal);
+	void SetArmourStrength(Stat<double> newVal);
 	void SetArmourStrength(double newVal);
 
 	virtual void Equip(ALivingEntity* entity);
@@ -35,7 +35,7 @@ public:
 	void SetBodyPart(PartEnums::PartType newVal);
 
 private:
-	Stat armourStrength = *new Stat(10);
+	Stat<double> armourStrength = *new Stat<double>(10);
 	TEnumAsByte<PartEnums::PartType> bodyPart = PartEnums::Chest;
 
 };

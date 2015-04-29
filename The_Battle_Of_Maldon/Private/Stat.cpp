@@ -7,21 +7,21 @@
 #include "The_Battle_of_Maldon.h"
 #include "Stat.h"
 
-Stat::Stat(double value){
+template<typename T> Stat<typename T>::Stat(T value){
 	SetValue(value);
 }
 
 
-Stat::~Stat(){
+template<typename T> Stat<typename T>::~Stat(){
 
 }
 
 
-double Stat::GetValue(){
+template<typename T> T Stat<typename T>::GetValue(){
 	return value;
 }
 
 
-void Stat::SetValue(double newVal){
+template<typename T> void Stat<typename T>::SetValue(T newVal){
 	value = newVal;
 }

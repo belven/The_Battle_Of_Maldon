@@ -8,17 +8,17 @@
 #if !defined(EA_C7DA055B_AB8E_4cee_B943_2DE3C2FABA98__INCLUDED_)
 #define EA_C7DA055B_AB8E_4cee_B943_2DE3C2FABA98__INCLUDED_
 
-class Stat
+template<typename T> class Stat
 {
 
 public:
-	Stat(double value);
+	Stat(T value);
 	virtual ~Stat();
 
-	double GetValue();
-	void SetValue(double newVal);
+	T GetValue();
+	void SetValue(T newVal);
 private:
-	double value;
+	T value;
 
 };
 #endif // !defined(EA_C7DA055B_AB8E_4cee_B943_2DE3C2FABA98__INCLUDED_)

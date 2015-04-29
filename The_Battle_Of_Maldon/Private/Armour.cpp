@@ -19,13 +19,13 @@ double AArmour::GetArmourStrength(){
 }
 
 
-void AArmour::SetArmourStrength(Stat newVal){
+void AArmour::SetArmourStrength(Stat<double> newVal){
 	armourStrength = newVal;
 }
 
 
 void AArmour::SetArmourStrength(double newVal){
-	armourStrength = *new Stat(newVal);
+	armourStrength = *new Stat<double>(newVal);
 }
 
 

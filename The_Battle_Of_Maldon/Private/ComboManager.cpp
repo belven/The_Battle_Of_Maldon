@@ -1,17 +1,13 @@
 #pragma once
 #include "The_Battle_of_Maldon.h"
 
-Combos::Combos(ALivingEntity* inOwner)
+ComboManager::ComboManager(ALivingEntity* inOwner)
 {
 	SetOwner(inOwner);
-	SetLastDamage(0);
-	SetLastComboSucsessfull(false);
-	SetHitCounter(0);
-	CombosID = 1;
-	createTestCombos();
+	createTestComboManager();
 }
 
-void Combos::loadCombos(){
+void ComboManager::loadComboManager(){
 	//try
 	//{
 
@@ -34,7 +30,7 @@ void Combos::loadCombos(){
 	//}
 }
 
-void Combos::createTestCombos()
+void ComboManager::createTestComboManager()
 {
 	float delay = 1;
 	Combo* tempCombo = GenerateCombo(1, 1, delay, "");
@@ -42,17 +38,7 @@ void Combos::createTestCombos()
 	Combo* tempCombo3 = GenerateCombo(3, 2.25, 2, "F");
 	Combo* tempCombo4 = GenerateCombo(4, 1.15, 1.5, "Q");
 	Combo* tempCombo5 = GenerateCombo(5, 2.25, 1, "E");
-
-	EffectStructs::HealthParams hp;
-	hp.amountOfChange = 20;
-	hp.positive = false;
-	hp.dely = 1;
-	hp.id = "Basic Damage";
-	hp.stacks = false;
-	hp.maxDuration = 3;
-
-	HealthEffect* he = new HealthEffect(hp, Owner);
-
+	
 	Combo* tempCombo6 = GenerateCombo(6, 2.75, 1.25, "R");
 	Combo* tempCombo7 = GenerateCombo(7, 1.4, 2, "F");
 	Combo* tempCombo8 = GenerateCombo(8, 3.8, 1.75, "Q");
@@ -91,7 +77,7 @@ void Combos::createTestCombos()
 }
 
 /*Creates a new Combo with all the approprite parameters*/
-Combo* Combos::GenerateCombo(int ComboID, float tempComboDamageScaling, float tempComboDelay, FString tempComboButton,
+Combo* ComboManager::GenerateCombo(int ComboID, float tempComboDamageScaling, float tempComboDelay, FString tempComboButton,
 class Effect* inEffect, CombatEnums::CombatType ActionType)
 {
 	Combo* tempCombo = new Combo();
@@ -99,22 +85,22 @@ class Effect* inEffect, CombatEnums::CombatType ActionType)
 	tempCombo->SetComboDamageScaling(tempComboDamageScaling);
 	tempCombo->SetComboDelay(tempComboDelay);
 	tempCombo->SetCurrentCombatActionType(ActionType);
-	tempCombo->SetEffect(inEffect);
+	//tempCombo->SetEffect(inEffect);
 	//tempCombo.ComboAnim = tempComboAnim;
 	tempCombo->SetComboID(ComboID);
 	return tempCombo;
 }
 
 /*Reset the combo to the first, we might have failed to hit the buttons at the right time*/
-void Combos::StopCombo()
+void ComboManager::StopCombo()
 {
 	lastDamage = 0;
 	hitCounter = 0;
 	currentCombo = origanalCombo;
 }
 
-/*Checks to see if the button pressed, e.g. F, is one of the combos that the current one links to*/
-bool Combos::IsWithinCombo(FString BInput)
+/*Checks to see if the button pressed, e.g. F, is one of the ComboManager that the current one links to*/
+bool ComboManager::IsWithinCombo(FString BInput)
 {
 	bool PartOfCombo = false;
 
@@ -134,8 +120,8 @@ bool Combos::IsWithinCombo(FString BInput)
 	return PartOfCombo;
 }
 
-/*This is to allow chaining of combos as we can revert back to the starting combo to cut short are current assult*/
-bool Combos::IsWithinOriginalCombo(FString BInput)
+/*This is to allow chaining of ComboManager as we can revert back to the starting combo to cut short are current assult*/
+bool ComboManager::IsWithinOriginalCombo(FString BInput)
 {
 	bool PartOfCombo = false;
 	int i = 0;
@@ -157,12 +143,12 @@ bool Combos::IsWithinOriginalCombo(FString BInput)
 }
 
 
-void Combos::SetNextCombo(Combo* nextCombo)
+void ComboManager::SetNextCombo(Combo* nextCombo)
 {
 	currentCombo = nextCombo;
 }
 
-void Combos::CalculateDamage(float WeaponDamage)
+void ComboManager::CalculateDamage(float WeaponDamage)
 {
 	if (lastDamage == 0)
 	{
@@ -176,61 +162,61 @@ void Combos::CalculateDamage(float WeaponDamage)
 }
 
 
-float Combos::GetLastDamage(){
+float ComboManager::GetLastDamage(){
 	return lastDamage;
 }
 
 
-void Combos::SetLastDamage(float newVal){
+void ComboManager::SetLastDamage(float newVal){
 	lastDamage = newVal;
 }
 
 
-int Combos::GetHitCounter(){
+int ComboManager::GetHitCounter(){
 	return hitCounter;
 }
 
 
-void Combos::SetHitCounter(int newVal){
+void ComboManager::SetHitCounter(int newVal){
 	hitCounter = newVal;
 }
 
 
-Combo* Combos::GetOriganalCombo(){
+Combo* ComboManager::GetOriganalCombo(){
 	return origanalCombo;
 }
 
 
-void Combos::SetOriganalCombo(Combo* newVal){
+void ComboManager::SetOriganalCombo(Combo* newVal){
 	origanalCombo = newVal;
 }
 
 
-Combo* Combos::GetCurrentCombo(){
+Combo* ComboManager::GetCurrentCombo(){
 	return currentCombo;
 }
 
 
-void Combos::SetCurrentCombo(Combo* newVal){
+void ComboManager::SetCurrentCombo(Combo* newVal){
 	currentCombo = newVal;
 }
 
 
-bool Combos::WasLastComboSucsessfull(){
-	return lastComboSucsessfull;
+bool ComboManager::WasLastComboManagerucsessfull(){
+	return lastComboManagerucsessfull;
 }
 
 
-void Combos::SetLastComboSucsessfull(bool newVal){
-	lastComboSucsessfull = newVal;
+void ComboManager::SetLastComboManagerucsessfull(bool newVal){
+	lastComboManagerucsessfull = newVal;
 }
 
 
-ALivingEntity* Combos::GetOwner(){
+ALivingEntity* ComboManager::GetOwner(){
 	return Owner;
 }
 
 
-void Combos::SetOwner(ALivingEntity* newVal){
+void ComboManager::SetOwner(ALivingEntity* newVal){
 	Owner = newVal;
 }

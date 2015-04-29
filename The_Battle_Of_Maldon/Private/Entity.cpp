@@ -6,5 +6,5 @@ AEntity::AEntity() : Super()
 {
 	CurrentEntityType = EntityEnums::Non_Living;
 	GetCharacterMovement()->bUseRVOAvoidance = true;
-	receiver.hookEvent(&source);
+	receiver->hookEvent(&source);
 }

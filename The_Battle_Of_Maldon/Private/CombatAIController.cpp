@@ -2,7 +2,7 @@
 
 #include "The_Battle_Of_Maldon.h"
 #include "Engine.h"
-//DEFINE_LOG_CATEGORY(CombatCombos);
+//DEFINE_LOG_CATEGORY(CombatComboManager);
 //DEFINE_LOG_CATEGORY(CombatDecisions);
 
 ACombatAIController::ACombatAIController(const FObjectInitializer& ObjectInitializer)
@@ -32,29 +32,38 @@ void ACombatAIController::Possess(APawn* InPawn)
 /*Looks for actors that the bot can go towards and possibly attack*/
 void ACombatAIController::lookForTarget()
 {
-	//Check if there is anything within the bots patrol range otherwise move towards next RouteObject
-
-	if (!Bot->CurrentAggressionType == LivingEntityEnums::Passive)
+	if (Bot->CurrentAggressionType != LivingEntityEnums::Passive)
 	{
-		ALivingEntity* tempTarget = findNearestEnemyLivingEntity();
+		ALivingEntity* tempTarget = Cast<ALivingEntity>(target);
+		bool isTagetVaild = tempTarget != NULL && tempTarget->currentHealth > 0;
 
-		if (livingEntityIsWithinPatrolRange(tempTarget))
+		if (isTagetVaild && livingEntityIsWithinPatrolRange(tempTarget))
 		{
 			//If the target isn't close enough move towards it
 			if (!isTargetInAttackRange(tempTarget))
 			{
 				moveToTarget(tempTarget);
+				target = tempTarget;
 			}
 			else if (canAttack)
 			{
 				StopMovement();
 				attackTarget(buttonPressed(), tempTarget);
+				target = tempTarget;
 			}
-
-			target = tempTarget;
 		}
-		else
-		{
+		else if (!isTagetVaild){
+			//Check if there is anything within the bots patrol range otherwise move towards next RouteObject
+			target = findNearestEnemyLivingEntity();
+
+			if (target != NULL){
+				lookForTarget();
+			}
+			else {
+				goToNextPathObject();
+			}
+		}
+		else {
 			goToNextPathObject();
 		}
 	}
@@ -114,7 +123,7 @@ void ACombatAIController::attackTarget(FString ButtonPressed, AActor* attackTarg
 		//Get the next damage to.
 		float damageDone = ComboButtonPressed(ButtonPressed, getWeaponDamage(Bot));
 
-		if (tempTarget && Bot->EntityCombos->WasLastComboSucsessfull())
+		if (tempTarget && Bot->EntityComboManager->WasLastComboManagerucsessfull())
 		{
 			//Is the target perfomring an action, then react to action, removed for players as they control thier own defenses 
 			if (isAI && tempTarget->CurrentAction)
@@ -125,33 +134,33 @@ void ACombatAIController::attackTarget(FString ButtonPressed, AActor* attackTarg
 				}
 				//Check to see if the target is attacking and wether we have started attacking
 				//This will need to include some level of intelligence as the hit counter check determines how far into a ccombo we are
-				else if (isTargetPerfomingAnAttackAction(tempTarget) && Bot->EntityCombos->GetHitCounter() == 0 && tempCon->target == Bot)
+				else if (isTargetPerfomingAnAttackAction(tempTarget) && Bot->EntityComboManager->GetHitCounter() == 0 && tempCon && tempCon->target == Bot)
 				{
 					reactToAttackAction();
 				}
 				else
 				{
-					performCombo(Bot->EntityCombos->GetCurrentCombo());
+					performCombo(Bot->EntityComboManager->GetCurrentCombo());
 				}
 			}
 			else
 			{
-				performCombo(Bot->EntityCombos->GetCurrentCombo());
+				performCombo(Bot->EntityComboManager->GetCurrentCombo());
 			}
 		}
 	}
 }
 
-/*Extracted from entityCombos, this is designed to control the combo system by checking button presses against a list of possile combos*/
+/*Extracted from entityComboManager, this is designed to control the combo system by checking button presses against a list of possile ComboManager*/
 float ACombatAIController::ComboButtonPressed(FString BInput, float WeaponDamage)
 {
-	Combos* combos = Bot->EntityCombos;
+	ComboManager* ComboManager = Bot->EntityComboManager;
 	/*if (ItemOwner != NULL && CustomAnimNode == NULL)
 	{
 	CustomAnimNode = AnimNodePlayCustomAnim(ItemOwner.Mesh.FindAnimNode(AnimNode));
 	}*/
 
-	if (combos->IsWithinCombo(BInput))
+	if (ComboManager->IsWithinCombo(BInput))
 	{
 		//Run combo animation
 		/*if (CustomAnimNode != NULL)
@@ -159,30 +168,30 @@ float ACombatAIController::ComboButtonPressed(FString BInput, float WeaponDamage
 		CustomAnimNode.PlayCustomAnim(tempCurrentCombo->ComboAnim, 1.0);
 		}*/
 
-		Bot->SetStopComboTimer(combos->GetCurrentCombo()->GetComboDelay());
-		combos->SetLastComboSucsessfull(true);
-		combos->CalculateDamage(WeaponDamage);
+		Bot->SetStopComboTimer(ComboManager->GetCurrentCombo()->GetComboDelay());
+		ComboManager->SetLastComboManagerucsessfull(true);
+		ComboManager->CalculateDamage(WeaponDamage);
 	}
-	else if (combos->IsWithinOriginalCombo(BInput))
+	else if (ComboManager->IsWithinOriginalCombo(BInput))
 	{
-		Bot->SetStopComboTimer(combos->GetCurrentCombo()->GetComboDelay());
-		combos->SetLastComboSucsessfull(true);
-		combos->CalculateDamage(WeaponDamage);
+		Bot->SetStopComboTimer(ComboManager->GetCurrentCombo()->GetComboDelay());
+		ComboManager->SetLastComboManagerucsessfull(true);
+		ComboManager->CalculateDamage(WeaponDamage);
 	}
 	else
 	{
 		Bot->ClearStopComboTimer();
-		combos->StopCombo();
-		combos->SetLastComboSucsessfull(false);
+		ComboManager->StopCombo();
+		ComboManager->SetLastComboManagerucsessfull(false);
 	}
 
-	if (combos->GetCurrentCombo()->GetComboList().Num() == 0)
+	if (ComboManager->GetCurrentCombo()->GetComboList().Num() == 0)
 	{
 		Bot->ClearStopComboTimer();
-		combos->StopCombo();
+		ComboManager->StopCombo();
 	}
 
-	return combos->GetLastDamage();
+	return ComboManager->GetLastDamage();
 }
 
 /*This will eventually control Reaction animations and strength of force of the hit*/
@@ -190,7 +199,7 @@ void ACombatAIController::reactToDefensiveAction()
 {
 	GetWorldTimerManager().SetTimer(this, &ACombatAIController::attackAgain, 1.5f);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, Bot->entityName + "s' attack was blocked");
-	Bot->EntityCombos->StopCombo();
+	Bot->EntityComboManager->StopCombo();
 	canAttack = false;
 }
 
@@ -237,7 +246,7 @@ bool ACombatAIController::isTargetInAttackRange(AActor* tempTarget)
 void ACombatAIController::attackAgain()
 {
 	ALivingEntity* tempTarget = (ALivingEntity*)target;
-	LivingEntityDamage* damage = new LivingEntityDamage(Bot, tempTarget, Bot->EntityCombos->GetLastDamage());
+	LivingEntityDamage* damage = new LivingEntityDamage(Bot, tempTarget, Bot->EntityComboManager->GetLastDamage());
 	if (tempTarget)	tempTarget->InflictDamage(damage);
 
 	Bot->CurrentAction = NULL;
@@ -340,7 +349,7 @@ bool ACombatAIController::isTargetPerfomingADefensiveAction(ALivingEntity* tempT
 FString ACombatAIController::buttonPressed()
 {
 	int index = 0;
-	TArray<Combo*> comboList = Bot->EntityCombos->GetCurrentCombo()->GetComboList();
+	TArray<Combo*> comboList = Bot->EntityComboManager->GetCurrentCombo()->GetComboList();
 
 	if (comboList.Num() > 0){
 		FString text = Bot->entityName + " just pressed " + comboList[index]->GetComboButton();

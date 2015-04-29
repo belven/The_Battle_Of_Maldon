@@ -5,7 +5,7 @@
 #endif
 
 //DECLARE_LOG_CATEGORY_EXTERN(CombatDecisions, Log, All)
-//DECLARE_LOG_CATEGORY_EXTERN(CombatCombos, Log, All)
+//DECLARE_LOG_CATEGORY_EXTERN(CombatComboManager, Log, All)
 
 #include "EngineMinimal.h"
 #include "GameFramework/Actor.h"

@@ -28,6 +28,6 @@ public:
 	TEnumAsByte<EntityEnums::EntityType> CurrentEntityType;
 
 	Action* CurrentAction;
-	EventSource source;
-	EventReceiver receiver;
+	EventSource source = *new EventSource();
+	EventReceiver* receiver = new EventReceiver();
 };

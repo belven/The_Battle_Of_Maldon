@@ -35,5 +35,5 @@ public:
 		TArray<FName> SocketsToAttachTo = *new TArray<FName>();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
-		USkeletalMesh* ItemMesh;
+		USkeletalMeshComponent* ItemMesh;
 };

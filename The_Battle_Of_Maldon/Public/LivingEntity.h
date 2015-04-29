@@ -24,7 +24,7 @@ namespace DodgeEnums
 #pragma once
 #include "ModifierManager.h"
 #include "Entity.h"
-#include "Combos.h"
+#include "ComboManager.h"
 #include "Weapon.h"
 #include "Damage.h"
 #include "Inventory.h"
@@ -75,7 +75,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float rollVelocity;
 		
-	Combos* EntityCombos;
+	ComboManager* EntityComboManager;
 	float currentHealth;
 	AWeapon *Weapon;
 

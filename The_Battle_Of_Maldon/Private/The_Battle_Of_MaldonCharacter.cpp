@@ -332,7 +332,7 @@ void AThe_Battle_Of_MaldonCharacter::BlockStopped()
 }
 
 /*
-This forms the starting point for the players combos
+This forms the starting point for the players ComboManager
 The player presses a button, e.g. 'E', 'F', 'Q'
 And this will check if they have pressed the right button, this is all handled in the AIController
 

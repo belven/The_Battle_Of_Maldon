@@ -5,7 +5,7 @@ ALivingEntity::ALivingEntity() : Super()
 {
 	CurrentEntityType = EntityEnums::Living;
 	AIControllerClass = ACombatAIController::StaticClass();
-	EntityCombos = new Combos(this);
+	EntityComboManager = new ComboManager(this);
 	health = 1000;
 	entityName = "Test";
 	clan = "2";
@@ -19,7 +19,7 @@ ALivingEntity::ALivingEntity() : Super()
 
 	UConversationChoice* name = new UConversationChoice("What's you're name?");
 	name->SetResponse(middle);
-	
+
 	UConversationChoice* sorry = new UConversationChoice("Sorry to disturb you, cya");
 	sorry->SetResponse(end);
 
@@ -34,7 +34,7 @@ ALivingEntity::ALivingEntity() : Super()
 /*This method is used to control the effects on the entity, this runs each frame*/
 void ALivingEntity::Tick(float deltaTime){
 	Super::Tick(deltaTime);
-	CheckEffects(deltaTime);
+	//CheckEffects(deltaTime);
 }
 
 double ALivingEntity::GetHealth(){
@@ -67,7 +67,7 @@ void ALivingEntity::ClearStopComboTimer(){
 /*Resets the entities combo to the start*/
 void ALivingEntity::StopCombo()
 {
-	EntityCombos->StopCombo();
+	EntityComboManager->StopCombo();
 }
 
 /*Adds an item to the entities inventory and will attach it to a socket if any*/
@@ -95,7 +95,7 @@ void ALivingEntity::AddItemToInventory(AItem* itemToAdd)
 
 /*Places the items mesh at the inputted socket*/
 void ALivingEntity::AttachItemToSocket(AItem* itemToAdd, FName socketName){
-	itemToAdd->AttachRootComponentToActor(itemToAdd, socketName);
+	itemToAdd->ItemMesh->AttachTo(GetMesh(), socketName);
 }
 
 /*Launchs the character in the desired direction*/
@@ -134,37 +134,40 @@ FVector ALivingEntity::GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection
 /*This damages the entiies health and will include damage reduction from defense modifiers**/
 void ALivingEntity::InflictDamage(Damage* damage)
 {
-	Modifier* modifier = GetModifier(ModifierManager::defenseModiferName);
-	LivingEntityDamage* led = (LivingEntityDamage*)damage;
-	FString damagedBy = "Other";
+	if (currentHealth > 0){
+		Modifier* modifier = GetModifier(ModifierManager::defenseModiferName);
+		LivingEntityDamage* led = (LivingEntityDamage*)damage;
+		FString damagedBy = "Other";
 
-	if (led) {
-		damagedBy = led->damager->entityName;
-	}
-
-	if (modifier) {
-		damage->damageDone *= modifier->value;
-	}
-
-	if (__raise source.LivingEntityDamageEvent(damage))
-	{
-		FString damageDone = FString::SanitizeFloat(damage->damageDone);
-		if ((currentHealth - damage->damageDone) > 0)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, damagedBy + " delt " + damageDone + " damage to " + entityName);
-			currentHealth -= damage->damageDone;
+		if (led) {
+			damagedBy = led->damager->entityName;
 		}
-		else
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, entityName + " was killed!!!");
-			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::SanitizeFloat(currentHealth - Damage) +  " overkill damage!!");
 
-			std::unique_lock<std::mutex> lk(m);
-			cv.wait(lk, [&]{ return !beingRed; });
-			beingRed = true;
-			lk.unlock();
-			cv.notify_one();
-			Destroy();
+		if (modifier) {
+			damage->damageDone *= modifier->value;
+		}
+
+		if (__raise source.LivingEntityDamageEvent(damage))
+		{
+			FString damageDone = FString::SanitizeFloat(damage->damageDone);
+			if ((currentHealth - damage->damageDone) > 0)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, damagedBy + " delt " + damageDone + " damage to " + entityName);
+				currentHealth -= damage->damageDone;
+			}
+			else
+			{
+				currentHealth -= damage->damageDone;
+				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, entityName + " was killed!!!");
+				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::SanitizeFloat(currentHealth - Damage) +  " overkill damage!!");
+
+				/*std::unique_lock<std::mutex> lk(m);
+				cv.wait(lk, [&]{ return !beingRed; });
+				beingRed = true;
+				lk.unlock();
+				cv.notify_one();*/
+				Destroy();
+			}
 		}
 	}
 }

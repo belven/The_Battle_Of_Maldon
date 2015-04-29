@@ -10,14 +10,14 @@ public:
 	TArray<Effect*> currentEffects = *new TArray<Effect*>();
 	TArray<Effect*> effectsToRemove = *new TArray<Effect*>();
 	bool beingRed = false;
-	std::condition_variable cv;
-	std::mutex m;
+	//std::condition_variable cv;
+	//std::mutex m;
 
 	/*This will check all current effects to see if they need applying or removing*/
 	void CheckEffects(float deltaTime){
-		std::unique_lock<std::mutex> lk(m);
-		cv.wait(lk, [&]{ return !beingRed; });
-		beingRed = true;
+		/*std::unique_lock<std::mutex> lk(m);
+		cv.wait(lk, [&]{ return isNotBeingRed(); });
+		beingRed = true;*/
 
 		//UE_LOG(LogTemp, Log, TEXT("Checking effects"));
 
@@ -34,9 +34,9 @@ public:
 
 		effectsToRemove.Empty();
 
-		beingRed = false;
+		/*beingRed = false;
 		lk.unlock();
-		cv.notify_one();
+		cv.notify_one();*/
 	}
 
 	/*Checks a single effect to allow for re-usability*/
@@ -75,11 +75,12 @@ public:
 
 	/*Assigns a new effect to an entity or replaces an existing one, based on if the effect stacks*/
 	void GiveEffect(Effect* newE) {
-		std::unique_lock<std::mutex> lk(m);
-		cv.wait(lk, [&]{ return !beingRed; });
+		/*std::unique_lock<std::mutex> lk(m);
+		cv.wait(lk, [&]{ return isNotBeingRed(); });
+		beingRed = true;*/
+
 		UE_LOG(LogTemp, Log, TEXT("Giving effect"));
 
-		beingRed = true;
 		if (!newE->stacks && HasEffect(newE)) {
 			for (TArray<Effect*>::TConstIterator it = currentEffects.CreateConstIterator(); it; it++){
 				Effect* e = (Effect*)*it;
@@ -92,9 +93,9 @@ public:
 			currentEffects.Add(newE);
 		}
 
-		beingRed = false;
+		/*beingRed = false;
 		lk.unlock();
-		cv.notify_one();
+		cv.notify_one();*/
 	}
 
 };

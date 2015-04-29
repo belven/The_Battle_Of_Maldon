@@ -43,9 +43,9 @@ public:
 	/*Returns a modifier, if it exists, with the inputted name*/
 	Modifier* GetModifier(FString name){
 		Modifier* mReturn = NULL;
-		std::unique_lock<std::mutex> lk(m);
+		/*std::unique_lock<std::mutex> lk(m);
 		cv.wait(lk, [&]{ return !beingRed; });
-		beingRed = true;
+		beingRed = true;*/
 
 		UE_LOG(LogTemp, Log, TEXT("Get Modifier"));
 		for (TArray<Modifier*>::TConstIterator it = currentModifiers.CreateConstIterator(); it; it++){
@@ -57,9 +57,9 @@ public:
 		}
 
 		UE_LOG(LogTemp, Log, TEXT("Got Modifier"));
-		beingRed = false;
+		/*beingRed = false;
 		lk.unlock();
-		cv.notify_one();
+		cv.notify_one();*/
 		return mReturn;
 	}
 

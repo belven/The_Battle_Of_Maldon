@@ -3,10 +3,6 @@
 
 Combo::Combo()
 {
-	comboID = 1;
-	comboButton = "";
-	comboDamageScaling = 1;
-	comboDelay = 1;
 }
 
 void Combo::Add(Combo* ComboToAdd)

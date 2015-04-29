@@ -34,7 +34,7 @@ public:
 	void SetTwoHanded(bool newVal);
 
 private:
-	Stat<double> weaponDamage = *new Stat<double>(10);
+	Stat<double> weaponDamage = *new Stat<double>(100);
 	Stat<double> weaponRange = *new Stat<double>(200);
 	TEnumAsByte<PartEnums::PartType> bodyPart = PartEnums::Chest;
 	bool twoHanded = false;

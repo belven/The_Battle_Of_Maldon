@@ -31,14 +31,14 @@ public:
 	void SetEffect(class Effect* newVal);
 
 private:
-	int comboID;
-	float cmboDamageScaling;
-	float comboDelay;
+	int comboID = 1;
+	float cmboDamageScaling = 1;
+	float comboDelay = 1;
 
-	class Effect* effect;
+	class Effect* effect = NULL;
 	TArray<Combo*> comboList = *new TArray<Combo*>();
-	FString comboButton;
+	FString comboButton = "E";
 
-	CombatEnums::CombatType currentCombatActionType;
-	float comboDamageScaling;
+	CombatEnums::CombatType currentCombatActionType = CombatEnums::Attack;
+	float comboDamageScaling = 1;
 };

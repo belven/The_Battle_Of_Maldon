@@ -29,7 +29,10 @@ public:
 	ASupply* targetSupplies;
 	bool mechantHasSupplies();
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable, Category = "AddItem")
 	void SuppliesGivenEvent(ASupply* supply);
+
 	TArray<AVillageVolume*> getVillages();
 	FSupplyRequirement ourVillageRequirements;
 	FSupplyRequirement targetVillageRequirements;

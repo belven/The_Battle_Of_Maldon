@@ -5,10 +5,41 @@
 
 void AVillageVolume::ReceiveActorBeginOverlap(AActor* OtherActor) {
 	ABaseVolume::ReceiveActorBeginOverlap(OtherActor);
+	ALivingEntity* le = Cast<ALivingEntity>(OtherActor);
+
+	if (le) {
+		if (!le->clan.Equals(clan)){
+			if (OnEnemyEnterEvent.IsBound()){
+				OnEnemyEnterEvent.Broadcast(le);
+			}
+			enemies.Add(le);
+		}
+		else {
+			if (OnAllyEnterEvent.IsBound()){
+				OnAllyEnterEvent.Broadcast(le);
+			}
+			allies.Add(le);
+		}
+	}
 }
 
 void AVillageVolume::ReceiveActorEndOverlap(AActor* OtherActor) {
 	ABaseVolume::ReceiveActorEndOverlap(OtherActor);
+	ALivingEntity* le = Cast<ALivingEntity>(OtherActor);
+	if (le) {
+		if (!le->clan.Equals(clan)){
+			if (OnEnemyLeaveEvent.IsBound()){
+				OnEnemyLeaveEvent.Broadcast(le);
+			}
+			enemies.Remove(le);
+		}
+		else {
+			if (OnAllyLeaveEvent.IsBound()){
+				OnAllyLeaveEvent.Broadcast(le);
+			}
+			allies.Remove(le);
+		}
+	}
 }
 
 /*Checks to see if this village has any supplies*/
@@ -31,6 +62,10 @@ ASupply* AVillageVolume::takeSupplies(FSupplyRequirement suppliesToTake){
 			supply->SetActorHiddenInGame(true);
 			supplies.Remove(supply);
 		}
+
+		if (OnSuppliesTakenEvent.IsBound()){
+			OnSuppliesTakenEvent.Broadcast(supply);
+		}
 		return supply;
 	}
 	return NULL;
@@ -42,6 +77,11 @@ ASupply* AVillageVolume::takeSupplies(ASupply* suppliesToTake){
 		suppliesToTake->SetActorHiddenInGame(true);
 		suppliesToTake->SetActorEnableCollision(true);
 		supplies.Remove(suppliesToTake);
+
+		if (OnSuppliesTakenEvent.IsBound()){
+			OnSuppliesTakenEvent.Broadcast(suppliesToTake);
+		}
+
 		return suppliesToTake;
 	}
 	return NULL;
@@ -58,6 +98,10 @@ ASupply* AVillageVolume::giveSupplies(ASupply* suppliesToGive){
 	}
 	else {
 		supplies.Add(suppliesToGive);
+	}
+
+	if (OnSuppliesGivenEvent.IsBound()){
+		OnSuppliesGivenEvent.Broadcast(suppliesToGive);
 	}
 
 	//OnSuppliesGivenEvent.Broadcast(suppliesToGive);
@@ -106,7 +150,6 @@ FSupplyRequirement AVillageVolume::getRequirement(SuppliesEnums::SupplyType type
 	}
 	return temp;
 }
-
 
 FSupplyRequirement AVillageVolume::getSupplyRequirement(SuppliesEnums::SupplyType type){
 	FSupplyRequirement tempRequirement;
@@ -169,33 +212,10 @@ TArray<FSupplyRequirement> AVillageVolume::getVillageSupplyRequirements(){
 
 /*Returns a list of all the villages allies, i.e. bots with the same clan*/
 TArray<ALivingEntity*> AVillageVolume::GetAlliesInVillage(){
-	TArray<ALivingEntity*> allies;
-	FString message = "";
-
-	for (ALivingEntity* le : currentEntities){
-		if (le->clan.Equals(clan)){
-			allies.Add(le);
-			message += le->entityName + ", ";
-		}
-	}
-
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, message);
 	return allies;
 }
 
 /*Returns a list of all the villages enimies, i.e. bots not in the same clan*/
 TArray<ALivingEntity*> AVillageVolume::GetEnimiesInVillage(){
-	TArray<ALivingEntity*> enimies;
-	FString message = "";
-
-	for (ALivingEntity* le : currentEntities){
-		if (!le->clan.Equals(clan)){
-			enimies.Add(le);
-			message += le->entityName + ", ";
-		}
-	}
-
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, message);
-	return enimies;
+	return enemies;
 }
-

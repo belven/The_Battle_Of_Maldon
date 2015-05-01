@@ -132,43 +132,44 @@ FVector ALivingEntity::GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection
 }
 
 /*This damages the entiies health and will include damage reduction from defense modifiers**/
-void ALivingEntity::InflictDamage(Damage* damage)
+void ALivingEntity::InflictDamage(FDamage damage)
 {
 	if (currentHealth > 0){
 		Modifier* modifier = GetModifier(ModifierManager::defenseModiferName);
-		LivingEntityDamage* led = (LivingEntityDamage*)damage;
+		FLivingEntityDamage led = (FLivingEntityDamage&)damage;
 		FString damagedBy = "Other";
 
-		if (led) {
-			damagedBy = led->damager->entityName;
+		if (led.damager != NULL) {
+			damagedBy = led.damager->entityName;
 		}
 
 		if (modifier) {
-			damage->damageDone *= modifier->value;
+			damage.damageDone *= modifier->value;
 		}
 
-		if (__raise source.LivingEntityDamageEvent(damage))
+		FString damageDone = FString::SanitizeFloat(damage.damageDone);
+		if ((currentHealth - damage.damageDone) > 0)
 		{
-			FString damageDone = FString::SanitizeFloat(damage->damageDone);
-			if ((currentHealth - damage->damageDone) > 0)
-			{
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, damagedBy + " delt " + damageDone + " damage to " + entityName);
-				currentHealth -= damage->damageDone;
+			if (OnLivingEntityDamageEvent.IsBound())	{
+				OnLivingEntityDamageEvent.Broadcast(led);
 			}
-			else
-			{
-				currentHealth -= damage->damageDone;
-				GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, entityName + " was killed!!!");
-				//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::SanitizeFloat(currentHealth - Damage) +  " overkill damage!!");
 
-				/*std::unique_lock<std::mutex> lk(m);
-				cv.wait(lk, [&]{ return !beingRed; });
-				beingRed = true;
-				lk.unlock();
-				cv.notify_one();*/
-				Destroy();
-			}
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, damagedBy + " delt " + damageDone + " damage to " + entityName);
+			currentHealth -= damage.damageDone;
 		}
+		else
+		{
+			currentHealth -= damage.damageDone;
+
+			if (OnLivingEntityDeathEvent.IsBound()){
+				OnLivingEntityDeathEvent.Broadcast(this);
+			}
+
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, entityName + " was killed!!!");
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, FString::SanitizeFloat(currentHealth - Damage) +  " overkill damage!!");
+			Destroy();
+		}
+
 	}
 }
 

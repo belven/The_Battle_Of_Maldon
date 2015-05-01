@@ -1,13 +1,12 @@
 #pragma once
+#include "Damage.generated.h"
 
-class Damage
+USTRUCT(BlueprintType)
+struct FDamage
 {
+	GENERATED_USTRUCT_BODY()
 public:
-	Damage(float damageIn)
-	{
-		damageDone = damageIn;
-	}
-
-	float damageDone = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Damage)
+		double damageDone = 0;
 
 };

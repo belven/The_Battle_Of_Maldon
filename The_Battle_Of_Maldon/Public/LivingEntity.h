@@ -31,10 +31,14 @@ namespace DodgeEnums
 #include "Conversation.h"
 #include "EffectManager.h"
 #include "Body.h"
+#include "LivingEntityDamage.h"
 #include "Armour.h"
 #include "LivingEntity.generated.h"
 
-UCLASS()
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLivingEntityDamageEvent, FLivingEntityDamage, InEvent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLivingEntityDeathEvent, AEntity*, entityInvolved);
+
+UCLASS(Blueprintable, BlueprintType)
 class ALivingEntity : public AEntity, public ModifierManager
 {
 	GENERATED_BODY()
@@ -53,10 +57,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Senses)
 		float sightRange;
-		
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Health)
 		float health;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Routes)
 		TArray<AActor*> PathObjects = *new TArray<AActor*>();
 
@@ -74,7 +78,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Movement)
 		float rollVelocity;
-		
+
 	ComboManager* EntityComboManager;
 	float currentHealth;
 	AWeapon *Weapon;
@@ -86,7 +90,7 @@ public:
 	void StopCombo();
 
 	void SetStopComboTimer(float ComboDelay);
-	void InflictDamage(Damage* damage);
+	void InflictDamage(FDamage damage);
 	void Dodge(DodgeEnums::DodgeDirection dodgeDirection);
 	void SetBody(Body* value);
 
@@ -95,6 +99,12 @@ public:
 
 	void AttachItemToSocket(AItem* itemToAdd, FName socketName);
 	void Tick(float deltaTime) override;
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+	FLivingEntityDamageEvent OnLivingEntityDamageEvent;
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+		FLivingEntityDeathEvent OnLivingEntityDeathEvent;
 
 	UConversation* GetConversation();
 	void SetConversation(UConversation* newVal);
@@ -107,7 +117,7 @@ public:
 
 	TArray<AArmour*> GetEquipedArmour();
 	void SetEquipedArmour(TArray<AArmour*> newVal);
-	
+
 	void AddArmour(AArmour* armourToAdd);
 
 	TArray<AWeapon*> GetEquipedWeapons();

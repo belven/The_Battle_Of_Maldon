@@ -4,8 +4,8 @@
 #include "The_Battle_Of_Maldon.h"
 
 void AMerchantAIController::BeginPlay(){
-	if (getMerchant()->GetVillage()){
-		//getMerchant()->GetVillage()->OnSuppliesGivenEvent.BindSP(this, &AMerchantAIController::SuppliesGivenEvent);
+	if (getMerchant()->GetVillage()) {
+		getMerchant()->GetVillage()->OnSuppliesGivenEvent.AddDynamic(this, &AMerchantAIController::SuppliesGivenEvent);
 	}
 }
 
@@ -18,6 +18,7 @@ void AMerchantAIController::SuppliesGivenEvent(ASupply* supply){
 /*Runs every frame and makes sure the mechant is always doing something*/
 void AMerchantAIController::Tick(float DeltaTime)
 {
+
 	//The controller has a bot, and the bot can move
 	if (Bot && canMove)
 	{

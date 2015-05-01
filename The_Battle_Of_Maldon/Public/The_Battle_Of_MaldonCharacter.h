@@ -2,9 +2,6 @@
 #pragma once
 #include "Person.h"
 #include "UnrealString.h"
-//#include "Message.h"
-//#include "MessageBP.h"
-//#include "Conversation.h"
 #include "LivingEntity.h"
 #include "Quest.h"
 #include "The_Battle_Of_MaldonCharacter.generated.h"
@@ -35,12 +32,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 			
-	//Message* currentMessage;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Message)
 		TArray<FString> currentMessages = *new TArray<FString>();
 
-	//Conversation* currentConversation;
 	TArray<Quest*> currentQuests = *new TArray<Quest*>();
 	bool isLocking;
 	bool canMove;
@@ -97,4 +91,3 @@ protected:
 	// End of APawn interface
 
 };
-

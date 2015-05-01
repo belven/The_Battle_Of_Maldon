@@ -246,7 +246,12 @@ bool ACombatAIController::isTargetInAttackRange(AActor* tempTarget)
 void ACombatAIController::attackAgain()
 {
 	ALivingEntity* tempTarget = (ALivingEntity*)target;
-	LivingEntityDamage* damage = new LivingEntityDamage(Bot, tempTarget, Bot->EntityComboManager->GetLastDamage());
+
+	FLivingEntityDamage damage;
+	damage.damager = Bot;
+	damage.damagee = tempTarget;
+	damage.damageDone = Bot->EntityComboManager->GetLastDamage();
+
 	if (tempTarget)	tempTarget->InflictDamage(damage);
 
 	Bot->CurrentAction = NULL;

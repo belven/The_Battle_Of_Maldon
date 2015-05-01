@@ -8,12 +8,21 @@
 #include "SupplyRequirement.h"
 #include "VillageVolume.generated.h"
 
-//DECLARE_MULTICAST_DELEGATE_OneParam(SuppliesGivenEvent, ASupply*);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSuppliesGivenEvent, ASupply*, supply);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSuppliesTakenEvent, ASupply*, supply);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAllyEnterEvent, ALivingEntity*, entity);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAllyLeaveEvent, ALivingEntity*, entity);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnemyEnterEvent, ALivingEntity*, entity);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnemyLeaveEvent, ALivingEntity*, entity);
 
 UCLASS(Blueprintable, BlueprintType)
 class THE_BATTLE_OF_MALDON_API AVillageVolume : public ABaseVolume
 {
 	GENERATED_BODY()
+
+private:
+	TArray<ALivingEntity*> allies = *new TArray<ALivingEntity*>();
+	TArray<ALivingEntity*> enemies = *new TArray<ALivingEntity*>();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Clan)
@@ -49,6 +58,21 @@ public:
 	FSupplyRequirement getSupplyRequirement(SuppliesEnums::SupplyType type);
 	FSupplyRequirement getFirstRequirementThatWeCanSupply(AVillageVolume* otherVillage);
 
-	//UPROPERTY(BlueprintAssignable, Category = "Events")
-		//SuppliesGivenEvent OnSuppliesGivenEvent;
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+		FSuppliesGivenEvent OnSuppliesGivenEvent;
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+		FSuppliesTakenEvent OnSuppliesTakenEvent;
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+		FAllyEnterEvent OnAllyEnterEvent;
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+		FAllyLeaveEvent OnAllyLeaveEvent;
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+		FEnemyEnterEvent OnEnemyEnterEvent;
+
+	UPROPERTY(BlueprintAssignable, Category = "Events")
+		FEnemyLeaveEvent OnEnemyLeaveEvent;
 };

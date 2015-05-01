@@ -20,7 +20,9 @@ public:
 			//EffectOwner->GiveHealth(healthModifier);
 		}
 		else {
-			effectOwner->InflictDamage(new Damage(amountOfChange));
+			FDamage damage;
+			damage.damageDone = amountOfChange;
+			effectOwner->InflictDamage(damage);
 		}
 	}
 

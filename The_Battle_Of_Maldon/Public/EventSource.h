@@ -12,5 +12,5 @@ public:
 	__event bool AttackActionEvent(AttackAction* action);
 	__event bool DefenseActionEvent(DefenseAction* action);
 	__event bool MoveActionEvent(MoveAction* action);
-	__event bool LivingEntityDamageEvent(Damage* damage);
+	//__event bool LivingEntityDamageEvent(Damage* damage);
 };

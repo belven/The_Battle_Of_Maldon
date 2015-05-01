@@ -16,14 +16,16 @@ public:
 
 	/*Run when the effect is applied, i.e. deal damage/heal*/
 	virtual void ApplyEffect(){
-		if (positive) {			
-			//EffectOwner->GiveHealth(healthModifier);
+		FLivingEntityDamage damage;
+
+		if (positive) {
+			damage.damageDone -= amountOfChange;
 		}
 		else {
-			FDamage damage;
 			damage.damageDone = amountOfChange;
-			effectOwner->InflictDamage(damage);
 		}
+
+		effectOwner->InflictDamage(damage);
 	}
 
 	virtual void Expired(){}

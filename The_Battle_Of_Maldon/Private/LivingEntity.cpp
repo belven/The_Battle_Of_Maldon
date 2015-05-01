@@ -132,15 +132,14 @@ FVector ALivingEntity::GetForceForRoll(DodgeEnums::DodgeDirection dodgeDirection
 }
 
 /*This damages the entiies health and will include damage reduction from defense modifiers**/
-void ALivingEntity::InflictDamage(FDamage damage)
+void ALivingEntity::InflictDamage(FLivingEntityDamage damage)
 {
 	if (currentHealth > 0){
 		Modifier* modifier = GetModifier(ModifierManager::defenseModiferName);
-		FLivingEntityDamage led = (FLivingEntityDamage&)damage;
 		FString damagedBy = "Other";
 
-		if (led.damager != NULL) {
-			damagedBy = led.damager->entityName;
+		if (damage.damager != NULL) {
+			damagedBy = damage.damager->entityName;
 		}
 
 		if (modifier) {
@@ -151,7 +150,7 @@ void ALivingEntity::InflictDamage(FDamage damage)
 		if ((currentHealth - damage.damageDone) > 0)
 		{
 			if (OnLivingEntityDamageEvent.IsBound())	{
-				OnLivingEntityDamageEvent.Broadcast(led);
+				OnLivingEntityDamageEvent.Broadcast(damage);
 			}
 
 			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, damagedBy + " delt " + damageDone + " damage to " + entityName);

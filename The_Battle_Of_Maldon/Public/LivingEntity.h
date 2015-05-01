@@ -90,7 +90,7 @@ public:
 	void StopCombo();
 
 	void SetStopComboTimer(float ComboDelay);
-	void InflictDamage(FDamage damage);
+	void InflictDamage(FLivingEntityDamage damage);
 	void Dodge(DodgeEnums::DodgeDirection dodgeDirection);
 	void SetBody(Body* value);
 

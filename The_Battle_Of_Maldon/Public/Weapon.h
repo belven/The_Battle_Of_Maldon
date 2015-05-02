@@ -19,8 +19,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 		double GetWeaponRange();
 
-	void SetWeaponDamage(Stat<double> newVal);
-	void SetWeaponRange(Stat<double> newVal);
+	void SetWeaponDamage(UStat<double> newVal);
+	void SetWeaponRange(UStat<double> newVal);
 
 	virtual void Equip(ALivingEntity* entity);
 	virtual void UnEquip(ALivingEntity* entity);
@@ -34,8 +34,8 @@ public:
 	void SetTwoHanded(bool newVal);
 
 private:
-	Stat<double> weaponDamage = *new Stat<double>(100);
-	Stat<double> weaponRange = *new Stat<double>(200);
+	UStat<double> weaponDamage = *new UStat<double>(100, "Damage");
+	UStat<double> weaponRange = *new UStat<double>(200, "Range");
 	TEnumAsByte<PartEnums::PartType> bodyPart = PartEnums::Chest;
 	bool twoHanded = false;
 };

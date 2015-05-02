@@ -7,21 +7,38 @@
 #include "The_Battle_of_Maldon.h"
 #include "Stat.h"
 
-template<typename T> Stat<typename T>::Stat(T value){
+template<typename T> 
+UStat<typename T>::UStat(T value, FString inName){
 	SetValue(value);
+	SetName(inName);
 }
 
 
-template<typename T> Stat<typename T>::~Stat(){
+template<typename T> 
+UStat<typename T>::~UStat(){
 
 }
 
 
-template<typename T> T Stat<typename T>::GetValue(){
+template<typename T> 
+T UStat<typename T>::GetValue(){
 	return value;
 }
 
 
-template<typename T> void Stat<typename T>::SetValue(T newVal){
+template<typename T> 
+void UStat<typename T>::SetValue(T newVal){
 	value = newVal;
+}
+
+
+template<typename T>
+FString UStat<T>::GetName(){
+	return name;
+}
+
+
+template<typename T>
+void UStat<T>::SetName(FString newVal){
+	name = newVal;
 }

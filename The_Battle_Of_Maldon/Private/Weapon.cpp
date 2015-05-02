@@ -16,12 +16,12 @@ double AWeapon::GetWeaponRange(){
 }
 
 
-void AWeapon::SetWeaponDamage(Stat<double> newVal){
+void AWeapon::SetWeaponDamage(UStat<double> newVal){
 	weaponDamage = newVal;
 }
 
 
-void AWeapon::SetWeaponRange(Stat<double> newVal){
+void AWeapon::SetWeaponRange(UStat<double> newVal){
 	weaponRange = newVal;
 }
 

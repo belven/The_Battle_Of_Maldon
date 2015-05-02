@@ -33,7 +33,10 @@ void AMyAIController::lookForTarget()
 
 #pragma region Perception
 
-/*Check to see if both the pawn and the taraget is within the Bot->patrolRange of currentRouteObject*/
+/*Check to see if both the pawn and the taraget is within the Bot->patrolRange of currentRouteObject
+*
+* @param le - The entity to check distance from the currentRouteObject
+*/
 bool AMyAIController::livingEntityIsWithinPatrolRange(ALivingEntity* le)
 {
 	if (Bot->PathObjects.Num() > 0)
@@ -55,10 +58,6 @@ bool AMyAIController::livingEntityIsWithinPatrolRange(ALivingEntity* le)
 		return false;
 	}
 }
-
-
-
-
 
 #pragma endregion
 
@@ -110,14 +109,12 @@ void AMyAIController::moveToTarget(AActor* tempTarget)
 {
 	MoveAction* ma = new MoveAction(10);
 
-	if (__raise Bot->source.MoveActionEvent(ma))
-	{
-		SetFocus(tempTarget);
-		MoveToActor(tempTarget);
-		canMove = false;
-		Bot->CurrentAction = ma;
-	}
+	SetFocus(tempTarget);
+	MoveToActor(tempTarget);
+	canMove = false;
+	Bot->CurrentAction = ma;
 }
+
 
 /*This is used to make sure that the pawn can only move after it's reached it's current destination.*/
 void AMyAIController::OnMoveCompleted(FAIRequestID RequestID, EPathFollowingResult::Type Result)

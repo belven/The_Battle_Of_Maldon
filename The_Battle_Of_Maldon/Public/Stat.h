@@ -5,20 +5,38 @@
 //  Original author: sam
 ///////////////////////////////////////////////////////////
 
-#if !defined(EA_C7DA055B_AB8E_4cee_B943_2DE3C2FABA98__INCLUDED_)
-#define EA_C7DA055B_AB8E_4cee_B943_2DE3C2FABA98__INCLUDED_
+#pragma once
+#include "UnrealString.h"
+//#include "Object.h"
+//#include "Stat.generated.h"
 
-template<typename T> class Stat
+//UCLASS(Blueprintable, BlueprintType)
+template<typename T>
+class UStat //: public UObject
 {
 
+	//GENERATED_BODY()
 public:
-	Stat(T value);
-	virtual ~Stat();
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+		UStat(T value, FString inName);
 
-	T GetValue();
-	void SetValue(T newVal);
+	virtual ~UStat();
+
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+		T GetValue();
+
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+		void SetValue(T newVal);
+
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+		FString GetName();
+
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+		void SetName(FString newVal);
 private:
 	T value;
+	FString name = "";
+
 
 };
-#endif // !defined(EA_C7DA055B_AB8E_4cee_B943_2DE3C2FABA98__INCLUDED_)
+
